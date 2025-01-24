@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Recipe</title>
 
-    <script src="/js/createRecipe-script.js"></script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Recipe</title>
 
-  <body>
+  <script src="/js/createRecipe-script.js"></script>
+</head>
+
+<body>
+  <header>
+
+  </header>
+  <main>
     <h1>Create a New Recipe</h1>
-    <form action="/recipes/create-recipe" method="POST">
+    <form action="/recipes/create-recipe" method="POST" enctype="multipart/form-data">
       <!-- Recipe Title -->
       <label for="title">Recipe Title:</label>
       <input type="text" id="title" name="title" required /><br /><br />
@@ -19,54 +24,39 @@
       <input type="file" name="image" accept="image/*" id="imageUpload" />
       <br />
       <!-- Image Preview -->
-      <img id="imagePreview" src="" alt="" />
+      <img id="imagePreview" src="" alt="Preview" />
 
       <br />
 
       <!-- Recipe Description -->
       <label for="description">Description:</label><br />
-      <textarea
-        id="description"
-        name="description"
-        rows="4"
-        cols="50"
-      ></textarea
-      ><br /><br />
+      <textarea id="description" name="description" rows="4" cols="50"></textarea><br /><br />
 
       <!-- Ingredients -->
       <label>Ingredients:</label>
       <div id="ingredients-container">
-        <input
-          type="text"
-          name="ingredients[]"
-          placeholder="Enter ingredient"
-          required
-        />
+        <input type="text" name="ingredients[]" placeholder="Enter ingredient" required />
       </div>
 
-      <button type="button" onclick="addIngredient()">Add Ingredient</button
-      ><br />
+      <button type="button" onclick="addIngredient()">Add Ingredient</button><br />
       <button type="button" onclick="removeIngredient()">
-        Remove Ingredient</button
-      ><br /><br />
+        Remove Ingredient</button><br /><br />
 
       <!-- Instructions -->
       <label>Instructions:</label>
       <div id="instructions-container">
-        <input
-          type="text"
-          name="instructions[]"
-          placeholder="Enter instruction step"
-          required
-        />
+        <input type="text" name="instructions[]" placeholder="Enter instruction step" required />
       </div>
-      <button type="button" onclick="addInstruction()">Add Instruction</button
-      ><br />
+      <button type="button" onclick="addInstruction()">Add Instruction</button><br />
       <button type="button" onclick="removeInstruction()">
-        Remove Instruction</button
-      ><br /><br />
+        Remove Instruction</button><br /><br />
 
       <button type="submit">Submit Recipe</button>
+      <button type="button" onclick="history.back()">Back</button>
     </form>
-  </body>
+  </main>
+  <footer>
+
+  </footer>
+</body>
 </html>

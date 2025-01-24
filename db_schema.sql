@@ -63,7 +63,7 @@ CREATE TABLE Recipes (
 CREATE TABLE Ingredients (
     ingredient_id INTEGER PRIMARY KEY AUTOINCREMENT,
     recipe_id INTEGER NOT NULL,
-   ingredient_name VARCHAR(255) NOT NULL,
+    ingredient_name VARCHAR(255) NOT NULL,
     ingredient_order INTEGER NOT NULL,
     FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id) ON DELETE CASCADE
 );
