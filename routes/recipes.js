@@ -29,7 +29,16 @@ const upload = multer({
 // Handle POST request to create a new recipe
 router.post("/create-recipe", upload.single("image"), async (req, res) => {
   // Extract details from the request body
-  const { title, description, ingredients, instructions } = req.body;
+  const {
+    title,
+    description,
+    ingredients,
+    instructions,
+    servings,
+    prep_time,
+    yield,
+    cook_time,
+  } = req.body;
 
   //file path for uploaded images
   const imagePath = req.file ? `/images/${req.file.filename}` : null;
@@ -42,8 +51,17 @@ router.post("/create-recipe", upload.single("image"), async (req, res) => {
     // Insert new recipe into the Recipes table and get the ID of the inserted recipe
     const recipeId = await new Promise((resolve, reject) => {
       db.run(
-        `INSERT INTO Recipes (user_id, title, description,image_url) VALUES (?, ?, ?, ?)`,
-        [userId, title, description, imagePath],
+        `INSERT INTO Recipes (user_id, title, description,image_url,servings,prep_time,yield,cook_time) VALUES (?, ?, ?, ?,? ,?,?,?)`,
+        [
+          userId,
+          title,
+          description,
+          imagePath,
+          servings,
+          prep_time,
+          yield,
+          cook_time,
+        ],
         function (err) {
           // Using regular function to have 'this' context
           if (err) {
@@ -93,7 +111,6 @@ router.get("/create-recipe", (req, res) => {
   res.render("recipes/createRecipe");
 });
 
-
 /**-------------------------------------------------
  * @desc Display all recipes in main page 
  ----------------------------------------------------*/
@@ -139,7 +156,7 @@ router.get("/recipe", (req, res) => {
 /**-------------------------------------------------
  * @desc Display individual recipe 
  ----------------------------------------------------*/
- router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   const recipeId = req.params.id;
 
   try {
@@ -151,6 +168,10 @@ router.get("/recipe", (req, res) => {
             Recipes.title, 
             Recipes.description, 
             Recipes.image_url, 
+            Recipes.servings,
+            Recipes.prep_time,
+            Recipes.yield,
+            Recipes.cook_time,
             Recipes.average_appearance_rating, 
             Recipes.average_taste_rating, 
             Users.username AS author 
@@ -166,7 +187,7 @@ router.get("/recipe", (req, res) => {
     });
 
     if (!recipe) {
-      return res.status(404).send('Recipe not found');
+      return res.status(404).send("Recipe not found");
     }
 
     // Fetch ingredients
@@ -200,14 +221,14 @@ router.get("/recipe", (req, res) => {
     });
 
     // Render the detailed recipe page
-    res.render('recipes/recipe', {
+    res.render("recipes/recipe", {
       recipe,
       ingredients,
-      instructions
+      instructions,
     });
   } catch (error) {
-    console.error('Error fetching recipe details:', error.message);
-    res.status(500).send('Internal Server Error');
+    console.error("Error fetching recipe details:", error.message);
+    res.status(500).send("Internal Server Error");
   }
 });
 

@@ -54,6 +54,10 @@ CREATE TABLE Recipes (
     title VARCHAR(100) NOT NULL,
     description TEXT,
     image_url VARCHAR(255),
+    servings VARCHAR(255),
+    prep_time VARCHAR(255),
+    yield VARCHAR(255),
+    cook_time VARCHAR(255),
     average_appearance_rating DECIMAL(3, 2) DEFAULT 0.00,
     average_taste_rating DECIMAL(3, 2) DEFAULT 0.00,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -102,8 +106,6 @@ INSERT INTO Users (
     'User',
     'test@example.com'
 );
-
-
 
 
 COMMIT;

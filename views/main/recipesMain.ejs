@@ -22,7 +22,6 @@
               <a href="#" class="w3-bar-item w3-button">Link 3</a>
             </div>
           </div>
-     
 
         <a href="/about">About Us</a>
       </nav>
@@ -31,14 +30,14 @@
       <div id="recipes-list">
         <% if (typeof recipes !== 'undefined' && recipes && recipes.length > 0) { %>
           <% recipes.forEach(recipe => { %>
-            <div class="recipe-container"><a href="/recipes/<%= recipe.recipe_id %>">
+            <a href="/recipes/<%= recipe.recipe_id %>"><div class="recipe-container">
               <h2><%= recipe.title %></h2>
               <p><strong>Description:</strong> <%= recipe.description %></p>
               <p><strong>Author:</strong> <%= recipe.author %></p>
               <% if (recipe.image_url) { %>
                 <img src="<%= recipe.image_url %>" alt="<%= recipe.title %>" width="200">
               <% } %>
-            </a></div>
+         </div></a>
           <% }); %>
         <% } else { %>
           <p>No recipes found.</p>
