@@ -1,12 +1,11 @@
 const express = require("express");
 const router = express.Router();
-
-/**-------------------------------------------------
- * @desc Set up multer to save uploaded files into the /public/images folder.
- ----------------------------------------------------*/
 const multer = require("multer");
 const path = require("path");
 
+/**-------------------------------------------------
+ * @desc configure multer to save uploaded files into the /public/images folder.
+ ----------------------------------------------------*/
 // Configure storage for multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -25,7 +24,7 @@ const upload = multer({
 });
 
 /**-------------------------------------------------
- * @desc Create New recipe
+ * @desc Create New recipe 
  ----------------------------------------------------*/
 // Handle POST request to create a new recipe
 router.post("/create-recipe", upload.single("image"), async (req, res) => {
@@ -90,8 +89,13 @@ router.post("/create-recipe", upload.single("image"), async (req, res) => {
   }
 });
 
+router.get("/create-recipe", (req, res) => {
+  res.render("recipes/createRecipe");
+});
+
+
 /**-------------------------------------------------
- * @desc Display all recipe 
+ * @desc Display all recipes in main page 
  ----------------------------------------------------*/
 router.get("/", async (req, res) => {
   try {
@@ -128,12 +132,83 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/create-recipe", (req, res) => {
-  res.render("recipes/createRecipe");
-});
-
 router.get("/recipe", (req, res) => {
   res.render("recipes/recipe");
+});
+
+/**-------------------------------------------------
+ * @desc Display individual recipe 
+ ----------------------------------------------------*/
+ router.get('/:id', async (req, res) => {
+  const recipeId = req.params.id;
+
+  try {
+    // Fetch recipe details
+    const recipe = await new Promise((resolve, reject) => {
+      db.get(
+        `SELECT 
+            Recipes.recipe_id, 
+            Recipes.title, 
+            Recipes.description, 
+            Recipes.image_url, 
+            Recipes.average_appearance_rating, 
+            Recipes.average_taste_rating, 
+            Users.username AS author 
+         FROM Recipes
+         INNER JOIN Users ON Recipes.user_id = Users.user_id
+         WHERE Recipes.recipe_id = ?`,
+        [recipeId],
+        (err, row) => {
+          if (err) reject(err);
+          else resolve(row);
+        }
+      );
+    });
+
+    if (!recipe) {
+      return res.status(404).send('Recipe not found');
+    }
+
+    // Fetch ingredients
+    const ingredients = await new Promise((resolve, reject) => {
+      db.all(
+        `SELECT ingredient_name, ingredient_order 
+         FROM Ingredients 
+         WHERE recipe_id = ? 
+         ORDER BY ingredient_order`,
+        [recipeId],
+        (err, rows) => {
+          if (err) reject(err);
+          else resolve(rows);
+        }
+      );
+    });
+
+    // Fetch instructions
+    const instructions = await new Promise((resolve, reject) => {
+      db.all(
+        `SELECT instruction_text, step_order 
+         FROM Instructions 
+         WHERE recipe_id = ? 
+         ORDER BY step_order`,
+        [recipeId],
+        (err, rows) => {
+          if (err) reject(err);
+          else resolve(rows);
+        }
+      );
+    });
+
+    // Render the detailed recipe page
+    res.render('recipes/recipe', {
+      recipe,
+      ingredients,
+      instructions
+    });
+  } catch (error) {
+    console.error('Error fetching recipe details:', error.message);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 module.exports = router;

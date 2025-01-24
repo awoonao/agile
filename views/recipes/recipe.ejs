@@ -3,10 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <title>Recipes</title>
 </head>
 <body>
-  <h1>All Recipes</h1>
+  <header>
+    <h1>Recipes</h1>
+    <a href="/recipes">Recipes</a>
+
+    <!-- //change this in the future -->
+    <div class="w3-dropdown-hover">
+      <button class="w3-button w3-black">My Account!</button>
+      <div class="w3-dropdown-content w3-bar-block w3-border">
+        <a href="recipes/create-recipe" class="w3-bar-item w3-button"
+          >Create New Recipe</a
+        >
+        <a href="#" class="w3-bar-item w3-button">Link 2</a>
+        <a href="#" class="w3-bar-item w3-button">Link 3</a>
+      </div>
+    </div>
+
+    <a href="/about">About Us</a>
+  </nav>
+  </header>
+  <main>
+    <h1><%= recipe.title %></h1>
+    <p><strong>Author:</strong> <%= recipe.author %></p>
+    <p><strong>Description:</strong> <%= recipe.description %></p>
+
+    <% if (recipe.image_url) { %>
+    <img
+      src="<%= recipe.image_url %>"
+      alt="<%= recipe.title %>"
+      width="400"
+    />
+    <% } else { %>
+    <p>No image available.</p>
+    <% } %>
+
+    <h2>Ingredients</h2>
+    <ul>
+      <% ingredients.forEach(ingredient => { %>
+      <li><%= ingredient.ingredient_name %></li>
+      <% }); %>
+    </ul>
+
+    <h2>Instructions</h2>
+    <ol>
+      <% instructions.forEach(instruction => { %>
+      <li><%= instruction.instruction_text %></li>
+      <% }); %>
+    </ol>
+  </main>
+<footer>
+
+</footer>
 
   
 </body>
