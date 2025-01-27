@@ -75,12 +75,17 @@ CREATE TABLE Ingredients (
 CREATE TABLE Substitutions (
     substitution_id INTEGER PRIMARY KEY AUTOINCREMENT,
     recipe_id INTEGER NOT NULL,
+    ingredient_id INTEGER, 
+    instruction_id INTEGER,
     ingredient_name VARCHAR(100) NOT NULL,
     substitution VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     votes INTEGER DEFAULT 0,
     suggested_by INTEGER NOT NULL,
+    type TEXT CHECK(type IN ('ingredient', 'instruction')) DEFAULT 'ingredient',
     FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id) ON DELETE CASCADE,
+    FOREIGN KEY (ingredient_id) REFERENCES Ingredients(ingredient_id) ON DELETE CASCADE,
+    FOREIGN KEY (instruction_id) REFERENCES Instructions(instruction_id) ON DELETE CASCADE,
     FOREIGN KEY (suggested_by) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 

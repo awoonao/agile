@@ -20,7 +20,15 @@ const storage = multer.diskStorage({
 // Initialize multer with the storage configuration
 const upload = multer({
   storage,
-  limits: { fileSize: 2 * 1024 * 1024 }, // Limit to 2MB
+  limits: { fileSize: 2 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only JPEG, PNG, and GIF files are allowed.'));
+    }
+  },
 });
 
 /**-------------------------------------------------
@@ -36,7 +44,7 @@ router.post("/create-recipe", upload.single("image"), async (req, res) => {
     instructions,
     servings,
     prep_time,
-    yield,
+    yield:recipeYield,
     cook_time,
   } = req.body;
 
@@ -59,7 +67,7 @@ router.post("/create-recipe", upload.single("image"), async (req, res) => {
           imagePath,
           servings,
           prep_time,
-          yield,
+          recipeYield,
           cook_time,
         ],
         function (err) {
@@ -74,10 +82,10 @@ router.post("/create-recipe", upload.single("image"), async (req, res) => {
     });
 
     // Insert each ingredient into the Ingredients table
-    ingredients.forEach(async (ingredient, index) => {
-      await new Promise((resolve, reject) => {
-        db.run(
-          `INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order) VALUES (?, ?, ?)`,
+   for (const [index, ingredient] of ingredients.entries()) {
+    await new Promise((resolve, reject) => {
+      db.run(
+        `INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order) VALUES (?, ?, ?)`,
           [recipeId, ingredient, index + 1],
           function (err) {
             if (err) reject(err); // Handle insertion error
@@ -85,10 +93,10 @@ router.post("/create-recipe", upload.single("image"), async (req, res) => {
           }
         );
       });
-    });
+    };
 
     // Insert each instruction into the Instructions table
-    instructions.forEach(async (instruction, index) => {
+    for (const [index, instruction] of instructions.entries()) {
       await new Promise((resolve, reject) => {
         db.run(
           `INSERT INTO Instructions (recipe_id, instruction_text, step_order) VALUES (?, ?, ?)`,
@@ -99,7 +107,7 @@ router.post("/create-recipe", upload.single("image"), async (req, res) => {
           }
         );
       });
-    });
+    };
 
     res.redirect("/recipes"); // Redirect to the desired page after successful addition
   } catch (error) {
@@ -109,6 +117,255 @@ router.post("/create-recipe", upload.single("image"), async (req, res) => {
 
 router.get("/create-recipe", (req, res) => {
   res.render("recipes/createRecipe");
+});
+
+/**-------------------------------------------------
+ * @desc display current recipe details for new variant
+ ----------------------------------------------------*/
+
+router.get("/:id/create-variant", async (req, res) => {
+  const recipeId = req.params.id;
+
+  try {
+    // Fetch recipe details
+    const recipe = await new Promise((resolve, reject) => {
+      db.get(
+        `SELECT 
+            Recipes.recipe_id, 
+            Recipes.title, 
+            Recipes.description, 
+            Recipes.image_url, 
+            Recipes.servings,
+            Recipes.prep_time,
+            Recipes.yield,
+            Recipes.cook_time,
+            Users.username AS author 
+         FROM Recipes
+         INNER JOIN Users ON Recipes.user_id = Users.user_id
+         WHERE Recipes.recipe_id = ?`,
+        [recipeId],
+        (err, row) => {
+          if (err) reject(err);
+          else resolve(row);
+        }
+      );
+    });
+
+    if (!recipe) {
+      return res.status(404).send("Recipe not found");
+    }
+
+    // Fetch ingredients
+    const ingredients = await new Promise((resolve, reject) => {
+      db.all(
+        `SELECT ingredient_name, ingredient_order 
+         FROM Ingredients 
+         WHERE recipe_id = ? 
+         ORDER BY ingredient_order`,
+        [recipeId],
+        (err, rows) => {
+          if (err) reject(err);
+          else resolve(rows);
+        }
+      );
+    });
+
+    // Fetch instructions
+    const instructions = await new Promise((resolve, reject) => {
+      db.all(
+        `SELECT instruction_text, step_order 
+         FROM Instructions 
+         WHERE recipe_id = ? 
+         ORDER BY step_order`,
+        [recipeId],
+        (err, rows) => {
+          if (err) reject(err);
+          else resolve(rows);
+        }
+      );
+    });
+
+    // Render the variant creation page
+    res.render("recipes/createVariant", {
+      recipe,
+      ingredients,
+      instructions,
+    });
+  } catch (error) {
+    console.error("Error fetching recipe details:", error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+/**-------------------------------------------------
+ * @desc Create New recipe variant
+ ----------------------------------------------------*/
+router.post("/:id/create-variant", async (req, res) => {
+  const originalRecipeId = req.params.id;
+  const {
+    substitutions,
+    title,
+    description,
+    servings,
+    prep_time,
+    cook_time,
+    yield: recipeYield,
+  } = req.body;
+  const userId = 1; // Replace with session user ID in production
+
+  try {
+    // Insert the new recipe variant
+    const newRecipeId = await new Promise((resolve, reject) => {
+      db.run(
+        `INSERT INTO Recipes (user_id, title, description, image_url, servings, prep_time, cook_time, yield) 
+         SELECT ?, ?, ?, image_url, ?, ?, ?, ? 
+         FROM Recipes 
+         WHERE recipe_id = ?`,
+        [
+          userId,
+          title || `Variant of ${originalRecipeId}`,
+          description || "",
+          servings,
+          prep_time,
+          cook_time,
+          recipeYield,
+          originalRecipeId,
+        ],
+        function (err) {
+          if (err) reject(err);
+          else resolve(this.lastID); // Return the ID of the new recipe
+        }
+      );
+    });
+
+    // Copy ingredients and save substitutions
+    const ingredients = await new Promise((resolve, reject) => {
+      db.all(
+        `SELECT ingredient_id, ingredient_name, ingredient_order 
+        FROM Ingredients 
+        WHERE recipe_id = ?
+        ORDER BY ingredient_order`,
+        [originalRecipeId],
+        (err, rows) => {
+          if (err) reject(err);
+          else resolve(rows);
+        }
+      );
+    });
+
+    for (const ingredient of ingredients) {
+      // Adjust the index to match 1-based ordering
+      const substitution =
+        substitutions?.ingredients?.[ingredient.ingredient_order - 1];
+      const ingredientName = substitution || ingredient.ingredient_name;
+
+      // Insert the ingredient
+      const newIngredientId = await new Promise((resolve, reject) => {
+        db.run(
+          `INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order) 
+         VALUES (?, ?, ?)`,
+          [newRecipeId, ingredientName, ingredient.ingredient_order],
+          function (err) {
+            if (err) reject(err);
+            else resolve(this.lastID);
+          }
+        );
+      });
+
+      // Save the substitution if it exists
+      if (substitution) {
+        await new Promise((resolve, reject) => {
+          db.run(
+            `INSERT INTO Substitutions (
+            recipe_id, 
+            ingredient_id,
+            ingredient_name, 
+            substitution, 
+            suggested_by,
+            type
+          ) VALUES (?, ?, ?, ?, ?, 'ingredient')`,
+            [
+              newRecipeId,
+              newIngredientId,
+              ingredient.ingredient_name,
+              substitution,
+              userId,
+            ],
+            (err) => {
+              if (err) reject(err);
+              else resolve();
+            }
+          );
+        });
+      }
+    }
+
+// Copy instructions and save substitutions
+const instructions = await new Promise((resolve, reject) => {
+  db.all(
+    `SELECT instruction_id, instruction_text, step_order 
+     FROM Instructions 
+     WHERE recipe_id = ?
+     ORDER BY step_order`,
+    [originalRecipeId],
+    (err, rows) => {
+      if (err) reject(err);
+      else resolve(rows);
+    }
+  );
+});
+
+for (const instruction of instructions) {
+  // Adjust the index to match 1-based ordering
+  const substitution = substitutions?.instructions?.[instruction.step_order - 1];
+  const instructionText = substitution || instruction.instruction_text;
+
+  // Insert the instruction
+  const newInstructionId = await new Promise((resolve, reject) => {
+    db.run(
+      `INSERT INTO Instructions (recipe_id, instruction_text, step_order) 
+       VALUES (?, ?, ?)`,
+      [newRecipeId, instructionText, instruction.step_order],
+      function(err) {
+        if (err) reject(err);
+        else resolve(this.lastID);
+      }
+    );
+  });
+
+  // Save the substitution if it exists
+  if (substitution) {
+    await new Promise((resolve, reject) => {
+      db.run(
+        `INSERT INTO Substitutions (
+          recipe_id,
+          instruction_id,
+          ingredient_name,
+          substitution,
+          suggested_by,
+          type
+        ) VALUES (?, ?, ?, ?, ?, 'instruction')`,
+        [
+          newRecipeId,
+          newInstructionId,
+          instruction.instruction_text,
+          substitution,
+          userId
+        ],
+        (err) => {
+          if (err) reject(err);
+          else resolve();
+        }
+      );
+    });
+  }
+}
+
+res.redirect(`/recipes/${newRecipeId}`);
+} catch (error) {
+console.error("Error creating recipe variant:", error.message);
+res.status(500).send("Internal Server Error");
+}
 });
 
 /**-------------------------------------------------
@@ -163,21 +420,10 @@ router.get("/:id", async (req, res) => {
     // Fetch recipe details
     const recipe = await new Promise((resolve, reject) => {
       db.get(
-        `SELECT 
-            Recipes.recipe_id, 
-            Recipes.title, 
-            Recipes.description, 
-            Recipes.image_url, 
-            Recipes.servings,
-            Recipes.prep_time,
-            Recipes.yield,
-            Recipes.cook_time,
-            Recipes.average_appearance_rating, 
-            Recipes.average_taste_rating, 
-            Users.username AS author 
-         FROM Recipes
-         INNER JOIN Users ON Recipes.user_id = Users.user_id
-         WHERE Recipes.recipe_id = ?`,
+        `SELECT r.*, u.username as author 
+       FROM Recipes r
+       JOIN Users u ON r.user_id = u.user_id
+       WHERE r.recipe_id = ?`,
         [recipeId],
         (err, row) => {
           if (err) reject(err);
@@ -193,10 +439,16 @@ router.get("/:id", async (req, res) => {
     // Fetch ingredients
     const ingredients = await new Promise((resolve, reject) => {
       db.all(
-        `SELECT ingredient_name, ingredient_order 
-         FROM Ingredients 
-         WHERE recipe_id = ? 
-         ORDER BY ingredient_order`,
+        `SELECT 
+            i.ingredient_id,
+            i.ingredient_name as original_name,
+            i.ingredient_order,
+            s.substitution as substitution_name,
+            COALESCE(s.ingredient_name, i.ingredient_name) as original_for_sub
+        FROM Ingredients i
+        LEFT JOIN Substitutions s ON s.ingredient_id = i.ingredient_id AND s.type = 'ingredient'
+        WHERE i.recipe_id = ?
+        ORDER BY i.ingredient_order`,
         [recipeId],
         (err, rows) => {
           if (err) reject(err);
@@ -208,10 +460,16 @@ router.get("/:id", async (req, res) => {
     // Fetch instructions
     const instructions = await new Promise((resolve, reject) => {
       db.all(
-        `SELECT instruction_text, step_order 
-         FROM Instructions 
-         WHERE recipe_id = ? 
-         ORDER BY step_order`,
+        `SELECT 
+            i.instruction_id,
+            i.instruction_text as original_name,
+            i.step_order,
+            s.substitution as substitution_name,
+            COALESCE(s.ingredient_name, i.instruction_text) as original_for_sub
+        FROM Instructions i
+        LEFT JOIN Substitutions s ON s.instruction_id = i.instruction_id AND s.type = 'instruction'
+        WHERE i.recipe_id = ?
+        ORDER BY i.step_order`,
         [recipeId],
         (err, rows) => {
           if (err) reject(err);

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Variant for <%= recipe.title %></title>
+  <style>
+    .substitution-box {
+      display: none;
+    }
+  </style>
+  <script>
+    function toggleSubstitution(inputId) {
+      const textbox = document.getElementById(inputId);
+      textbox.style.display = textbox.style.display === 'none' ? 'block' : 'none';
+    }
+  </script>
+</head>
+<body>
+  <h1>Create Variant for "<%= recipe.title %>"</h1>
+  <form action="/recipes/<%= recipe.recipe_id %>/create-variant" method="POST">
+    <h2>Recipe Details</h2>
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" value="Variant of <%= recipe.title %>"><br>
+  
+    <label for="description">Description:</label>
+    <textarea id="description" name="description"><%= recipe.description %></textarea><br>
+  
+    <label for="servings">Servings:</label>
+    <input type="text" id="servings" name="servings" value="<%= recipe.servings %>"><br>
+  
+    <label for="prep_time">Prep Time:</label>
+    <input type="text" id="prep_time" name="prep_time" value="<%= recipe.prep_time %>"><br>
+  
+    <label for="cook_time">Cook Time:</label>
+    <input type="text" id="cook_time" name="cook_time" value="<%= recipe.cook_time %>"><br>
+  
+    <label for="yield">Yield:</label>
+    <input type="text" id="yield" name="yield" value="<%= recipe.yield %>"><br>
+  
+    <!-- Ingredients and Instructions sections remain the same -->
+    <h2>Ingredients</h2>
+    <% ingredients.forEach((ingredient, index) => { %>
+      <div>
+        <%= ingredient.ingredient_name %>
+        <button type="button" onclick="toggleSubstitution('ingredient-<%= index %>')">Add Substitution</button>
+        <input type="text" id="ingredient-<%= index %>" name="substitutions[ingredients][<%= ingredient.ingredient_order %>]" placeholder="Enter substitution" class="substitution-box">
+      </div>
+    <% }); %>
+  
+    <h2>Instructions</h2>
+    <% instructions.forEach((instruction, index) => { %>
+      <div>
+        <%= instruction.instruction_text %>
+        <button type="button" onclick="toggleSubstitution('instruction-<%= index %>')">Add Substitution</button>
+        <input type="text" id="instruction-<%= index %>" name="substitutions[instructions][<%= instruction.step_order %>]" placeholder="Enter substitution" class="substitution-box">
+      </div>
+    <% }); %>
+  
+    <button type="submit">Save Variant</button>
+  </form>
+  
+</body>
+</html>

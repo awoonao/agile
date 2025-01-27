@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <title>Recipes</title>
 </head>
+
 <body>
   <header>
     <h1>Recipes</h1>
@@ -15,55 +17,78 @@
     <div class="w3-dropdown-hover">
       <button class="w3-button w3-black">My Account!</button>
       <div class="w3-dropdown-content w3-bar-block w3-border">
-        <a href="recipes/create-recipe" class="w3-bar-item w3-button"
-          >Create New Recipe</a
-        >
+        <a href="./create-recipe" class="w3-bar-item w3-button">Create New Recipe</a>
         <a href="#" class="w3-bar-item w3-button">Link 2</a>
         <a href="#" class="w3-bar-item w3-button">Link 3</a>
       </div>
     </div>
 
     <a href="/about">About Us</a>
-  </nav>
+    </nav>
   </header>
   <main>
-    <h1><%= recipe.title %></h1>
-    <p><strong>Author:</strong> <%= recipe.author %></p>
-    <p><strong>Description:</strong> <%= recipe.description %></p>
+    <h1>
+      <%= recipe.title %>
+    </h1>
+    <p><strong>Author:</strong>
+      <%= recipe.author %>
+    </p>
+    <p><strong>Description:</strong>
+      <%= recipe.description %>
+    </p>
+    <br>
+
+    <a href="/recipes/<%= recipe.recipe_id %>/create-variant">Create Variant Recipe</a>
+    <br><br>
 
     <% if (recipe.image_url) { %>
-    <img
-      src="<%= recipe.image_url %>"
-      alt="<%= recipe.title %>"
-      width="400"
-    />
-    <% } else { %>
-    <p>No image available.</p>
-    <% } %>
+      <img src="<%= recipe.image_url %>" alt="<%= recipe.title %>" width="400" />
+      <% } else { %>
+        <p>No image available.</p>
+        <% } %>
 
-    <h2>Ingredients</h2>
-    <ul>
-      <% ingredients.forEach(ingredient => { %>
-      <li><%= ingredient.ingredient_name %></li>
-      <% }); %>
-    </ul>
+        <h2>Ingredients</h2>
+        <ul>
+          <% ingredients.forEach(ingredient => { %>
+            <% if (ingredient.substitution_name) { %>
+              <li><s><%= ingredient.original_for_sub  %></s> → <%= ingredient.substitution_name %></li>
+            <% } else { %>
+              <li><%= ingredient.original_name %></li>
+            <% } %>
+          <% }); %>
+        </ul>
+      
+        <h2>Instructions</h2>
+        <ol>
+          <% instructions.forEach(instruction => { %>
+            <% if (instruction.substitution_name) { %>
+              <li><s><%= instruction.original_for_sub  %></s> → <%= instruction.substitution_name %></li>
+            <% } else { %>
+              <li><%= instruction.original_name %></li>
+            <% } %>
+          <% }); %>
+        </ol>
 
-    <h2>Instructions</h2>
-    <ol>
-      <% instructions.forEach(instruction => { %>
-      <li><%= instruction.instruction_text %></li>
-      <% }); %>
-    </ol>
-    <br>
-    <p><strong>Servings:</strong> <%= recipe.servings %></p>
-    <p><strong>Prep Time:</strong> <%= recipe.prep_time %></p>
-    <p><strong>Yield:</strong> <%= recipe.yield %></p>
-    <p><strong>Cook time:</strong> <%= recipe.cook_time %></p>
+
+          <br>
+          <p><strong>Servings:</strong>
+            <%= recipe.servings %>
+          </p>
+          <p><strong>Prep Time:</strong>
+            <%= recipe.prep_time %>
+          </p>
+          <p><strong>Yield:</strong>
+            <%= recipe.yield %>
+          </p>
+          <p><strong>Cook time:</strong>
+            <%= recipe.cook_time %>
+          </p>
   </main>
-<footer>
+  <footer>
 
-</footer>
+  </footer>
 
-  
+
 </body>
+
 </html>
