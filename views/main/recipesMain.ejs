@@ -3,48 +3,112 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Common css -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <!-- recipeMain.css -->
     <link rel="stylesheet" type="text/css" href="/css/recipeMain.css" />
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
     <title>Recipes</title>
   </head>
   <body>
     <header>
-      <nav>
-        <h1>Recipes</h1>
-        <a href="/recipes">Recipes</a>
+      <nav class="navbar navbar-expand-xl nav-container">
+        <!-- Brand -->
+        <a class="navbar-brand" href="/"
+          ><img src="/images/logo.png" alt="logo"
+        /></a>
 
-        <!-- //change this in the future -->
-        <div class="w3-dropdown-hover">
-            <button class="w3-button w3-black">My Account!</button>
-            <div class="w3-dropdown-content w3-bar-block w3-border">
-              <a href="recipes/create-recipe" class="w3-bar-item w3-button">Create New Recipe</a>
-              <a href="#" class="w3-bar-item w3-button">Link 2</a>
-              <a href="#" class="w3-bar-item w3-button">Link 3</a>
-            </div>
-          </div>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#collapsibleNavbar"
+        >
+        <!-- <a href="https://www.flaticon.com/free-icons/hamburger" title="hamburger icons">Hamburger icons created by Arief Harvi - Flaticon</a> -->
+          <span class="navbar-toggler-icon"><img src="/images/hamburger-menu.png" alt="hamburger-menu"
+            /></span>
 
-        <a href="/about">About Us</a>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+          <!-- Links -->
+          <ul class="navbar-nav">
+            <!-- Recipe -->
+            <li class="nav-item">
+              <a class="nav-link" href="/recipes">Recipe</a>
+            </li>
+
+            <!-- Dropdown (account) -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbardrop"
+                data-toggle="dropdown"
+              >
+                My Account
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="recipes/create-recipe"
+                  >Create New Recipe</a
+                >
+                <a class="dropdown-item" href="#">My Profile</a>
+                <a class="dropdown-item" href="#">My Recipes</a>
+                <a class="dropdown-item" href="#">Saved Recipes</a>
+                <a class="dropdown-item" href="#">Logout</a>
+              </div>
+            </li>
+            <!-- about us -->
+            <li class="nav-item">
+              <a class="nav-link" href="/about">About us</a>
+            </li>
+            <li>
+              <form class="form-inline" action="/action_page.php">
+                <input
+                  class="form-control mr-sm-2"
+                  type="text"
+                  placeholder="Search"
+                />
+                <!-- <button class="btn btn-success" type="submit">Search</button> -->
+              </form>
+            </li>
+          </ul>
+        </div>
       </nav>
     </header>
     <main>
       <div id="recipes-list">
-        <% if (typeof recipes !== 'undefined' && recipes && recipes.length > 0) { %>
-          <% recipes.forEach(recipe => { %>
-            <a href="/recipes/<%= recipe.recipe_id %>"><div class="recipe-container">
-              <h2><%= recipe.title %></h2>
-              <p><strong>Description:</strong> <%= recipe.description %></p>
-              <p><strong>Author:</strong> <%= recipe.author %></p>
-              <% if (recipe.image_url) { %>
-                <img src="<%= recipe.image_url %>" alt="<%= recipe.title %>" width="200">
-              <% } %>
-         </div></a>
-          <% }); %>
-        <% } else { %>
-          <p>No recipes found.</p>
+        <% if (typeof recipes !== 'undefined' && recipes && recipes.length > 0)
+        { %> <% recipes.forEach(recipe => { %>
+        <a href="/recipes/<%= recipe.recipe_id %>"
+          ><div class="recipe-container">
+            <h2><%= recipe.title %></h2>
+            <p><strong>Description:</strong> <%= recipe.description %></p>
+            <p><strong>Author:</strong> <%= recipe.author %></p>
+            <% if (recipe.image_url) { %>
+            <img
+              src="<%= recipe.image_url %>"
+              alt="<%= recipe.title %>"
+              width="200"
+            />
+            <% } %>
+          </div></a
+        >
+        <% }); %> <% } else { %>
+        <p>No recipes found.</p>
         <% } %>
       </div>
     </main>
-    
+
     <footer></footer>
   </body>
 </html>

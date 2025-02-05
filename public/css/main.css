@@ -1,1 +1,76 @@
 /* Define styles */
+body {
+    background-color: #FFF4EF;
+}
+
+body a ,h2{
+    color: #96290B;
+}
+
+body a:hover {
+    color: #96290B;
+}
+
+
+
+.nav-container {
+    background-color: #96290B;
+}
+
+.navbar-nav {
+    width: 100%;
+    justify-content: space-evenly;
+
+}
+
+.navbar-nav a {
+    color: #FFF4EF;
+    font-size: 1.5rem;
+}
+
+nav img {
+    width: 200px;
+    height: 100px;
+    object-fit: scale-down;
+    padding-bottom: 20px;
+}
+
+.navbar-toggler-icon img {
+    width: 100%;
+    height: 100%;
+    filter: invert(95%);
+    object-fit: contain;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0px;
+}
+
+.dropdown-menu {
+    background-color: #96290B;
+    border-style: solid;
+    border-color: #BB8379;
+}
+
+.dropdown-menu a {
+    font-size: 1rem;
+}
+
+.form-inline .form-control {
+    width: 350px;
+    align-items: center;
+}
+
+.form-inline {
+    padding-top: 2%;
+}
+
+.navbar-nav a:hover {
+    color: #E6D7D0;
+    font-size: 1.5rem;
+}
+
+.dropdown-menu a:hover {
+    color: #96290B;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px;
+}

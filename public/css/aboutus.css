@@ -1,0 +1,77 @@
+.about-container {
+    display: grid;
+    grid-template-areas:
+        "mtt-content mtt-image"
+        "mission-image mission-content"
+        "vision-content vision-image"
+    ;
+    grid-template-columns: 1fr 1fr;
+    gap:5% 5px;
+    padding: 5px;
+    margin: 5% 15%;
+}
+
+.about-container>div {
+ 
+    padding: 10px;
+    font-size: 30px;
+    text-align: center;
+}
+
+/* Assigning correct grid areas */
+.about-container .mtt-content {
+    grid-area: mtt-content;
+    margin: auto;
+
+}
+
+.about-container .mtt-image {
+    grid-area: mtt-image;
+}
+
+.about-container .mission-content {
+    grid-area: mission-content;
+    margin: auto;
+}
+
+.about-container .mission-image {
+    grid-area: mission-image;
+}
+
+.about-container .vision-content {
+    grid-area: vision-content;
+    margin: auto;
+
+}
+
+.about-container .vision-image {
+    grid-area: vision-image;
+}
+
+p{
+    font-size: 1rem;
+    text-align: justify;
+    margin: auto;
+    color: #96290B;
+}
+
+img {
+    width: 100%;
+    /* height: 100%; */
+    object-fit: scale-down;
+    border-radius: 15px
+
+}
+/* Responsive Design
+@media (max-width: 768px) {
+    .about-container {
+        grid-template-areas:
+            "mtt-content"
+            "mtt-image"
+            "mission-content"
+            "mission-image"
+            "vision-content"
+            "vision-image";
+        grid-template-columns: 1fr;
+    }
+} */
