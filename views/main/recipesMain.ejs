@@ -91,22 +91,25 @@
         { %> <% recipes.forEach(recipe => { %>
         <a href="/recipes/<%= recipe.recipe_id %>"
           ><div class="recipe-container">
+            <% if (recipe.image_url) { %>
+              <img
+                src="<%= recipe.image_url %>"
+                alt="<%= recipe.title %>"
+                width="200"
+              />
+              <% } %>
+          <div class="recipe-content">
             <h2><%= recipe.title %></h2>
             <p><strong>Description:</strong> <%= recipe.description %></p>
             <p><strong>Author:</strong> <%= recipe.author %></p>
-            <% if (recipe.image_url) { %>
-            <img
-              src="<%= recipe.image_url %>"
-              alt="<%= recipe.title %>"
-              width="200"
-            />
-            <% } %>
-          </div></a
-        >
+          </a></div>
+          </div>
+          <hr>
         <% }); %> <% } else { %>
         <p>No recipes found.</p>
         <% } %>
       </div>
+      
     </main>
 
     <footer></footer>

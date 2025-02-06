@@ -1,94 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Bootstrap -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-  <title>Recipes</title>
-</head>
+    <!-- Common css -->
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
 
-<body>
-  <header>
-    <h1>Recipes</h1>
-    <a href="/recipes">Recipes</a>
+    <!-- recipe css -->
+    <link rel="stylesheet" type="text/css" href="/css/recipe.css" />
+    <title>Recipes</title>
+  </head>
 
-    <!-- //change this in the future -->
-    <div class="w3-dropdown-hover">
-      <button class="w3-button w3-black">My Account!</button>
-      <div class="w3-dropdown-content w3-bar-block w3-border">
-        <a href="./create-recipe" class="w3-bar-item w3-button">Create New Recipe</a>
-        <a href="#" class="w3-bar-item w3-button">Link 2</a>
-        <a href="#" class="w3-bar-item w3-button">Link 3</a>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-xl nav-container">
+        <!-- Brand -->
+        <a class="navbar-brand" href="/"
+          ><img src="/images/logo.png" alt="logo"
+        /></a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#collapsibleNavbar"
+        >
+          <!-- <a href="https://www.flaticon.com/free-icons/hamburger" title="hamburger icons">Hamburger icons created by Arief Harvi - Flaticon</a> -->
+          <span class="navbar-toggler-icon"
+            ><img src="/images/hamburger-menu.png" alt="hamburger-menu"
+          /></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+          <!-- Links -->
+          <ul class="navbar-nav">
+            <!-- Recipe -->
+            <li class="nav-item">
+              <a class="nav-link" href="/recipes">Recipe</a>
+            </li>
+
+            <!-- Dropdown (account) -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbardrop"
+                data-toggle="dropdown"
+              >
+                My Account
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="recipes/create-recipe"
+                  >Create New Recipe</a
+                >
+                <a class="dropdown-item" href="#">My Profile</a>
+                <a class="dropdown-item" href="#">My Recipes</a>
+                <a class="dropdown-item" href="#">Saved Recipes</a>
+                <a class="dropdown-item" href="#">Logout</a>
+              </div>
+            </li>
+            <!-- about us -->
+            <li class="nav-item">
+              <a class="nav-link" href="/about">About us</a>
+            </li>
+            <li>
+              <form class="form-inline" action="/action_page.php">
+                <input
+                  class="form-control mr-sm-2"
+                  type="text"
+                  placeholder="Search"
+                />
+                <!-- <button class="btn btn-success" type="submit">Search</button> -->
+              </form>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <div class="recipe-container">
+        <div class="average-rating">
+          <p><strong>Average Rating:</strong> <%= recipe.average_rating %></p>
+        </div>
+
+        <div class="variant">
+          <a href="/recipes/<%= recipe.recipe_id %>/create-variant"
+            >Create Variant Recipe</a
+          >
+        </div>
+
+        <div class="image">
+          <% if (recipe.image_url) { %>
+          <img
+            src="<%= recipe.image_url %>"
+            alt="<%= recipe.title %>"
+            width="400"
+          />
+          <% } else { %>
+          <p>No image available.</p>
+          <% } %>
+        </div>
+
+        <div class="title">
+          <h1><%= recipe.title %></h1>
+          <p><strong>Author:</strong> <%= recipe.author %></p>
+
+        </div>
+        <div class="description">
+          <p><strong>Description:</strong> <%= recipe.description %></p>
+        </div>
+
+        <div class="ingredient">
+          <h2>Ingredients</h2>
+          <ul>
+            <% ingredients.forEach(ingredient => { %> <% if
+            (ingredient.substitution_name) { %>
+            <li>
+              <s><%= ingredient.original_for_sub %></s> → <%=
+              ingredient.substitution_name %>
+            </li>
+            <% } else { %>
+            <li><%= ingredient.original_name %></li>
+            <% } %> <% }); %>
+          </ul>
+        </div>
+
+        <div class="instruction">
+          <h2>Instructions</h2>
+          <ul>
+            <% instructions.forEach(instruction => { %> <% if
+            (instruction.substitution_name) { %>
+            <li>
+              <s><%= instruction.original_for_sub %></s> → <%=
+              instruction.substitution_name %>
+            </li>
+            <% } else { %>
+            <li><%= instruction.original_name %></li>
+            <% } %> <% }); %>
+          </ul>
+        </div>
+
+        <br />
+        <div class="servings">
+          <p><strong>Servings:</strong> <%= recipe.servings %></p>
+        </div>
+
+        <div class="yield">
+          <p><strong>Yield:</strong> <%= recipe.yield %></p>
+        </div>
+
+        <div class="preptime">
+          <p><strong>Prep Time:</strong> <%= recipe.prep_time %></p>
+        </div>
+
+        <div class="cooktime">
+          <p><strong>Cook Time:</strong> <%= recipe.cook_time %></p>
+        </div>
+
+        <div class="appearance-rating">
       </div>
-    </div>
-
-    <a href="/about">About Us</a>
-    </nav>
-  </header>
-  <main>
-    <h1>
-      <%= recipe.title %>
-    </h1>
-    <p><strong>Author:</strong>
-      <%= recipe.author %>
-    </p>
-    <p><strong>Description:</strong>
-      <%= recipe.description %>
-    </p>
-    <br>
-
-    <a href="/recipes/<%= recipe.recipe_id %>/create-variant">Create Variant Recipe</a>
-    <br><br>
-
-    <% if (recipe.image_url) { %>
-      <img src="<%= recipe.image_url %>" alt="<%= recipe.title %>" width="400" />
-      <% } else { %>
-        <p>No image available.</p>
-        <% } %>
-
-        <h2>Ingredients</h2>
-        <ul>
-          <% ingredients.forEach(ingredient => { %>
-            <% if (ingredient.substitution_name) { %>
-              <li><s><%= ingredient.original_for_sub  %></s> → <%= ingredient.substitution_name %></li>
-            <% } else { %>
-              <li><%= ingredient.original_name %></li>
-            <% } %>
-          <% }); %>
-        </ul>
-      
-        <h2>Instructions</h2>
-        <ol>
-          <% instructions.forEach(instruction => { %>
-            <% if (instruction.substitution_name) { %>
-              <li><s><%= instruction.original_for_sub  %></s> → <%= instruction.substitution_name %></li>
-            <% } else { %>
-              <li><%= instruction.original_name %></li>
-            <% } %>
-          <% }); %>
-        </ol>
-
-
-          <br>
-          <p><strong>Servings:</strong>
-            <%= recipe.servings %>
-          </p>
-          <p><strong>Prep Time:</strong>
-            <%= recipe.prep_time %>
-          </p>
-          <p><strong>Yield:</strong>
-            <%= recipe.yield %>
-          </p>
-          <p><strong>Cook time:</strong>
-            <%= recipe.cook_time %>
-          </p>
-  </main>
-  <footer>
-
-  </footer>
-
-
-</body>
-
+  
+      <div class="taste-rating">
+          
+      </div>
+  
+      <div class="review">
+          <h2>Reviews</h2>
+       
+      </div>
+  
+      <div class="comments">
+          <h2>Comments</h2>
+          <ul>
+            1
+             
+          </ul>
+      </div>
+        
+      </div>
+    </main>
+    <footer></footer>
+  </body>
 </html>

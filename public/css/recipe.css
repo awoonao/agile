@@ -1,0 +1,114 @@
+.recipe-container {
+    margin: 30px auto;
+    display: grid;
+    width: 80%;
+    text-align: center;
+    gap: 40px;
+    grid-template-areas:
+    "average-rating variant"
+    "image image"
+    "title title"
+    "description description"
+    "ingredient substitution"
+    "instruction substitution"
+    "servings yield"
+    "preptime cooktime"
+    "appearance-rating taste-rating"
+    "review review"
+    "comments comments";
+    grid-template-columns: 1fr 1fr;
+
+}
+
+.recipe-container img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+.recipe-container .ingredient li ,.instruction li{
+    list-style-type: none; 
+   
+
+}
+
+p,
+h1,
+li {
+    color: #96290B;
+}
+
+/* Assigning grid areas */
+.recipe-container .average-rating {
+    grid-area: average-rating;
+}
+
+.recipe-container .variant {
+    grid-area: variant;
+}
+
+.recipe-container .image {
+    grid-area: image;
+    max-width: 100%;
+}
+
+.recipe-container .title {
+    grid-area: title;
+}
+
+.recipe-container .description {
+    grid-area: description;
+    font-size: 1.2em;
+    text-align: justify;
+}
+
+.recipe-container .ingredient {
+    grid-area: ingredient;
+    text-align: left;
+    list-style-type: none; 
+}
+
+.recipe-container .substitution {
+    grid-area: substitution;
+    text-align: left;
+    list-style-type: none; 
+
+}
+
+.recipe-container .instruction {
+    grid-area: instruction;
+    text-align: left;
+    list-style-type: none; 
+}
+
+.recipe-container .servings {
+    grid-area: servings;
+}
+
+.recipe-container .yield {
+    grid-area: yield;
+}
+
+.recipe-container .preptime {
+    grid-area: preptime;
+}
+
+.recipe-container .cooktime {
+    grid-area: cooktime;
+}
+
+.recipe-container .appearance-rating {
+    grid-area: appearance-rating;
+}
+
+.recipe-container .taste-rating {
+    grid-area: taste-rating;
+}
+
+.recipe-container .review {
+    grid-area: review;
+}
+
+.recipe-container .comments {
+    grid-area: comments;
+}

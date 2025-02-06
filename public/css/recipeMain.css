@@ -1,16 +1,32 @@
 .recipe-container{
-    width: fit-content;
-    border-style: solid;
-    border-width:2px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
     padding: 10px;
-    margin: 20px;
+    margin:40px 5%;
+    display: grid;
+    grid-template-columns: auto auto ;
+    gap: 3%;
+    width: 80%;
+
+}
+a{
+    width: auto;
 }
 
 #recipes-list{
     padding-left: 20px;
 }
-img{
-    border-radius: 15px
+#recipes-list img{
+    border: #E6D7D0;
+    border-style: solid;
+    border-width:2px;
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+
+hr{
+    color: #96290B;
+    height: 0.1px;
+    background-color:#96290B;
+    width: 84%;
 }
