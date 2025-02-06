@@ -3,6 +3,20 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 
+
+// Middleware to check if user is authenticated
+const isAuthenticated = (req, res, next) => {
+  if (req.session && req.session.userId) {
+    next();
+  } else {
+    res.status(401).redirect('/users/login'); // Redirect to login page if not authenticated
+  }
+};
+
+
+// Apply authentication middleware to routes that need it
+router.use(['/create-recipe', '/:id/create-variant'], isAuthenticated);
+
 /**-------------------------------------------------
  * @desc configure multer to save uploaded files into the /public/images folder.
  ----------------------------------------------------*/
@@ -36,6 +50,10 @@ const upload = multer({
  ----------------------------------------------------*/
 // Handle POST request to create a new recipe
 router.post("/create-recipe", upload.single("image"), async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).redirect('/users/login');
+  }
+
   // Extract details from the request body
   const {
     title,
@@ -51,17 +69,13 @@ router.post("/create-recipe", upload.single("image"), async (req, res) => {
   //file path for uploaded images
   const imagePath = req.file ? `/images/${req.file.filename}` : null;
 
-  //////////////////////
-  //   Temp user
-  const userId = 1; // Using test user_id = 1
-  /////////////////////
   try {
     // Insert new recipe into the Recipes table and get the ID of the inserted recipe
     const recipeId = await new Promise((resolve, reject) => {
       db.run(
         `INSERT INTO Recipes (user_id, title, description,image_url,servings,prep_time,yield,cook_time) VALUES (?, ?, ?, ?,? ,?,?,?)`,
         [
-          userId,
+          req.session.userId,
           title,
           description,
           imagePath,
@@ -201,6 +215,9 @@ router.get("/:id/create-variant", async (req, res) => {
  * @desc Create New recipe variant
  ----------------------------------------------------*/
 router.post("/:id/create-variant", async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).redirect('/users/login');
+  }
   const originalRecipeId = req.params.id;
   const {
     substitutions,
@@ -211,7 +228,9 @@ router.post("/:id/create-variant", async (req, res) => {
     cook_time,
     yield: recipeYield,
   } = req.body;
-  const userId = 1; // Replace with session user ID in production
+
+
+
 
   try {
     // Insert the new recipe variant
@@ -222,7 +241,7 @@ router.post("/:id/create-variant", async (req, res) => {
          FROM Recipes 
          WHERE recipe_id = ?`,
         [
-          userId,
+          req.session.userId,
           title || `Variant of ${originalRecipeId}`,
           description || "",
           servings,
@@ -289,7 +308,7 @@ router.post("/:id/create-variant", async (req, res) => {
               newIngredientId,
               ingredient.ingredient_name,
               substitution,
-              userId,
+              req.session.userId,,
             ],
             (err) => {
               if (err) reject(err);
@@ -350,7 +369,7 @@ for (const instruction of instructions) {
           newInstructionId,
           instruction.instruction_text,
           substitution,
-          userId
+          req.session.userId,
         ],
         (err) => {
           if (err) reject(err);

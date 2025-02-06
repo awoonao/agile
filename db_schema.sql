@@ -97,7 +97,7 @@ CREATE TABLE Instructions (
     FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id) ON DELETE CASCADE
 );
 
-
+-- password : dummyhash
 INSERT INTO Users (
     username,
     password_hash,
@@ -111,6 +111,10 @@ INSERT INTO Users (
     'User',
     'test@example.com'
 );
+
+-- password : password
+INSERT INTO Users (username, password_hash, first_name, last_name, birthday, email, role, is_active)
+VALUES ('test1', '$2b$10$oBgO8MGxHrf7b0nr19xPiewENnHfjewVQZ1S0AJ7.OB8ko640MsUS', 'John', 'Doe', '1990-01-01', 'johndoe@example.com', 'user', TRUE);
 
 
 COMMIT;
