@@ -1,34 +1,35 @@
 .recipe-container {
     margin: 30px auto;
     display: grid;
-    width: 80%;
+    width: 75%;
     text-align: center;
     gap: 40px;
     grid-template-areas:
-    "average-rating variant"
-    "image image"
-    "title title"
-    "description description"
-    "ingredient substitution"
-    "instruction substitution"
-    "servings yield"
-    "preptime cooktime"
-    "appearance-rating taste-rating"
-    "review review"
-    "comments comments";
-    grid-template-columns: 1fr 1fr;
+        "average-rating variant"
+        "image image"
+        "title title"
+        "description description"
+        "ingredient ingredient"
+        "instruction instruction"
+        "recipe-details recipe-details"
+        "review review"
+        "appearance-rating taste-rating"
 
+        "comments comments";
+    grid-template-columns: 1fr 1fr;
 }
 
 .recipe-container img {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 90%;
+    width: 100%;
 }
-.recipe-container .ingredient li ,.instruction li{
-    list-style-type: none; 
-   
+
+.recipe-container .ingredient li,
+.instruction li {
+    list-style-type: none;
+
 
 }
 
@@ -36,6 +37,7 @@ p,
 h1,
 li {
     color: #96290B;
+    margin-bottom: 20px;
 }
 
 /* Assigning grid areas */
@@ -60,25 +62,43 @@ li {
     grid-area: description;
     font-size: 1.2em;
     text-align: justify;
+
 }
 
 .recipe-container .ingredient {
     grid-area: ingredient;
     text-align: left;
-    list-style-type: none; 
+    list-style-type: none;
+    border: 2px solid #96290B;
+    padding: 10px;
+
 }
 
-.recipe-container .substitution {
+/* .recipe-container .substitution {
     grid-area: substitution;
     text-align: left;
     list-style-type: none; 
 
-}
+} */
 
 .recipe-container .instruction {
     grid-area: instruction;
     text-align: left;
-    list-style-type: none; 
+    list-style-type: none;
+    border: 2px solid #96290B;
+    padding: 10px;
+}
+
+.recipe-details {
+    grid-area: recipe-details;
+    display: grid;
+    grid-template-areas:
+        "servings yield"
+        "preptime cooktime";
+    grid-template-columns: 1fr 1fr;
+    border: 2px solid #96290B;
+    padding: 10px;
+
 }
 
 .recipe-container .servings {
@@ -99,6 +119,7 @@ li {
 
 .recipe-container .appearance-rating {
     grid-area: appearance-rating;
+
 }
 
 .recipe-container .taste-rating {
@@ -111,4 +132,62 @@ li {
 
 .recipe-container .comments {
     grid-area: comments;
+}
+
+
+/* https://codepen.io/hesguru/pen/BaybqXv */
+.appearance-rating,
+.taste-rating {
+    float: left;
+    height: 46px;
+    padding: 0 10px;
+    margin: auto;
+}
+
+.appearance-rating:not(:checked)>input,
+.taste-rating:not(:checked)>input {
+    position: absolute;
+    top: -9999px;
+
+}
+
+.appearance-rating:not(:checked)>label,
+.taste-rating:not(:checked)>label{
+    float: right;
+    width: 1em;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 30px;
+    color: #ccc;
+}
+
+.appearance-rating:not(:checked)>label:before,
+.taste-rating:not(:checked)>label:before {
+    content: '★ ';
+}
+
+.appearance-rating>input:checked~label,
+.taste-rating>input:checked~label {
+    color: #ffc700;
+}
+
+.appearance-rating:not(:checked)>label:hover,
+.appearance-rating:not(:checked)>label:hover~label ,
+.taste-rating:not(:checked)>label:hover,
+.taste-rating:not(:checked)>label:hover~label {
+    color: #deb217;
+}
+
+.appearance-rating>input:checked+label:hover,
+.appearance-rating>input:checked+label:hover~label,
+.appearance-rating>input:checked~label:hover,
+.appearance-rating>input:checked~label:hover~label,
+.appearance-rating>label:hover~input:checked~label ,
+.taste-rating>input:checked+label:hover,
+.taste-rating>input:checked+label:hover~label,
+.taste-rating>input:checked~label:hover,
+.taste-rating>input:checked~label:hover~label,
+.taste-rating>label:hover~input:checked~label {
+    color: #c59b08;
 }

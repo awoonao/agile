@@ -3,7 +3,7 @@
     padding: 10px;
     margin:40px 5%;
     display: grid;
-    grid-template-columns: auto auto ;
+    grid-template-columns: 600px auto ;
     gap: 3%;
     width: 80%;
 
@@ -24,9 +24,3 @@ a{
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
 
-hr{
-    color: #96290B;
-    height: 0.1px;
-    background-color:#96290B;
-    width: 84%;
-}

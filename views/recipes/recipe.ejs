@@ -112,7 +112,6 @@
         <div class="title">
           <h1><%= recipe.title %></h1>
           <p><strong>Author:</strong> <%= recipe.author %></p>
-
         </div>
         <div class="description">
           <p><strong>Description:</strong> <%= recipe.description %></p>
@@ -148,43 +147,61 @@
           </ul>
         </div>
 
-        <br />
-        <div class="servings">
-          <p><strong>Servings:</strong> <%= recipe.servings %></p>
-        </div>
+     
+        <div class="recipe-details">
+          <div class="servings">
+            <p><strong>Servings:</strong> <%= recipe.servings %></p>
+          </div>
 
-        <div class="yield">
-          <p><strong>Yield:</strong> <%= recipe.yield %></p>
-        </div>
+          <div class="yield">
+            <p><strong>Yield:</strong> <%= recipe.yield %></p>
+          </div>
 
-        <div class="preptime">
-          <p><strong>Prep Time:</strong> <%= recipe.prep_time %></p>
-        </div>
+          <div class="preptime">
+            <p><strong>Prep Time:</strong> <%= recipe.prep_time %></p>
+          </div>
 
-        <div class="cooktime">
-          <p><strong>Cook Time:</strong> <%= recipe.cook_time %></p>
+          <div class="cooktime">
+            <p><strong>Cook Time:</strong> <%= recipe.cook_time %></p>
+          </div>
         </div>
 
         <div class="appearance-rating">
-      </div>
-  
-      <div class="taste-rating">
-          
-      </div>
-  
-      <div class="review">
+            <input type="radio" id="appearance-star5" name="appearance-rate" value="5" />
+            <label for="appearance-star5" title="text">5 stars</label>
+            <input type="radio" id="appearance-star4" name="appearance-rate" value="4" />
+            <label for="appearance-star4" title="text">4 stars</label>
+            <input type="radio" id="appearance-star3" name="appearance-rate" value="3" />
+            <label for="appearance-star3" title="text">3 stars</label>
+            <input type="radio" id="appearance-star2" name="appearance-rate" value="2" />
+            <label for="appearance-star2" title="text">2 stars</label>
+            <input type="radio" id="appearance-star1" name="appearance-rate" value="1" />
+            <label for="appearance-star1" title="text">1 star</label>
+        </div>
+
+        <div class="taste-rating">
+          <input type="radio" id="taste-star5" name="rate" value="5" />
+          <label for="taste-star5" title="text">5 stars</label>
+          <input type="radio" id="taste-star4" name="rate" value="4" />
+          <label for="taste-star4" title="text">4 stars</label>
+          <input type="radio" id="taste-star3" name="rate" value="3" />
+          <label for="taste-star3" title="text">3 stars</label>
+          <input type="radio" id="taste-star2" name="rate" value="2" />
+          <label for="taste-star2" title="text">2 stars</label>
+          <input type="radio" id="taste-star1" name="rate" value="1" />
+          <label for="taste-star1" title="text">1 star</label>
+        </div>
+
+        <div class="review">
           <h2>Reviews</h2>
-       
-      </div>
-  
-      <div class="comments">
+        </div>
+
+        <div class="comments">
           <h2>Comments</h2>
           <ul>
             1
-             
           </ul>
-      </div>
-        
+        </div>
       </div>
     </main>
     <footer></footer>
