@@ -106,7 +106,7 @@ INSERT INTO Users (
     email
 ) VALUES (
     'testuser',
-    'dummyhash',
+    '$2b$10$fIdByBejJWSt9TthqykSYOrWSJaSB5J/Ki8qBsGd8b2T.Q7M7NYDu', 
     'Test',
     'User',
     'test@example.com'
