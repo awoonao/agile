@@ -119,11 +119,17 @@ li {
 
 .recipe-container .appearance-rating {
     grid-area: appearance-rating;
-
+    
+}
+.recipe-container .appearance-rating p{
+    margin: 0; 
 }
 
 .recipe-container .taste-rating {
     grid-area: taste-rating;
+}
+.recipe-container .taste-rating p{
+    margin: 0;
 }
 
 .recipe-container .review {
