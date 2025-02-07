@@ -25,6 +25,11 @@ app.use((req, res, next) => {
     next();
 });
 
+
+// bodyParser middleware
+app.use(bodyParser.json());
+
+
 // Configure body parser
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -56,6 +61,7 @@ app.use('/', mainRoutes);
 app.use('/profile', profileRoutes);
 app.use('/recipes', recipesRoutes);
 app.use('/users', userRoutes);
+
 
 // Start the server
 app.listen(port, () => {

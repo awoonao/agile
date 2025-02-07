@@ -88,7 +88,14 @@
     <main>
       <div class="recipe-container">
         <div class="average-rating">
-          <p><strong>Average Rating:</strong> <%= recipe.average_rating %></p>
+          <p>
+            <strong>Average Appearance Rating:</strong> <%=
+            recipe.average_appearance_rating %>
+          </p>
+          <p>
+            <strong>Average Taste Rating:</strong> <%=
+            recipe.average_taste_rating %>
+          </p>
         </div>
 
         <div class="variant">
@@ -147,7 +154,6 @@
           </ul>
         </div>
 
-     
         <div class="recipe-details">
           <div class="servings">
             <p><strong>Servings:</strong> <%= recipe.servings %></p>
@@ -166,29 +172,120 @@
           </div>
         </div>
 
+        <script>
+          document.addEventListener("DOMContentLoaded", function () {
+            // Handle appearance ratings
+            const appearanceStars = document.querySelectorAll(
+              'input[name="appearance-rate"]'
+            );
+            appearanceStars.forEach((star) => {
+              star.addEventListener("change", function () {
+                const rating = parseInt(this.value); // Convert to integer
+                const recipeId = "<%= recipe.recipe_id %>";
+
+                fetch(`/recipes/${recipeId}/rate/appearance`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ rating: rating }),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    if (data.success) {
+                      // Maybe update the UI to show the new average rating
+                      console.log("Appearance rating saved:", rating);
+                      location.reload(); // Refresh to show new average
+                    }
+                  })
+                  .catch((error) => {
+                    console.error("Error:", error);
+                    alert("Error saving rating");
+                  });
+              });
+            });
+
+            // Handle taste ratings
+            const tasteStars = document.querySelectorAll(
+              'input[name="taste-rate"]'
+            );
+            tasteStars.forEach((star) => {
+              star.addEventListener("change", function () {
+                const rating = parseInt(this.value); // Convert to integer
+                const recipeId = "<%= recipe.recipe_id %>";
+
+                fetch(`/recipes/${recipeId}/rate/taste`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ rating: rating }),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    if (data.success) {
+                      // Maybe update the UI to show the new average rating
+                      console.log("Taste rating saved:", rating);
+                      location.reload(); // Refresh to show new average
+                    }
+                  })
+                  .catch((error) => {
+                    console.error("Error:", error);
+                    alert("Error saving rating");
+                  });
+              });
+            });
+          });
+        </script>
+
         <div class="appearance-rating">
-            <input type="radio" id="appearance-star5" name="appearance-rate" value="5" />
-            <label for="appearance-star5" title="text">5 stars</label>
-            <input type="radio" id="appearance-star4" name="appearance-rate" value="4" />
-            <label for="appearance-star4" title="text">4 stars</label>
-            <input type="radio" id="appearance-star3" name="appearance-rate" value="3" />
-            <label for="appearance-star3" title="text">3 stars</label>
-            <input type="radio" id="appearance-star2" name="appearance-rate" value="2" />
-            <label for="appearance-star2" title="text">2 stars</label>
-            <input type="radio" id="appearance-star1" name="appearance-rate" value="1" />
-            <label for="appearance-star1" title="text">1 star</label>
+          <input
+            type="radio"
+            id="appearance-star5"
+            name="appearance-rate"
+            value="5"
+          />
+          <label for="appearance-star5" title="text">5 stars</label>
+          <input
+            type="radio"
+            id="appearance-star4"
+            name="appearance-rate"
+            value="4"
+          />
+          <label for="appearance-star4" title="text">4 stars</label>
+          <input
+            type="radio"
+            id="appearance-star3"
+            name="appearance-rate"
+            value="3"
+          />
+          <label for="appearance-star3" title="text">3 stars</label>
+          <input
+            type="radio"
+            id="appearance-star2"
+            name="appearance-rate"
+            value="2"
+          />
+          <label for="appearance-star2" title="text">2 stars</label>
+          <input
+            type="radio"
+            id="appearance-star1"
+            name="appearance-rate"
+            value="1"
+          />
+          <label for="appearance-star1" title="text">1 star</label>
         </div>
 
         <div class="taste-rating">
-          <input type="radio" id="taste-star5" name="rate" value="5" />
+          <input type="radio" id="taste-star5" name="taste-rate" value="5" />
           <label for="taste-star5" title="text">5 stars</label>
-          <input type="radio" id="taste-star4" name="rate" value="4" />
+          <input type="radio" id="taste-star4" name="taste-rate" value="4" />
           <label for="taste-star4" title="text">4 stars</label>
-          <input type="radio" id="taste-star3" name="rate" value="3" />
+          <input type="radio" id="taste-star3" name="taste-rate" value="3" />
           <label for="taste-star3" title="text">3 stars</label>
-          <input type="radio" id="taste-star2" name="rate" value="2" />
+          <input type="radio" id="taste-star2" name="taste-rate" value="2" />
           <label for="taste-star2" title="text">2 stars</label>
-          <input type="radio" id="taste-star1" name="rate" value="1" />
+          <input type="radio" id="taste-star1" name="taste-rate" value="1" />
           <label for="taste-star1" title="text">1 star</label>
         </div>
 
