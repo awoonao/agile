@@ -131,12 +131,60 @@ router.post('/logout', (req, res) => {
     });
 });
 
+// Forgot Password - Email Page (GET)
 router.get('/forgot-password-email', (req, res) => {
-    res.render('user/forgotPasswordEmail');
+    res.render('user/forgotPasswordEmail', { message: null, error: null });
 });
 
+// Forgot Password - Email Page (POST)
+router.post('/forgot-password-email', (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.render('user/forgotPasswordEmail', { error: 'Please enter your email', message: null });
+    }
+
+    // Check if the email exists in the database
+    db.get('SELECT * FROM Users WHERE email = ?', [email], (err, user) => {
+        if (err) {
+            return res.render('user/forgotPasswordEmail', { error: 'Database error', message: null });
+        }
+
+        if (!user) {
+            return res.render('user/forgotPasswordEmail', { error: 'No account found with that email', message: null });
+        }
+
+        return res.render('user/forgotPasswordEmail', { error: null, message: 'Password reset link sent!' });
+    });
+});
+
+// Forgot Password Reset (GET)
 router.get('/forgot-password-reset', (req, res) => {
-    res.render('user/forgotPasswordReset');
+    res.render('user/forgotPasswordReset', { error: null, message: null }); // Ensure message is passed
+});
+
+
+// Forgot Password Reset (POST)
+router.post('/forgot-password-reset', (req, res) => {
+    const { newPassword, confirmNewPassword } = req.body;
+
+    if (!newPassword || !confirmNewPassword) {
+        return res.render('user/forgotPasswordReset', { error: 'All fields are required', message: null });
+    }
+
+    if (newPassword !== confirmNewPassword) {
+        return res.render('user/forgotPasswordReset', { error: 'Passwords do not match', message: null });
+    }
+
+    // Simulate password reset (Normally, we would verify a reset token and user ID)
+    bcrypt.hash(newPassword, 10, (err, hashedPassword) => {
+        if (err) {
+            return res.render('user/forgotPasswordReset', { error: 'Error resetting password', message: null });
+        }
+
+        // Show success message
+        return res.render('user/forgotPasswordReset', { error: null, message: 'Password successfully reset!' });
+    });
 });
 
 module.exports = router;
