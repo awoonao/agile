@@ -22,8 +22,61 @@ router.use(session({
     cookie: { secure: false } // Set to true if using HTTPS
 }));
 
+//Signup (GET)
 router.get('/signup', (req, res) => {
-    res.render('user/signup');
+    res.render('user/signup', { error: null }); 
+});
+
+//Signup (POST)
+
+router.post('/signup', (req, res) => {
+    const { first_name, last_name, username, email, password, confirmPassword, day, month, year } = req.body;
+
+    // Validate required fields
+    if (!first_name || !last_name || !username || !email || !password || !confirmPassword || !day || !month || !year) {
+        return res.render('user/signup', { error: 'All fields are required' });
+    }
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+        return res.render('user/signup', { error: 'Passwords do not match' });
+    }
+
+    // Format birthday as YYYY-MM-DD
+    const birthday = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+
+    // Check if username or email already exists
+    db.get('SELECT * FROM Users WHERE username = ? OR email = ?', [username, email], (err, existingUser) => {
+        if (err) {
+            return res.render('user/signup', { error: 'Database error' });
+        }
+
+        if (existingUser) {
+            return res.render('user/signup', { error: 'Username or email already taken' });
+        }
+
+        // Hash the password using bcrypt
+        bcrypt.hash(password, 10, (err, hashedPassword) => {
+            if (err) {
+                return res.render('user/signup', { error: 'Error hashing password' });
+            }
+
+            // Insert new user into database
+            db.run(
+                `INSERT INTO Users (first_name, last_name, username, email, password_hash, birthday) VALUES (?, ?, ?, ?, ?, ?)`,
+                [first_name, last_name, username, email, hashedPassword, birthday],
+                function (err) {
+                    if (err) {
+                        return res.render('user/signup', { error: 'Error creating account' });
+                    }
+
+                    // Store user session after signup
+                    req.session.userId = this.lastID;
+                    res.redirect('/');
+                }
+            );
+        });
+    });
 });
 
 // Login (GET)
