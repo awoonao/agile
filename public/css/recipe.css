@@ -14,7 +14,7 @@
         "recipe-details recipe-details"
         "review review"
         "appearance-rating taste-rating"
-
+        "feedback feedback"
         "comments comments";
     grid-template-columns: 1fr 1fr;
 }
@@ -136,6 +136,9 @@ li {
     grid-area: review;
 }
 
+.recipe-container .feedback {
+    grid-area: feedback;
+}
 .recipe-container .comments {
     grid-area: comments;
 }
@@ -153,8 +156,8 @@ li {
 .appearance-rating:not(:checked)>input,
 .taste-rating:not(:checked)>input {
     position: absolute;
-    top: -9999px;
-
+    /* top: -9999px; */
+    clip:rect(0,0,0,0);
 }
 
 .appearance-rating:not(:checked)>label,
@@ -196,4 +199,23 @@ li {
 .taste-rating>input:checked~label:hover~label,
 .taste-rating>label:hover~input:checked~label {
     color: #c59b08;
+}
+/* end */
+
+.comment {
+    display: grid;
+    grid-template-columns: 80% 20%;
+    text-align: left;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    margin-bottom: 10px;
+
+}
+
+.comment p{
+    padding:10px;
+    margin: 0;
+
 }

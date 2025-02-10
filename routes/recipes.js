@@ -1,3 +1,4 @@
+const { rejects } = require("assert");
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
@@ -199,11 +200,44 @@ router.get("/:id", async (req, res) => {
       );
     });
 
+    //fetch feedback
+    let feedback = null;
+    if (req.session.userId) {
+      // Only fetch if user is logged in
+      feedback = await new Promise((resolve, reject) => {
+        db.get(
+          `SELECT content FROM Comments WHERE recipe_id = ? AND user_id = ?`,
+          [recipeId, req.session.userId],
+          (err, row) => {
+            if (err) reject(err);
+            else resolve(row || null);
+          }
+        );
+      });
+    }
+
+    //
+    const comments = await new Promise((resolve, reject) => {
+      db.all(
+        `SELECT c.comment_id, c.content, c.created_at, u.username 
+       FROM Comments c
+       JOIN Users u ON c.user_id = u.user_id
+       WHERE c.recipe_id = ? `,
+        [recipeId],
+        (err, rows) => {
+          if (err) reject(err);
+          else resolve(rows);
+        }
+      );
+    });
+
     // Render the detailed recipe page
     res.render("recipes/recipe", {
       recipe,
       ingredients,
       instructions,
+      feedback,
+      comments,
     });
   } catch (error) {
     console.error("Error fetching recipe details:", error.message);
@@ -224,6 +258,8 @@ router.post("/:id/rate/taste", async (req, res) => {
   const { rating } = req.body;
 
   try {
+   
+
     // Check if user has already rated this recipe's taste
     const existingRating = await new Promise((resolve, reject) => {
       db.get(
@@ -292,7 +328,7 @@ router.post("/:id/rate/taste", async (req, res) => {
     res.status(500).json({ error: "Failed to save rating" });
   }
 });
-
+/*----------------------------------------------------*/
 // Route to handle appearance rating submissions
 router.post("/:id/rate/appearance", async (req, res) => {
   if (!req.session.userId) {
@@ -303,7 +339,7 @@ router.post("/:id/rate/appearance", async (req, res) => {
   const userId = req.session.userId;
   const { rating } = req.body;
 
-  try {
+   try {
     // Check if user has already rated this recipe's appearance
     const existingRating = await new Promise((resolve, reject) => {
       db.get(
@@ -373,9 +409,9 @@ router.post("/:id/rate/appearance", async (req, res) => {
     res.status(500).json({ error: "Failed to save rating" });
   }
 });
-
+// -------------------------------------------------------------------------
 // Route to get user's ratings for a recipe
-router.get("/:id/user-ratings", async (req, res) => {
+router.get("/:id/user-review", async (req, res) => {
   if (!req.session.userId) {
     return res.json({ appearance_rating: null, taste_rating: null });
   }
@@ -393,15 +429,79 @@ router.get("/:id/user-ratings", async (req, res) => {
          WHERE user_id = ? AND recipe_id = ?`,
         [userId, recipeId],
         (err, row) => {
-            if (err) reject(err);
-            else resolve(row || { appearance_rating: null, taste_rating: null });
+          if (err) reject(err);
+          else resolve(row || { appearance_rating: null, taste_rating: null });
         }
-    );
-  });
+      );
+    });
     res.json(ratings);
   } catch (error) {
     console.error("Error fetching user ratings:", error);
     res.status(500).json({ error: "Failed to fetch ratings" });
+  }
+});
+
+//---------------------------------------------------------//
+router.post("/:id/comment", async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: "Must be logged in to comment" });
+  }
+
+  const recipeId = req.params.id;
+  const userId = req.session.userId;
+  const { content } = req.body;
+
+  // Check if content is empty
+  if (!content || content.trim().length === 0) {
+    return res.status(400).json({ error: "Comment content cannot be empty" });
+  }
+
+  try {
+    const existingComment = await new Promise((resolve, reject) => {
+      db.get(
+        `SELECT comment_id, content 
+  FROM Comments
+  WHERE user_id = ? AND recipe_id = ? AND content IS NOT NULL`,
+        [userId, recipeId],
+        (err, row) => {
+          if (err) reject(err);
+          else resolve(row);
+        }
+      );
+    });
+
+    if (existingComment) {
+      await new Promise((resolve, reject) => {
+        db.run(
+          `UPDATE Comments
+          SET content = ?,
+             created_at = CURRENT_TIMESTAMP 
+             WHERE comment_id = ?`,
+          [content, existingComment.comment_id],
+          (err) => {
+            if (err) reject(err);
+            else resolve();
+          }
+        );
+      });
+    } else {
+      await new Promise((resolve, reject) => {
+        db.run(
+          `INSERT INTO Comments (recipe_id, user_id, content) 
+             VALUES (?, ?, ?)`,
+          [recipeId, userId, content],
+          (err) => {
+            if (err) reject(err);
+            else resolve();
+          }
+        );
+      });
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error saving comment:", error);
+    res.status(500).json({ error: "Failed to save comment" });
   }
 });
 
