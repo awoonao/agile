@@ -1,64 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Variant for <%= recipe.title %></title>
-  <style>
-    .substitution-box {
-      display: none;
-    }
-  </style>
-  <script>
-    function toggleSubstitution(inputId) {
-      const textbox = document.getElementById(inputId);
-      textbox.style.display = textbox.style.display === 'none' ? 'block' : 'none';
-    }
-  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Variant for <%= recipe.title %>
+  </title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Common css -->
+  <link rel="stylesheet" type="text/css" href="/css/main.css" />
+  <!-- createVariant.css -->
+  <link rel="stylesheet" type="text/css" href="/css/recipeVariant.css" />
+
+  <!-- Substitution toggle functionality -->
+  <script src="/js/substitutionToggle.js"></script>
 </head>
+
 <body>
-  <h1>Create Variant for "<%= recipe.title %>"</h1>
-  <form action="/recipes/<%= recipe.recipe_id %>/create-variant" method="POST">
-    <h2>Recipe Details</h2>
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title" value="Variant of <%= recipe.title %>"><br>
-  
-    <label for="description">Description:</label>
-    <textarea id="description" name="description"><%= recipe.description %></textarea><br>
-  
-    <label for="servings">Servings:</label>
-    <input type="text" id="servings" name="servings" value="<%= recipe.servings %>"><br>
-  
-    <label for="prep_time">Prep Time:</label>
-    <input type="text" id="prep_time" name="prep_time" value="<%= recipe.prep_time %>"><br>
-  
-    <label for="cook_time">Cook Time:</label>
-    <input type="text" id="cook_time" name="cook_time" value="<%= recipe.cook_time %>"><br>
-  
-    <label for="yield">Yield:</label>
-    <input type="text" id="yield" name="yield" value="<%= recipe.yield %>"><br>
-  
-    <!-- Ingredients and Instructions sections remain the same -->
-    <h2>Ingredients</h2>
-    <% ingredients.forEach((ingredient, index) => { %>
-      <div>
-        <%= ingredient.ingredient_name %>
-        <button type="button" onclick="toggleSubstitution('ingredient-<%= index %>')">Add Substitution</button>
-        <input type="text" id="ingredient-<%= index %>" name="substitutions[ingredients][<%= ingredient.ingredient_order %>]" placeholder="Enter substitution" class="substitution-box">
+  <header>
+    <nav class="navbar navbar-expand-xl nav-container">
+      <!-- Brand -->
+      <a class="navbar-brand" href="/"><img src="/images/logo.png" alt="logo" /></a>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <!-- <a href="https://www.flaticon.com/free-icons/hamburger" title="hamburger icons">Hamburger icons created by Arief Harvi - Flaticon</a> -->
+        <span class="navbar-toggler-icon"><img src="/images/hamburger-menu.png" alt="hamburger-menu" /></span>
+      </button>
+      <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <!-- Links -->
+        <ul class="navbar-nav">
+          <!-- Recipe -->
+          <li class="nav-item">
+            <a class="nav-link" href="/recipes">Recipe</a>
+          </li>
+
+          <!-- Dropdown (account) -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+              My Account
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="recipes/create-recipe">Create New Recipe</a>
+              <a class="dropdown-item" href="#">My Profile</a>
+              <a class="dropdown-item" href="#">My Recipes</a>
+              <a class="dropdown-item" href="#">Saved Recipes</a>
+              <a class="dropdown-item" href="#">Logout</a>
+            </div>
+          </li>
+          <!-- about us -->
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About us</a>
+          </li>
+          <li>
+            <form class="form-inline" action="/action_page.php">
+              <input class="form-control mr-sm-2" type="text" placeholder="Search" />
+              <!-- <button class="btn btn-success" type="submit">Search</button> -->
+            </form>
+          </li>
+        </ul>
       </div>
-    <% }); %>
+    </nav>
+  </header>
+  <main>
+    <h1>Create Variant for "<%= recipe.title %>"</h1>
+
+    <form class="recipe-container" action="/recipes/<%= recipe.recipe_id %>/create-variant" method="POST">
+      
+         <!-- Recipe Title -->
+         <div class="title">
+          <label for="title">Title:</label>
+         
+         <input type="text" id="title" name="title" value="Variant of <%= recipe.title %>" required />
+        </div>
   
-    <h2>Instructions</h2>
-    <% instructions.forEach((instruction, index) => { %>
-      <div>
-        <%= instruction.instruction_text %>
-        <button type="button" onclick="toggleSubstitution('instruction-<%= index %>')">Add Substitution</button>
-        <input type="text" id="instruction-<%= index %>" name="substitutions[instructions][<%= instruction.step_order %>]" placeholder="Enter substitution" class="substitution-box">
+        <!-- Recipe Description -->
+        <div class="description">
+          <label for="description">Description:</label>
+          <textarea id="description" name="description"><%= recipe.description %></textarea>
+        </div>
+
+        <div class="image">
+          <label for="image">Photo Here(not working yet):</label><br>
+          <div class="image-container">
+            <!-- Image Preview -->
+            <!-- <a href="https://www.flaticon.com/free-icons/image-placeholder" title="image placeholder icons">Image placeholder icons created by Graphic Nehar - Flaticon</a> -->
+            <img id="imagePreview" src="/images/imagePreview.png" alt="Preview" />
+            <!-- Recipe Image -->
+            <input type="file" name="image" accept="image/*" id="imageUpload" />
+
+          </div>
+        </div>
+
+      
+      <!-- Ingredients and Instructions sections remain the same -->
+      <div class="ingredient">
+      <label>Ingredients</label>
+      <% ingredients.forEach((ingredient, index)=> { %>
+        <div class="substitution-container">
+          <%= ingredient.ingredient_name %>
+            <button type="button" class="toggle-substitution">
+              Add Substitution
+            </button>
+            <input type="text" name="substitutions[ingredients][<%= ingredient.ingredient_order %>]"
+              placeholder="Enter substitution" class="substitution-input hidden" />
+        </div>
+        <% }); %>
       </div>
-    <% }); %>
-  
-    <button type="submit">Save Variant</button>
-  </form>
-  
+
+          <!-- Instructions -->
+          <div class="instruction">
+          <label>Instructions</label>
+          <% instructions.forEach((instruction, index)=> { %>
+            <div class="substitution-container">
+              <%= instruction.instruction_text %>
+                <button type="button" class="toggle-substitution">
+                  Add Substitution
+                </button>
+                <input type="text" name="substitutions[instructions][<%= instruction.step_order %>]"
+                  placeholder="Enter substitution" class="substitution-input hidden" />
+            </div>
+            <% }); %>
+          </div>
+
+            <div class="details">
+              <!-- servings -->
+              <label for="servings">Servings:</label>
+              <input type="text" id="servings" name="servings" value="<%= recipe.servings %>" required>
+      
+              <!-- prep time -->
+              <label for="prep_time">Prep Time:</label>
+              <input type="text" id="prep_time" name="prep_time" value="<%= recipe.prep_time %>" required>
+              <!-- yield -->
+              <label for="yield">Yield:</label>
+              <input type="text" id="yield" name="yield" value="<%= recipe.yield %>" required />
+              <!-- cook time -->
+              <label for="cook_time">Cook Time:</label>
+              <input type="text" id="cook_time" name="cook_time" value="<%= recipe.cook_time %>" required />
+            </div>
+            <button type="submit">Save Variant</button>
+            <button type="button" onclick="history.back()">Back</button>
+          </form>
+
+             
+    </form>
+  </main>
 </body>
+
 </html>

@@ -1,4 +1,3 @@
-
 // Function to add a new ingredient textbox
 function addIngredient() {
   const container = document.getElementById("ingredients-container");
@@ -49,18 +48,25 @@ function removeInstruction() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    function previewImage(event) {
-      const imageUpload = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById('imagePreview').src = e.target.result;
-      };
-      if (imageUpload) {
-        reader.readAsDataURL(imageUpload);
-      }
+document.addEventListener("DOMContentLoaded", function () {
+  function previewImage(event) {
+    const imageUpload = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      document.getElementById("imagePreview").src = e.target.result;
+    };
+    if (imageUpload) {
+      reader.readAsDataURL(imageUpload);
     }
-    
-    document.getElementById('imageUpload').addEventListener('change', previewImage);
-  });
-  
+  }
+
+  document
+    .getElementById("imageUpload")
+    .addEventListener("change", previewImage);
+
+  document
+    .getElementById("imagePreview")
+    .addEventListener("click", function () {
+      document.getElementById("imageUpload").click();
+    });
+});
