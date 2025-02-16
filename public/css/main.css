@@ -1,14 +1,45 @@
 /* Define styles */
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     background-color: #FFF4EF;
 }
 
-body a, h2 {
-    color: #96290B;
+/* Ensures main content stretches to fill available space */
+main {
+    flex: 1;
 }
 
-body a:hover {
-    color: #96290B;
+/* Footer always at bottom */
+.footer {
+    background-color: #96290B;
+    color: #FFF4EF;
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+    margin-top: auto;
+}
+
+/* Footer links */
+.footer a {
+    color: #FFF4EF;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.footer a:hover {
+    color: #E6D7D0;
+}
+
+.footer img {
+    width: 24px;
+    margin-right: 10px;
 }
 
 /* Navbar */
@@ -79,29 +110,6 @@ nav img {
 hr {
     color: #96290B;
     height: 0.1px;
-    background-color:#96290B;
-    width: 84%;
-}
-
-/* Footer */
-.footer {
     background-color: #96290B;
-    color: #FFF4EF;
-    padding: 20px 0;
-    text-align: center;
-}
-
-.footer a {
-    color: #FFF4EF;
-    text-decoration: none;
-    margin-right: 10px;
-}
-
-.footer a:hover {
-    color: #E6D7D0;
-}
-
-.footer img {
-    width: 24px;
-    margin-right: 10px;
+    width: 84%;
 }
