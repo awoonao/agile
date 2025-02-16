@@ -17,69 +17,126 @@
         "feedback feedback"
         "comments comments";
     grid-template-columns: 1fr 1fr;
+    color: #96290B;
 }
 
-.recipe-container img {
+
+
+ 
+
+/* Create variant Button */
+ .recipe-container .variant {
+    grid-area: variant;
+    display: flex;
+
+}
+
+.recipe-container .variant a {
+    color: #FFF4EF;
+
+}
+
+.recipe-container .variant a:hover {
+    text-decoration: none;
+
+}
+
+.recipe-container .variant {
+    background: #BB8379;
+    border-radius: 15px;
+    margin: auto 10px auto auto;
+    width: auto;
+    padding: 5px;
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+    transform: scale(1);
+    animation: pulse 5s infinite;
+}
+
+.recipe-container .variant:hover {
+    animation: pulse 1s infinite;
+}
+
+/* https://www.florin-pop.com/blog/2019/03/css-pulse-effect/ */
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(187, 131, 121, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(187, 131, 121, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(187, 131, 121, 0);
+    }
+}
+
+
+
+
+/* average ratings */
+
+.recipe-container .average-rating {
+    grid-area: average-rating;
+    display: flex;
+    gap: 15px;
+   
+}
+
+.recipe-container .average-rating img {
+    width: 100%;
+    max-width: 50px;
+    float: right;
+    margin: 0;
+
+}
+
+.recipe-container .average-rating p {
+    margin: auto 0;
+}
+
+.average-appearance,
+.average-taste {
+    display: flex;
+}
+
+
+/* Recipe Image */
+.recipe-container .image {
+    grid-area: image;
+    max-width: 100%;
+
+}
+
+.recipe-container .image img {
+    border-radius: 15px;
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: 100%;
-}
-
-.recipe-container .ingredient li,
-.instruction li {
-    list-style-type: none;
-
 
 }
 
-p,
-h1,
-li {
-    color: #96290B;
-    margin-bottom: 20px;
-}
-
-/* Assigning grid areas */
-.recipe-container .average-rating {
-    grid-area: average-rating;
-}
-
-.recipe-container .variant {
-    grid-area: variant;
-}
-
-.recipe-container .image {
-    grid-area: image;
-    max-width: 100%;
-}
-
+/* Title */
 .recipe-container .title {
     grid-area: title;
 }
 
+/* Description */
 .recipe-container .description {
+    display: block;
     grid-area: description;
     font-size: 1.2em;
     text-align: justify;
 
 }
 
-.recipe-container .ingredient {
-    grid-area: ingredient;
-    text-align: left;
-    list-style-type: none;
-    border: 2px solid #96290B;
-    padding: 10px;
 
-}
 
-/* .recipe-container .substitution {
-    grid-area: substitution;
-    text-align: left;
-    list-style-type: none; 
-
-} */
+/* Ingredient / instructions */
 
 .recipe-container .instruction {
     grid-area: instruction;
@@ -88,6 +145,43 @@ li {
     border: 2px solid #96290B;
     padding: 10px;
 }
+
+
+.recipe-container .ingredient {
+    grid-area: ingredient;
+    text-align: left;
+    list-style-type: none;
+    border: 2px solid #96290B;
+    padding: 10px;
+    
+
+}
+
+.recipe-container .ingredient ul,.instruction ul{
+    margin: 0;
+    padding:0px 5px;
+ }
+
+.recipe-container .ingredient li,
+.instruction li {
+    list-style-type: none;
+    margin-bottom: 20px;
+    align-items: center;
+    flex: 1;
+    display: flex;
+    gap: 5%;
+   
+}
+
+.recipe-container .ingredient img, .instruction img{
+    margin: 0px;
+     max-width: 40px;
+ }
+
+
+
+
+/* Servings/ yield/ prep-time/ cook time */
 
 .recipe-details {
     grid-area: recipe-details;
@@ -117,32 +211,23 @@ li {
     grid-area: cooktime;
 }
 
+/* individual ratings  */
+
+/* appearance rating */
 .recipe-container .appearance-rating {
     grid-area: appearance-rating;
-    
 }
-.recipe-container .appearance-rating p{
-    margin: 0; 
+.recipe-container .appearance-rating p {
+    margin: 0;
 }
-
+/* taste Rating  */
 .recipe-container .taste-rating {
     grid-area: taste-rating;
 }
-.recipe-container .taste-rating p{
+
+.recipe-container .taste-rating p {
     margin: 0;
 }
-
-.recipe-container .review {
-    grid-area: review;
-}
-
-.recipe-container .feedback {
-    grid-area: feedback;
-}
-.recipe-container .comments {
-    grid-area: comments;
-}
-
 
 /* https://codepen.io/hesguru/pen/BaybqXv */
 .appearance-rating,
@@ -157,11 +242,11 @@ li {
 .taste-rating:not(:checked)>input {
     position: absolute;
     /* top: -9999px; */
-    clip:rect(0,0,0,0);
+    clip: rect(0, 0, 0, 0);
 }
 
 .appearance-rating:not(:checked)>label,
-.taste-rating:not(:checked)>label{
+.taste-rating:not(:checked)>label {
     float: right;
     width: 1em;
     overflow: hidden;
@@ -182,7 +267,7 @@ li {
 }
 
 .appearance-rating:not(:checked)>label:hover,
-.appearance-rating:not(:checked)>label:hover~label ,
+.appearance-rating:not(:checked)>label:hover~label,
 .taste-rating:not(:checked)>label:hover,
 .taste-rating:not(:checked)>label:hover~label {
     color: #deb217;
@@ -192,7 +277,7 @@ li {
 .appearance-rating>input:checked+label:hover~label,
 .appearance-rating>input:checked~label:hover,
 .appearance-rating>input:checked~label:hover~label,
-.appearance-rating>label:hover~input:checked~label ,
+.appearance-rating>label:hover~input:checked~label,
 .taste-rating>input:checked+label:hover,
 .taste-rating>input:checked+label:hover~label,
 .taste-rating>input:checked~label:hover,
@@ -200,7 +285,29 @@ li {
 .taste-rating>label:hover~input:checked~label {
     color: #c59b08;
 }
-/* end */
+
+
+
+
+/* review header */
+.recipe-container .review {
+    grid-area: review;
+}
+
+/* comment section */
+.recipe-container .feedback {
+    grid-area: feedback;
+}
+
+.recipe-container .comments {
+    grid-area: comments;
+}
+
+.recipe-container .feedback button{
+    color:#FFF4EF;
+    background: #BB8379;
+
+}
 
 .comment {
     display: grid;
@@ -211,11 +318,9 @@ li {
     border: 1px solid #ced4da;
     border-radius: .25rem;
     margin-bottom: 10px;
-
 }
 
-.comment p{
-    padding:10px;
+.comment p {
+    padding: 10px;
     margin: 0;
-
 }

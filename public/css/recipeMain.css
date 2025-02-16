@@ -1,20 +1,18 @@
 .recipe-container{
 
     padding: 10px;
-    margin:40px 5%;
     display: grid;
     grid-template-columns: 45% auto ;
     gap: 30px;
-    width: 80%;
+    width: 75%;
+    margin: 20px auto ;
 
 }
 a{
     width: auto;
 }
 
-#recipes-list{
-    padding-left: 20px;
-}
+
 #recipes-list img{
     border: #E6D7D0;
     border-style: solid;
@@ -22,5 +20,11 @@ a{
     width: 100%;
     border-radius: 15px;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+    
 }
 
+
+/* .recipe-content p{
+display: block;
+text-overflow: clip;
+} */

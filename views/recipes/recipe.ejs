@@ -84,14 +84,20 @@
   <main>
     <div class="recipe-container">
       <div class="average-rating">
-        <p>
-          <strong>Average Appearance Rating:</strong>
-          <%= recipe.average_appearance_rating %>
-        </p>
-        <p>
-          <strong>Average Taste Rating:</strong>
-          <%= recipe.average_taste_rating %>
-        </p>
+        <div class="average-appearance">
+          <!-- <a href="https://www.flaticon.com/free-icons/star" title="star icons">Star icons created by Pixel perfect - Flaticon</a> -->
+          <img src="/images/chefstar.png" alt="star rating with chef's hat">
+          <p>:
+            <%= recipe.average_appearance_rating %>
+          </p>
+        </div>
+        <div class="average-taste">
+          <img src="/images/star.png" alt="star rating">
+
+          <p>:
+            <%= recipe.average_taste_rating %>
+          </p>
+        </div>
       </div>
 
       <div class="variant">
@@ -127,7 +133,9 @@
               <li>
                 <s>
                   <%= ingredient.original_for_sub %>
-                </s> → <%= ingredient.substitution_name %>
+                </s>
+                <img src="/images/right-arrow.png" alt="">
+                  <%= ingredient.substitution_name %>
               </li>
               <% } else { %>
                 <li>
@@ -145,7 +153,9 @@
               <li>
                 <s>
                   <%= instruction.original_for_sub %>
-                </s> → <%= instruction.substitution_name %>
+                </s> 
+                <img src="/images/right-arrow.png" alt="">
+                <%= instruction.substitution_name %>
               </li>
               <% } else { %>
                 <li>
@@ -234,7 +244,7 @@
             <p><strong>
                 <%= comment.username %>
             </p></strong>
-
+            
 
             <p><small>Posted on <%= new Date(comment.created_at).toLocaleString() %></small></p>
             <p>
