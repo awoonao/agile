@@ -10,6 +10,11 @@
 }
 a{
     width: auto;
+    color: #96290B;
+}
+
+a:hover{
+    color: #96290B;
 }
 
 
@@ -24,7 +29,5 @@ a{
 }
 
 
-/* .recipe-content p{
-display: block;
-text-overflow: clip;
-} */
+    
+    

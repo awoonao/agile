@@ -101,6 +101,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         promises.push(handleComment(comment));
 
         await Promise.all(promises);
+
+
+
+        
         // Reload page to show updated ratings and comment
         location.reload();
       } catch (error) {

@@ -98,6 +98,11 @@ nav img {
     color: #E6D7D0;
     font-size: 1.5rem;
 }
+.navbar-nav a:active {
+    background-color: #E6D7D0;
+    color: #96290B;
+    font-size: 1.5rem;
+}
 
 .dropdown-menu a:hover {
     color: #96290B;

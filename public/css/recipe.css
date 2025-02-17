@@ -303,10 +303,37 @@
     grid-area: comments;
 }
 
-.recipe-container .feedback button{
-    color:#FFF4EF;
-    background: #BB8379;
+.form-control:focus, textarea:focus {
+    outline: none;
+    border-color: #D94E1F;
+    box-shadow: 0 0 5px rgba(217, 78, 31, 0.3);
+}
 
+
+
+.btn-primary {
+    background-color: #BB8379; 
+    border-color: #96290B; 
+    color: #FFF4EF;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: #96290B; 
+    border-color: #BB8379;
+    box-shadow: none;
+    
+   
+}
+
+#submit-review.btn-primary:not(:disabled):not(.disabled).active,
+#submit-review.btn-primary:not(:disabled):not(.disabled):active,
+.show>#submit-review.btn-primary.dropdown-toggle {
+    color: #FFF4EF !important;
+    background-color: #96290B !important;
+    border-color: #BB8379 !important;
+    box-shadow: none;
 }
 
 .comment {
