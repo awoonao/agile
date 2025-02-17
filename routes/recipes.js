@@ -235,7 +235,7 @@ router.get("/:id", async (req, res) => {
         }
       );
     });
-    console.log(comments);
+
     // Render the detailed recipe page
     res.render("recipes/recipe", {
       recipe,
@@ -255,7 +255,9 @@ router.get("/:id", async (req, res) => {
 // Route to handle taste rating submissions
 router.post("/:id/rate/taste", async (req, res) => {
   if (!req.session.userId) {
+    
     return res.status(401).json({ error: "Must be logged in to rate recipes" });
+   
   }
 
   const recipeId = req.params.id;
