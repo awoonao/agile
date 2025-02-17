@@ -40,17 +40,12 @@
         </button>
 
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
-          <!-- Links -->
           <ul class="navbar-nav">
-            <!-- Recipe -->
-            <li class="nav-item">
-              <a class="nav-link" href="/recipes">Recipe</a>
-            </li>
+            <li class="nav-item"><a class="nav-link" href="/recipes">Recipes</a></li>
 
-            <!-- Account Dropdown (Only if user is logged in) -->
             <li class="nav-item dropdown">
               <% if (userId) { %>
-                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
                   My Account
                 </a>
                 <div class="dropdown-menu">
@@ -63,19 +58,14 @@
                   </form>
                 </div>
               <% } else { %>
-                <!-- If user is NOT logged in, show Login / Signup -->
                 <li class="nav-item">
                   <a class="nav-link" href="/users/login">Login / Signup</a>
                 </li>
               <% } %>
             </li>
 
-            <!-- About Us -->
-            <li class="nav-item">
-              <a class="nav-link" href="/about">About us</a>
-            </li>
+            <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
 
-            <!-- Search Bar -->
             <li>
               <form class="form-inline" action="/action_page.php">
                 <input class="form-control mr-sm-2" type="text" placeholder="Search" />
