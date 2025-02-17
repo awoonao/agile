@@ -219,10 +219,15 @@ router.get("/:id", async (req, res) => {
     //
     const comments = await new Promise((resolve, reject) => {
       db.all(
-        `SELECT c.comment_id, c.content, c.created_at, u.username 
-       FROM Comments c
-       JOIN Users u ON c.user_id = u.user_id
-       WHERE c.recipe_id = ? `,
+        `SELECT c.comment_id, c.content, c.created_at, u.username,
+     MAX(r.appearance_rating) AS appearance_rating, 
+     MAX(r.taste_rating) AS taste_rating
+   FROM Comments c
+   JOIN Users u ON c.user_id = u.user_id
+   LEFT JOIN Ratings r ON r.user_id = c.user_id AND r.recipe_id = c.recipe_id
+   WHERE c.recipe_id = ? 
+   GROUP BY c.comment_id
+   ORDER BY c.created_at DESC`,
         [recipeId],
         (err, rows) => {
           if (err) reject(err);
@@ -230,7 +235,7 @@ router.get("/:id", async (req, res) => {
         }
       );
     });
-
+    console.log(comments);
     // Render the detailed recipe page
     res.render("recipes/recipe", {
       recipe,

@@ -91,6 +91,7 @@
     max-width: 50px;
     float: right;
     margin: 0;
+   
 
 }
 
@@ -337,11 +338,7 @@
 }
 
 .comment {
-    display: grid;
-    grid-template-columns: 80% 20%;
-    text-align: left;
     background-color: #fff;
-    background-clip: padding-box;
     border: 1px solid #ced4da;
     border-radius: .25rem;
     margin-bottom: 10px;
@@ -349,5 +346,38 @@
 
 .comment p {
     padding: 10px;
-    margin: 0;
+    margin-left: 20px;
+    text-align: left;
+}
+
+
+.comment-header {
+  display: flex;
+  gap: 20px;
+  /* justify-content: space-between; */
+  align-items: center;
+  margin:  1rem ;
+
+
+}
+
+.ratings-container {
+  margin: 0.5rem 0;
+}
+
+.user-ratings {
+  display: flex;
+  gap: 1rem;
+}
+
+.rating-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.rating-icon {
+  width: 30px;
+  height: 30px;
+  padding-bottom: 5px;
 }

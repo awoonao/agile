@@ -86,13 +86,13 @@
       <div class="average-rating">
         <div class="average-appearance">
           <!-- <a href="https://www.flaticon.com/free-icons/star" title="star icons">Star icons created by Pixel perfect - Flaticon</a> -->
-          <img src="/images/chefstar.png" alt="star rating with chef's hat">
+          <img src="/images/lookstar.png" alt="star rating with chef's hat">
           <p>:
             <%= recipe.average_appearance_rating %>
           </p>
         </div>
         <div class="average-taste">
-          <img src="/images/star.png" alt="star rating">
+          <img src="/images/chefstar.png" alt="star rating">
 
           <p>:
             <%= recipe.average_taste_rating %>
@@ -135,7 +135,7 @@
                   <%= ingredient.original_for_sub %>
                 </s>
                 <img src="/images/right-arrow.png" alt="">
-                  <%= ingredient.substitution_name %>
+                <%= ingredient.substitution_name %>
               </li>
               <% } else { %>
                 <li>
@@ -153,7 +153,7 @@
               <li>
                 <s>
                   <%= instruction.original_for_sub %>
-                </s> 
+                </s>
                 <img src="/images/right-arrow.png" alt="">
                 <%= instruction.substitution_name %>
               </li>
@@ -224,7 +224,6 @@
 
 
       <div class="feedback">
-
         <form id="comment-form">
           <p><strong>Your Comment: </strong>
             <%= feedback ? feedback.content : "No comment yet" %>
@@ -241,15 +240,37 @@
         <h2>Comments</h2>
         <% comments.forEach(comment=> { %>
           <div class="comment">
-            <p><strong>
+            <div class="comment-header">
+              <strong>
                 <%= comment.username %>
-            </p></strong>
-            
-
-            <p><small>Posted on <%= new Date(comment.created_at).toLocaleString() %></small></p>
-            <p>
-              <%= comment.content %>
-            </p>
+              </strong>
+              <small>
+                <%= new Date(comment.created_at).toLocaleDateString() %>
+              </small>
+              <% if (comment.appearance_rating || comment.taste_rating) { %>
+                <div class="user-ratings">
+                  <% if (comment.appearance_rating) { %>
+                    <div class="rating-item">
+                      <img src="/images/lookstar.png" alt="appearance rating" class="rating-icon">
+                      <span><%= comment.appearance_rating %></span>
+                    </div>
+                  <% } %>
+                  
+                  <% if (comment.taste_rating) { %>
+                    <div class="rating-item">
+                      <img src="/images/chefstar.png" alt="taste rating" class="rating-icon">
+                      <span><%= comment.taste_rating %></span>
+                    </div>
+                  <% } %>
+                </div>
+              <% } %>
+          </div>
+          
+            <div class="comment-content">
+              <p>
+                <%= comment.content %>
+              </p>
+            </div>
           </div>
           <% }) %>
 
