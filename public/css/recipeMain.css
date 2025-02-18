@@ -28,6 +28,59 @@ a:hover{
     
 }
 
+h2{
+    margin-bottom: 20px;
+}
 
+
+#recipes-list .recipe-content a {
     
+    display: grid;
+    grid-template-areas:
+        "title  average-rating"
+        "description  description"
+        "createdby createdby ";
+    grid-template-columns: 1fr 1fr;
+    color: #96290B;
+}
     
+
+#recipes-list .average-appearance ,
+#recipes-list .average-taste {
+    display: flex;
+    align-items: center;
+}
+
+#recipes-list .average-appearance p,
+#recipes-list .average-taste p{
+    margin: auto 0px;
+    align-items: center;
+}
+
+#recipes-list .average-appearance img,
+#recipes-list .average-taste img{
+    max-width: 50px;
+    border-style: none;
+    box-shadow: none;
+}
+
+
+
+ .recipe-content title{
+    grid-area: title;
+}
+
+.recipe-container .average-rating {
+    grid-area: average-rating;
+    display: flex;
+   justify-content: right;
+   
+}
+
+.recipe-content .description{
+    grid-area: description;
+}
+
+.recipe-content .createdby{
+    grid-area: createdby;
+}

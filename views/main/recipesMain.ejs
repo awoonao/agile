@@ -1,67 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Bootstrap -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Common css -->
-    <link rel="stylesheet" type="text/css" href="/css/main.css" />
-    <!-- recipeMain.css -->
-    <link rel="stylesheet" type="text/css" href="/css/recipeMain.css" />
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <title>Recipes</title>
-  </head>
-  <body>
-    <header>
-      <nav class="navbar navbar-expand-xl nav-container">
-        <!-- Brand -->
-        <a class="navbar-brand" href="/">
-          <img src="/images/logo.png" alt="logo" />
-        </a>
+  <!-- Common css -->
+  <link rel="stylesheet" type="text/css" href="/css/main.css" />
+  <!-- recipeMain.css -->
+  <link rel="stylesheet" type="text/css" href="/css/recipeMain.css" />
 
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#collapsibleNavbar"
-        >
-          <span class="navbar-toggler-icon">
-            <img src="/images/hamburger-menu.png" alt="hamburger-menu" />
-          </span>
-        </button>
+  <title>Recipes</title>
+</head>
 
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-          <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="/recipes">Recipes</a></li>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-xl nav-container">
+      <!-- Brand -->
+      <a class="navbar-brand" href="/">
+        <img src="/images/logo.png" alt="logo" />
+      </a>
 
-            <li class="nav-item dropdown">
-              <% if (userId) { %>
-                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                  My Account
-                </a>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="/recipes/create-recipe">Create New Recipe</a>
-                  <a class="dropdown-item" href="/profile">My Profile</a>
-                  <a class="dropdown-item" href="/my-recipes">My Recipes</a>
-                  <a class="dropdown-item" href="/saved-recipes">Saved Recipes</a>
-                  <form action="/users/logout" method="POST">
-                    <button class="dropdown-item" type="submit">Logout</button>
-                  </form>
-                </div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon">
+          <img src="/images/hamburger-menu.png" alt="hamburger-menu" />
+        </span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="/recipes">Recipes</a></li>
+
+          <li class="nav-item dropdown">
+            <% if (userId) { %>
+              <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                My Account
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/recipes/create-recipe">Create New Recipe</a>
+                <a class="dropdown-item" href="/profile">My Profile</a>
+                <a class="dropdown-item" href="/my-recipes">My Recipes</a>
+                <a class="dropdown-item" href="/saved-recipes">Saved Recipes</a>
+                <form action="/users/logout" method="POST">
+                  <button class="dropdown-item" type="submit">Logout</button>
+                </form>
+              </div>
               <% } else { %>
-                <li class="nav-item">
-                  <a class="nav-link" href="/users/login">Login / Signup</a>
-                </li>
-              <% } %>
+          <li class="nav-item">
+            <a class="nav-link" href="/users/login">Login / Signup</a>
+          </li>
+          <% } %>
             </li>
 
             <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
@@ -71,37 +65,64 @@
                 <input class="form-control mr-sm-2" type="text" placeholder="Search" />
               </form>
             </li>
-          </ul>
-        </div>
-      </nav>
-    </header>
-    <main>
-      <div id="recipes-list">
-        <% if (typeof recipes !== 'undefined' && recipes && recipes.length > 0)
-        { %> <% recipes.forEach(recipe => { %>
-        <a href="/recipes/<%= recipe.recipe_id %>"
-          ><div class="recipe-container">
-            <% if (recipe.image_url) { %>
-              <img
-                src="<%= recipe.image_url %>"
-                alt="<%= recipe.title %>"
-                width="200"
-              />
-              <% } %>
-          <div class="recipe-content">
-            <h2><%= recipe.title %></h2>
-            <p><strong>Description:</strong> <%= recipe.description %></p>
-            <p><strong>Author:</strong> <%= recipe.author %></p>
-          </a></div>
-          </div>
-          <hr>
-        <% }); %> <% } else { %>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <div id="recipes-list">
+      <% if (typeof recipes !=='undefined' && recipes && recipes.length> 0)
+        { %> <% recipes.forEach(recipe=> { %>
+          <a href="/recipes/<%= recipe.recipe_id %>">
+            <div class="recipe-container">
+              <% if (recipe.image_url) { %>
+                <img src="<%= recipe.image_url %>" alt="<%= recipe.title %>" width="200" />
+                <% } %>
+                  <div class="recipe-content">
+                    <div class="title">
+                      <h2>
+                        <%= recipe.title %>
+                      </h2>
+                    </div>
+                    <div class="average-rating">
+                    <div class="average-appearance">
+                      <!-- <a href="https://www.flaticon.com/free-icons/star" title="star icons">Star icons created by Pixel perfect - Flaticon</a> -->
+                      <img src="/images/lookstar.png" alt="star rating with chef's hat">
+                      <p>:
+                        <%= recipe.average_appearance_rating %>
+                      </p>
+                    </div>
+                    <div class="average-taste">
+                      <img src="/images/chefstar.png" alt="star rating">
+
+                      <p>:
+                        <%= recipe.average_taste_rating %>
+                      </p>
+                    </div>
+                  </div>
+                    <div class="description">
+                      <p><strong>Description:</strong><br>
+                        <%= recipe.description %>
+                      </p>
+                    </div>
+                    <div class="createdby">
+                      <p><strong>Created by:</strong>
+                        <%= recipe.author %>
+                      </p>
+                    </div>
+          </a>
+    </div>
+    </div>
+    <hr>
+    <% }); %>
+      <% } else { %>
         <p>No recipes found.</p>
         <% } %>
-      </div>
-      
-    </main>
+          </div>
 
-    <footer></footer>
-  </body>
+  </main>
+
+  <footer></footer>
+</body>
+
 </html>
