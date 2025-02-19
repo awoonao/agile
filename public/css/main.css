@@ -26,6 +26,10 @@ main {
     margin-top: auto;
 }
 
+.footer p{
+    color: #FFF4EF;
+}
+
 /* Footer links */
 .footer a {
     color: #FFF4EF;
