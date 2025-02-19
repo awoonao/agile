@@ -14,7 +14,7 @@
   <!-- Common css -->
   <link rel="stylesheet" type="text/css" href="/css/main.css" />
   <!-- recipeMain.css -->
-  <link rel="stylesheet" type="text/css" href="/css/recipeMain.css" />
+  <link rel="stylesheet" type="text/css" href="/css/search.css" />
 
   <title>Recipes</title>
 </head>
@@ -69,59 +69,50 @@
       </div>
     </nav>
   </header>
-  <main>
-    <div id="recipes-list">
-      <% if (typeof recipes !=='undefined' && recipes && recipes.length> 0)
-        { %> <% recipes.forEach(recipe=> { %>
-          <a href="/recipes/<%= recipe.recipe_id %>">
-            <div class="recipe-container">
-              <% if (recipe.image_url) { %>
-                <img src="<%= recipe.image_url %>" alt="<%= recipe.title %>" width="200" />
-                <% } %>
-                  <div class="recipe-content">
-                    <div class="title">
-                      <h2>
-                        <%= recipe.title %>
-                      </h2>
-                    </div>
-                    <div class="average-rating">
-                    <div class="average-appearance">
-                      <!-- <a href="https://www.flaticon.com/free-icons/star" title="star icons">Star icons created by Pixel perfect - Flaticon</a> -->
-                      <img src="/images/lookstar.png" alt="star rating with chef's hat">
-                      <p>:
-                        <%= recipe.average_appearance_rating %>
-                      </p>
-                    </div>
-                    <div class="average-taste">
-                      <img src="/images/chefstar.png" alt="star rating">
-
-                      <p>:
-                        <%= recipe.average_taste_rating %>
-                      </p>
-                    </div>
+  <main class="container mt-4">
+    <h2>Search Results for "<%= searchTerm %>"</h2>
+    <% if (recipes.length> 0) { %>
+      <div class="row">
+        <% recipes.forEach(recipe=> { %>
+          <div class="col-md-4 mb-4">
+            <div class="card h-100">
+              <img src="<%= recipe.image_url || '/images/placeholder.png' %>" class="card-img-top"
+                alt="<%= recipe.title %>">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <%= recipe.title %>   
+                </h5>
+                <p class="card-text">
+                  <%= recipe.description.slice(0, 100) %>...
+                </p>
+                <div class="average-rating">
+                  <div class="average-appearance">
+                    <!-- <a href="https://www.flaticon.com/free-icons/star" title="star icons">Star icons created by Pixel perfect - Flaticon</a> -->
+                    <img src="/images/lookstar.png" alt="star rating with chef's hat">
+                    <p>:
+                      <%= recipe.average_appearance_rating %>
+                    </p>
                   </div>
-                    <div class="description">
-                      <p><strong>Description:</strong><br>
-                        <%= recipe.description %>
-                      </p>
-                    </div>
-                    <div class="createdby">
-                      <p><strong>Created by:</strong>
-                        <%= recipe.author %>
-                      </p>
-                    </div>
-          </a>
-    </div>
-    </div>
-    <hr>
-    <% }); %>
-      <% } else { %>
-        <p>No recipes found.</p>
-        <% } %>
+                  <div class="average-taste">
+                    <img src="/images/chefstar.png" alt="star rating">
+
+                    <p>:
+                      <%= recipe.average_taste_rating %>
+                    </p>
+                  </div>
+                </div>
+                <p class="text-muted">By <%= recipe.author %>
+                </p>
+                <a href="/recipes/<%= recipe.recipe_id %>" class="btn btn-primary">View Recipe</a>
+              </div>
+            </div>
           </div>
-
+          <% }) %>
+      </div>
+      <% } else { %>
+        <p class="mt-4">No recipes found matching your search.</p>
+        <% } %>         
   </main>
-
   <footer></footer>
 </body>
 

@@ -334,8 +334,15 @@
     color: #FFF4EF !important;
     background-color: #96290B !important;
     border-color: #BB8379 !important;
-    box-shadow: none;
+
 }
+
+.btn-primary:not(:disabled):not(.disabled).active:focus,
+.btn-primary:not(:disabled):not(.disabled):active:focus,
+.show>.btn-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 .2rem rgba(187, 131, 121, .5)
+}
+
 
 .comment {
     background-color: #fff;
