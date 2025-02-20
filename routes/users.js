@@ -13,6 +13,18 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const sqlite3 = require('sqlite3').verbose();
+const multer = require("multer");
+const path = require("path");
+
+// Configure multer storage
+const storage = multer.diskStorage({
+    destination: "./public/images/users/",
+    filename: (req, file, cb) => {
+        cb(null, "profile_" + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
 
 //Middleware for session handling below
 router.use(session({
@@ -28,54 +40,37 @@ router.get('/signup', (req, res) => {
 });
 
 //Signup (POST)
-
-router.post('/signup', (req, res) => {
+router.post('/signup', upload.single('profile_picture'), (req, res) => {
     const { first_name, last_name, username, email, password, confirmPassword, day, month, year } = req.body;
+    const profile_picture = req.file ? "/uploads/" + req.file.filename : "/images/defaultProfile.png"; // Fallback to default image
 
-    // Validate required fields
-    if (!first_name || !last_name || !username || !email || !password || !confirmPassword || !day || !month || !year) {
+    if (!first_name || !last_name || !username || !email || !password || !confirmPassword) {
         return res.render('user/signup', { error: 'All fields are required' });
     }
 
-    // Check if passwords match
     if (password !== confirmPassword) {
         return res.render('user/signup', { error: 'Passwords do not match' });
     }
 
-    // Format birthday as YYYY-MM-DD
     const birthday = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
 
-    // Check if username or email already exists
-    db.get('SELECT * FROM Users WHERE username = ? OR email = ?', [username, email], (err, existingUser) => {
+    bcrypt.hash(password, 10, (err, hashedPassword) => {
         if (err) {
-            return res.render('user/signup', { error: 'Database error' });
+            return res.render('user/signup', { error: 'Error hashing password' });
         }
 
-        if (existingUser) {
-            return res.render('user/signup', { error: 'Username or email already taken' });
-        }
-
-        // Hash the password using bcrypt
-        bcrypt.hash(password, 10, (err, hashedPassword) => {
-            if (err) {
-                return res.render('user/signup', { error: 'Error hashing password' });
-            }
-
-            // Insert new user into database
-            db.run(
-                `INSERT INTO Users (first_name, last_name, username, email, password_hash, birthday) VALUES (?, ?, ?, ?, ?, ?)`,
-                [first_name, last_name, username, email, hashedPassword, birthday],
-                function (err) {
-                    if (err) {
-                        return res.render('user/signup', { error: 'Error creating account' });
-                    }
-
-                    // Store user session after signup
-                    req.session.userId = this.lastID;
-                    res.redirect('/');
+        db.run(
+            `INSERT INTO Users (first_name, last_name, username, email, password_hash, birthday, profile_picture) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [first_name, last_name, username, email, hashedPassword, birthday, profile_picture],
+            function (err) {
+                if (err) {
+                    return res.render('user/signup', { error: 'Error creating account' });
                 }
-            );
-        });
+
+                req.session.userId = this.lastID;
+                res.redirect('/');
+            }
+        );
     });
 });
 
