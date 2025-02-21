@@ -4,7 +4,9 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 
-// Middleware to check if user is authenticated
+/**-------------------------------------------------------------------------------------------------------------------------------
+ * @desc Middleware to check if user is authenticated. Redirects to login page if not authenticated.
+ ---------------------------------------------------------------------------------------------------------------------------------*/
 const isAuthenticated = (req, res, next) => {
   if (req.session && req.session.userId) {
     next();
@@ -13,13 +15,12 @@ const isAuthenticated = (req, res, next) => {
   }
 };
 
-// Apply authentication middleware to routes that need it
+// Apply authentication middleware to protected routes
 router.use(["/create-recipe", "/:id/create-variant"], isAuthenticated);
 
 /**-------------------------------------------------------------------------------------------------------------------------------
- * @desc configure multer to save uploaded files into the /public/images folder.
- -------------------------------------------------------------------------------------------------------------------------------------*/
-// Configure storage for multer
+ * @desc Configuration for file uploads using Multer. Saves images to /public/images with unique filenames.
+ ---------------------------------------------------------------------------------------------------------------------------------*/
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname, "../public/images")); // Save files in /public/images
@@ -44,11 +45,8 @@ const upload = multer({
   },
 });
 
-
-
-
 /**-------------------------------------------------------------------------------------------------------------------------------
- * @desc search
+ * @desc Search functionality - Full-text search across recipes, ingredients, instructions, and substitutions
  -------------------------------------------------------------------------------------------------------------------------------*/
 router.get("/search", async (req, res) => {
   const searchTerm = req.query.query.trim();
@@ -58,8 +56,10 @@ router.get("/search", async (req, res) => {
   }
 
   try {
+    //  Perform a database query to search across multiple fields
     const recipes = await new Promise((resolve, reject) => {
-      db.all(`
+      db.all(
+        `
         SELECT DISTINCT 
           r.recipe_id, 
           r.title, 
@@ -81,13 +81,15 @@ router.get("/search", async (req, res) => {
           s.substitution LIKE '%' || ? || '%' COLLATE NOCASE
         GROUP BY r.recipe_id
         ORDER BY r.created_at DESC
-      `, [searchTerm, searchTerm, searchTerm, searchTerm, searchTerm], //pass the searchTerm variable five times (title, description, ingredient, instruction, substitution).
-      (err, rows) => {
-        if (err) reject(err);
-        else resolve(rows);
-      });
+      `,
+        [searchTerm, searchTerm, searchTerm, searchTerm, searchTerm], //pass the searchTerm variable five times (title, description, ingredient, instruction, substitution).
+        (err, rows) => {
+          if (err) reject(err);
+          else resolve(rows);
+        }
+      );
     });
-
+    // Render the search results page with the found recipes
     res.render("recipes/searchResults", { recipes, searchTerm });
   } catch (error) {
     console.error("Search error:", error);
@@ -96,9 +98,8 @@ router.get("/search", async (req, res) => {
 });
 
 /**-------------------------------------------------------------------------------------------------------------------------------
- * @desc Create New recipe 
- -------------------------------------------------------------------------------------------------------------------------------*/
-// Handle POST request to create a new recipe
+ * @desc Recipe Creation - Handles both GET (form display) and POST (form submission) for new recipes
+ -------------------------------------------------------------------------------------------------------------------------------*/ // Handle POST request to create a new recipe
 router.post("/create-recipe", upload.single("image"), async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).redirect("/users/login");
@@ -184,35 +185,36 @@ router.get("/create-recipe", (req, res) => {
 });
 
 /**-------------------------------------------------------------------------------------------------------------------------------
- * @desc Display individual recipe 
----------------------------------------------------------------------------------------------------------------------------------*/
-router.get("/:id", async (req, res) => {
-  const recipeId = req.params.id;
+ * @desc Recipe Details - Display individual recipe with ingredients, instructions, comments, and ratings
+ -------------------------------------------------------------------------------------------------------------------------------*/ router.get(
+  "/:id",
+  async (req, res) => {
+    const recipeId = req.params.id;
 
-  try {
-    // Fetch recipe details
-    const recipe = await new Promise((resolve, reject) => {
-      db.get(
-        `SELECT r.*, u.username as author 
+    try {
+      // Fetch recipe details
+      const recipe = await new Promise((resolve, reject) => {
+        db.get(
+          `SELECT r.*, u.username as author 
        FROM Recipes r
        JOIN Users u ON r.user_id = u.user_id
        WHERE r.recipe_id = ?`,
-        [recipeId],
-        (err, row) => {
-          if (err) reject(err);
-          else resolve(row);
-        }
-      );
-    });
+          [recipeId],
+          (err, row) => {
+            if (err) reject(err);
+            else resolve(row);
+          }
+        );
+      });
 
-    if (!recipe) {
-      return res.status(404).send("Recipe not found");
-    }
+      if (!recipe) {
+        return res.status(404).send("Recipe not found");
+      }
 
-    // Fetch ingredients
-    const ingredients = await new Promise((resolve, reject) => {
-      db.all(
-        `SELECT 
+      // Fetch ingredients
+      const ingredients = await new Promise((resolve, reject) => {
+        db.all(
+          `SELECT 
             i.ingredient_id,
             i.ingredient_name as original_name,
             i.ingredient_order,
@@ -222,18 +224,18 @@ router.get("/:id", async (req, res) => {
         LEFT JOIN Substitutions s ON s.ingredient_id = i.ingredient_id AND s.type = 'ingredient'
         WHERE i.recipe_id = ?
         ORDER BY i.ingredient_order`,
-        [recipeId],
-        (err, rows) => {
-          if (err) reject(err);
-          else resolve(rows);
-        }
-      );
-    });
+          [recipeId],
+          (err, rows) => {
+            if (err) reject(err);
+            else resolve(rows);
+          }
+        );
+      });
 
-    // Fetch instructions
-    const instructions = await new Promise((resolve, reject) => {
-      db.all(
-        `SELECT 
+      // Fetch instructions
+      const instructions = await new Promise((resolve, reject) => {
+        db.all(
+          `SELECT 
             i.instruction_id,
             i.instruction_text as original_name,
             i.step_order,
@@ -243,34 +245,34 @@ router.get("/:id", async (req, res) => {
         LEFT JOIN Substitutions s ON s.instruction_id = i.instruction_id AND s.type = 'instruction'
         WHERE i.recipe_id = ?
         ORDER BY i.step_order`,
-        [recipeId],
-        (err, rows) => {
-          if (err) reject(err);
-          else resolve(rows);
-        }
-      );
-    });
-
-    //fetch feedback
-    let feedback = null;
-    if (req.session.userId) {
-      // Only fetch if user is logged in
-      feedback = await new Promise((resolve, reject) => {
-        db.get(
-          `SELECT content FROM Comments WHERE recipe_id = ? AND user_id = ?`,
-          [recipeId, req.session.userId],
-          (err, row) => {
+          [recipeId],
+          (err, rows) => {
             if (err) reject(err);
-            else resolve(row || null);
+            else resolve(rows);
           }
         );
       });
-    }
 
-    //
-    const comments = await new Promise((resolve, reject) => {
-      db.all(
-        `SELECT c.comment_id, c.content, c.created_at, u.username,
+      //fetch user feedback if logged in
+      let feedback = null;
+      if (req.session.userId) {
+        // Only fetch if user is logged in
+        feedback = await new Promise((resolve, reject) => {
+          db.get(
+            `SELECT content FROM Comments WHERE recipe_id = ? AND user_id = ?`,
+            [recipeId, req.session.userId],
+            (err, row) => {
+              if (err) reject(err);
+              else resolve(row || null);
+            }
+          );
+        });
+      }
+
+      // fetch all comments for the recipe
+      const comments = await new Promise((resolve, reject) => {
+        db.all(
+          `SELECT c.comment_id, c.content, c.created_at, u.username,
      MAX(r.appearance_rating) AS appearance_rating, 
      MAX(r.taste_rating) AS taste_rating
    FROM Comments c
@@ -279,36 +281,35 @@ router.get("/:id", async (req, res) => {
    WHERE c.recipe_id = ? 
    GROUP BY c.comment_id
    ORDER BY c.created_at DESC`,
-        [recipeId],
-        (err, rows) => {
-          if (err) reject(err);
-          else resolve(rows);
-        }
-      );
-    });
+          [recipeId],
+          (err, rows) => {
+            if (err) reject(err);
+            else resolve(rows);
+          }
+        );
+      });
 
-    // Render the detailed recipe page
-    res.render("recipes/recipe", {
-      recipe,
-      ingredients,
-      instructions,
-      feedback,
-      comments,
-    });
-  } catch (error) {
-    console.error("Error fetching recipe details:", error.message);
-    res.status(500).send("Internal Server Error");
+      // Render the detailed recipe page with all fetched data
+      res.render("recipes/recipe", {
+        recipe,
+        ingredients,
+        instructions,
+        feedback,
+        comments,
+      });
+    } catch (error) {
+      console.error("Error fetching recipe details:", error.message);
+      res.status(500).send("Internal Server Error");
+    }
   }
-});
+);
+
 /**-------------------------------------------------------------------------------------------------------------------------------
- * @desc Rating
--------------------------------------------------------------------------------------------------------------------------------*/
-// Route to handle taste rating submissions
+ * @desc Rating System - Handle taste and appearance ratings with average calculation
+ -------------------------------------------------------------------------------------------------------------------------------*/ // Route to handle taste rating submissions
 router.post("/:id/rate/taste", async (req, res) => {
   if (!req.session.userId) {
-    
     return res.status(401).json({ error: "Must be logged in to rate recipes" });
-   
   }
 
   const recipeId = req.params.id;
@@ -316,8 +317,6 @@ router.post("/:id/rate/taste", async (req, res) => {
   const { rating } = req.body;
 
   try {
-   
-
     // Check if user has already rated this recipe's taste
     const existingRating = await new Promise((resolve, reject) => {
       db.get(
@@ -397,7 +396,7 @@ router.post("/:id/rate/appearance", async (req, res) => {
   const userId = req.session.userId;
   const { rating } = req.body;
 
-   try {
+  try {
     // Check if user has already rated this recipe's appearance
     const existingRating = await new Promise((resolve, reject) => {
       db.get(
@@ -467,8 +466,9 @@ router.post("/:id/rate/appearance", async (req, res) => {
     res.status(500).json({ error: "Failed to save rating" });
   }
 });
-// -------------------------------------------------------------------------
-// Route to get user's ratings for a recipe
+/**-------------------------------------------------------------------------------------------------------------------------------
+ * @desc User Reviews - Get user's existing ratings and handle comment submissions
+ -------------------------------------------------------------------------------------------------------------------------------*/
 router.get("/:id/user-review", async (req, res) => {
   if (!req.session.userId) {
     return res.json({ appearance_rating: null, taste_rating: null });
@@ -478,6 +478,7 @@ router.get("/:id/user-review", async (req, res) => {
   const userId = req.session.userId;
 
   try {
+    // Fetch the user's ratings for the recipe
     const ratings = await new Promise((resolve, reject) => {
       db.get(
         `SELECT 
@@ -515,6 +516,7 @@ router.post("/:id/comment", async (req, res) => {
   }
 
   try {
+    // Check if the user has already commented on this recipe
     const existingComment = await new Promise((resolve, reject) => {
       db.get(
         `SELECT comment_id, content 
@@ -529,6 +531,7 @@ router.post("/:id/comment", async (req, res) => {
     });
 
     if (existingComment) {
+      // Update the existing comment
       await new Promise((resolve, reject) => {
         db.run(
           `UPDATE Comments
@@ -543,6 +546,7 @@ router.post("/:id/comment", async (req, res) => {
         );
       });
     } else {
+      // Insert a new comment
       await new Promise((resolve, reject) => {
         db.run(
           `INSERT INTO Comments (recipe_id, user_id, content) 
@@ -563,9 +567,9 @@ router.post("/:id/comment", async (req, res) => {
   }
 });
 
-/**-------------------------------------------------
- * @desc Create New recipe variant
- ----------------------------------------------------*/
+/**-------------------------------------------------------------------------------------------------------------------------------
+ * @desc Recipe Variants - Create and display form for recipe variations with substitutions
+ -------------------------------------------------------------------------------------------------------------------------------*/
 router.post("/:id/create-variant", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).redirect("/users/login");
@@ -582,7 +586,7 @@ router.post("/:id/create-variant", async (req, res) => {
   } = req.body;
 
   try {
-    // Insert the new recipe variant
+      // Fetch the original recipe details
     const newRecipeId = await new Promise((resolve, reject) => {
       db.run(
         `INSERT INTO Recipes (user_id, title, description, image_url, servings, prep_time, cook_time, yield) 
@@ -737,11 +741,7 @@ router.post("/:id/create-variant", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
-/**-------------------------------------------------
- * @desc display current recipe details for new variant
- ----------------------------------------------------*/
-
+// -------------------------------------------------------------//
 router.get("/:id/create-variant", async (req, res) => {
   const recipeId = req.params.id;
 
@@ -816,9 +816,9 @@ router.get("/:id/create-variant", async (req, res) => {
   }
 });
 
-/**-------------------------------------------------
- * @desc Display all recipes in main page 
- ----------------------------------------------------*/
+/**-------------------------------------------------------------------------------------------------------------------------------
+ * @desc Main Recipes Page - Display all recipes with basic information and ratings
+ -------------------------------------------------------------------------------------------------------------------------------*/
 router.get("/", async (req, res) => {
   try {
     const recipes = await new Promise((resolve, reject) => {
@@ -853,7 +853,9 @@ router.get("/", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
+/**-------------------------------------------------------------------------------------------------------------------------------
+ * @desc Recipe Template - Fallback route for recipe view template
+ -------------------------------------------------------------------------------------------------------------------------------*/
 router.get("/recipe", (req, res) => {
   res.render("recipes/recipe");
 });

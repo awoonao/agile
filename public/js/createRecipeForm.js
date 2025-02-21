@@ -9,16 +9,16 @@ function addIngredient() {
   container.appendChild(input);
 }
 
-// Function to remove ingredient textbox
-function addIngredient() {
-  const container = document.getElementById("ingredients-container");
-  const input = document.createElement("input");
-  input.type = "text";
-  input.name = "ingredients[]"; // Name as an array for server processing
-  input.placeholder = "Enter ingredient";
-  input.required = true;
-  container.appendChild(input);
-}
+// // Function to remove ingredient textbox
+// function addIngredient() {
+//   const container = document.getElementById("ingredients-container");
+//   const input = document.createElement("input");
+//   input.type = "text";
+//   input.name = "ingredients[]"; // Name as an array for server processing
+//   input.placeholder = "Enter ingredient";
+//   input.required = true;
+//   container.appendChild(input);
+// }
 
 // Function to remove instruction textbox
 function removeIngredient() {
