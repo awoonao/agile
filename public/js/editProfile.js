@@ -1,22 +1,34 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const imageUpload = document.getElementById("imageUpload");
-    const imagePreview = document.getElementById("imagePreview");
-    const profilePicture = document.getElementById("profilePicture"); 
+    const profileButtons = document.querySelectorAll(".profile-btn");
+    const profileData = document.getElementById("profileData");
 
-    function previewImage(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                imagePreview.src = e.target.result; 
-                profilePicture.src = e.target.result; 
-            };
-            reader.readAsDataURL(file);
+    async function loadProfileSection(section) {
+        try {
+            console.log(`Loading section: ${section}`); // Debugging log
+            const response = await fetch(`/profile/edit-profile/${section}`);
+
+            if (!response.ok) throw new Error("Failed to load section");
+
+            const data = await response.text();
+            profileData.innerHTML = data; // Update UI dynamically
+        } catch (error) {
+            console.error(`Error loading ${section}:`, error);
+            profileData.innerHTML = "<p>Error loading section.</p>";
         }
     }
 
-    imagePreview.addEventListener("click", function () {
-        imageUpload.click();
+    profileButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+            profileButtons.forEach((btn) => btn.classList.remove("active"));
+            this.classList.add("active");
+
+            const section = this.dataset.section;
+            console.log(`Navigating to: ${section}`); // Debugging log
+
+            loadProfileSection(section);
+        });
     });
-    imageUpload.addEventListener("change", previewImage);
+
+    // Load the default section when the page loads
+    loadProfileSection("personal-information");
 });

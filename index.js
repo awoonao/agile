@@ -62,7 +62,6 @@ app.use('/profile', profileRoutes);
 app.use('/recipes', recipesRoutes);
 app.use('/users', userRoutes);
 
-
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

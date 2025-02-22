@@ -30,75 +30,28 @@
         </nav>
     </header>
 
-    <body>
-        <main>
-            <div class="profile-container">
-                <!-- Left Sidebar -->
-                <div class="profile-sidebar">
-                    <img id="profilePicture" src="/<%= user.profile_picture ? user.profile_picture : 'images/defaultProfile.png' %>" alt="Profile Picture" />
-
-                    <h3>Hi, <span id="userName"><%= user.first_name %></span>!</h3>
-                    <button class="profile-btn active" data-section="personal-info">Personal Information Tab</button>
-                    <button class="profile-btn" data-section="dietary-restrictions">Dietary Restrictions Tab</button>
-                    <button class="profile-btn" data-section="my-creations">My Creations</button>
-                    <button class="profile-btn" data-section="saved-recipes">Saved Recipes</button>
-                </div>
+    <main>
+        <div class="profile-container">
+            <!-- Left Sidebar -->
+            <div class="profile-sidebar">
+                <img id="profilePicture" src="/<%= user.profile_picture ? user.profile_picture : 'images/defaultProfile.png' %>" alt="Profile Picture" />
     
-                <!-- Right Content -->
-                <div class="profile-content" id="contentSection">
-                    <h2>My Personal Information:</h2>
-    
-                    <!-- Success/Error Message -->
-                    <% if (message) { %>
-                        <div class="alert alert-<%= message.type === 'success' ? 'success' : 'danger' %>">
-                            <%= message.text %>
-                        </div>
-                    <% } %>
-    
-                    <form id="editProfileForm" action="/profile/edit-profile/update" method="POST" enctype="multipart/form-data">
-                        <div class="profile-image-upload">
-                            <img id="imagePreview" src="/<%= user.profile_picture ? user.profile_picture : 'images/defaultProfile.png' %>" alt="Profile Preview" />
-                            <input type="file" name="profile_picture" accept="image/*" id="imageUpload" style="display: none;" />
-                        </div>
-                        <div class="form-group">
-                            <label>First Name:</label>
-                            <input type="text" class="form-control" name="first_name" value="<%= user.first_name %>" required />
-                        </div>
-                        <div class="form-group">
-                            <label>Last Name:</label>
-                            <input type="text" class="form-control" name="last_name" value="<%= user.last_name %>" required />
-                        </div>
-                        <div class="form-group">
-                            <label>Email Address:</label>
-                            <input type="email" class="form-control" name="email" value="<%= user.email %>" required />
-                        </div>
-                        <div class="form-group">
-                            <label>Your Birthday:</label>
-                            <div class="form-row">
-                                <select class="form-control col" name="day">
-                                    <% for (let i = 1; i <= 31; i++) { %>
-                                        <option value="<%= i %>" <%= user.birthday.day == i ? 'selected' : '' %>><%= i %></option>
-                                    <% } %>
-                                </select>
-                                <select class="form-control col" name="month">
-                                    <% const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; %>
-                                    <% months.forEach((month, index) => { %>
-                                        <option value="<%= index + 1 %>" <%= user.birthday.month == index + 1 ? 'selected' : '' %>><%= month %></option>
-                                    <% }); %>
-                                </select>
-                                <select class="form-control col" name="year">
-                                    <% for (let i = new Date().getFullYear(); i >= 1900; i--) { %>
-                                        <option value="<%= i %>" <%= user.birthday.year == i ? 'selected' : '' %>><%= i %></option>
-                                    <% } %>
-                                </select>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary save-btn">Save Changes</button>
-                    </form>
-                </div>
+                <h3>Hi, <span id="userName"><%= user.first_name %></span>!</h3>
+                <button class="profile-btn active" data-section="personal-information">Personal Information</button>
+                <button class="profile-btn" data-section="dietary-restrictions">Dietary Restrictions</button>
+                <button class="profile-btn" data-section="my-creations">My Creations</button>
+                <button class="profile-btn" data-section="saved-recipes">Saved Recipes</button>
             </div>
-        </main>
-    </body>    
+    
+            <!-- Right Content -->
+            <div class="profile-content" id="contentSection">
+                <div id="profileData">
+                    <%- include('./personalInfo') %> <!-- Correctly load the default section -->
+                </div>                
+            </div>
+        </div>
+    </main>    
 
+    <script src="/js/editProfile.js"></script>
 </body>
 </html>

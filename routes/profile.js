@@ -86,26 +86,47 @@ router.get("/edit-profile/personal-information", ensureAuthenticated, (req, res)
         if (err) return res.status(500).send("Internal Server Error");
         if (!userData) return res.status(404).send("User not found");
 
-        res.render("profile/editProfile", {
-            user: userData,
-            activeTab: "personal-information"
-        });
+        res.render("profile/personalInfo", { user: userData });
     });
 });
 
+
 //Load Dietary Restrictions Tab
 router.get("/edit-profile/dietary-restrictions", ensureAuthenticated, (req, res) => {
-    res.render("profile/editProfile", { activeTab: "dietary-restrictions" });
+    res.render("profile/dietaryRestrictions");
 });
 
 //Load My Creations Tab
-router.get("/edit-profile/my-creations", ensureAuthenticated, (req, res) => {
-    res.render("profile/editProfile", { activeTab: "my-creations" });
+router.get("/edit-profile/my-creations", ensureAuthenticated, async (req, res) => {
+    const userId = req.session.userId;
+
+    try {
+        const recipes = await new Promise((resolve, reject) => {
+            db.all(
+                `SELECT recipe_id, title, image_url, 
+                        COALESCE(average_appearance_rating, 0) AS appearance_rating, 
+                        COALESCE(average_taste_rating, 0) AS taste_rating
+                 FROM Recipes 
+                 WHERE user_id = ? 
+                 ORDER BY created_at DESC`,
+                [userId],
+                (err, rows) => {
+                    if (err) reject(err);
+                    else resolve(rows);
+                }
+            );
+        });
+
+        res.render("profile/myCreations", { recipes });
+    } catch (error) {
+        console.error("Error fetching recipes:", error);
+        res.status(500).send("Failed to fetch recipes");
+    }
 });
 
 //Load Saved Recipes Tab
 router.get("/edit-profile/saved-recipes", ensureAuthenticated, (req, res) => {
-    res.render("profile/editProfile", { activeTab: "saved-recipes" });
+    res.render("profile/savedRecipes");
 });
 
 //Handle Profile Updates
@@ -113,13 +134,11 @@ router.post("/edit-profile/update", ensureAuthenticated, upload.single("profile_
     const userId = req.session.userId;
     const { first_name, last_name, email, day, month, year } = req.body;
 
-    // 🔹 Ensure the profile picture path is stored correctly
     let profile_picture = req.body.existing_profile_picture; // Default to existing picture
     if (req.file) {
         profile_picture = `images/users/${req.file.filename}`; // Update if new image uploaded
     }
 
-    // 🔹 Convert birthday to YYYY-MM-DD format
     const birthday = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
 
     db.run(
