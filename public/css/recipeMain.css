@@ -1,3 +1,69 @@
+.row{
+    align-items: center;
+    justify-content: center;
+    padding: auto;
+    margin: auto;
+}
+.form-group{
+    float: right;
+    align-items: center;
+    justify-content: center;
+    padding: auto;
+    margin: auto;
+
+}
+.dropdown-menu.show{
+left: -99999px;
+
+}
+
+
+.dropdown-menu {
+    background-color: #fff;
+}
+
+.dropdown-menu button {
+    color: #96290B;
+    
+}
+.dropdown-menu button:focus,.dropdown-menu button:hover{
+    background-color: #96290B;
+    color: #FFF4EF;
+}
+
+.btn-primary {
+    background-color: #BB8379; 
+    border-color: #96290B; 
+    color: #FFF4EF;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active{
+    background-color: #96290B; 
+    border-color: #BB8379;
+    box-shadow: none;
+}
+
+
+
+.btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active,
+.show>.btn-primary.dropdown-toggle {
+    background-color: #96290B; 
+    border-color: #BB8379 !important;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active:focus,
+.btn-primary:not(:disabled):not(.disabled):active:focus,
+.show>.btn-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 .2rem rgba(187, 131, 121, .5);
+    background-color: #96290B; 
+    border-color: #BB8379;
+}
+
+
+
 .recipe-container{
 
     padding: 10px;
@@ -30,6 +96,10 @@ a:hover{
 
 h2{
     margin-bottom: 20px;
+}
+h3,label{
+    color: #96290B;
+    margin: auto;
 }
 
 
@@ -83,4 +153,15 @@ h2{
 
 .recipe-content .createdby{
     grid-area: createdby;
+}
+
+
+@media screen and (max-width: 1200px) {
+
+    .recipe-container {
+    
+        grid-template-columns: auto;
+        
+    }
+
 }

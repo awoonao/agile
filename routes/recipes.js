@@ -586,7 +586,7 @@ router.post("/:id/create-variant", async (req, res) => {
   } = req.body;
 
   try {
-      // Fetch the original recipe details
+    // Fetch the original recipe details
     const newRecipeId = await new Promise((resolve, reject) => {
       db.run(
         `INSERT INTO Recipes (user_id, title, description, image_url, servings, prep_time, cook_time, yield) 
@@ -821,34 +821,97 @@ router.get("/:id/create-variant", async (req, res) => {
  -------------------------------------------------------------------------------------------------------------------------------*/
 router.get("/", async (req, res) => {
   try {
+    // Get the sort parameter from the query string, defaulting to 'newest' if not provided
+    const sort = req.query.sort || "newest";
+
+    // Base SQL query to retrieve recipes with author name and comment count
+    let recipesQuery = `
+      SELECT 
+        Recipes.recipe_id, 
+        Recipes.title, 
+        Recipes.description, 
+        Recipes.image_url, 
+        Recipes.average_appearance_rating, 
+        Recipes.average_taste_rating,
+        Recipes.created_at,
+        Users.username AS author
+      FROM Recipes
+      INNER JOIN Users ON Recipes.user_id = Users.user_id
+    `;
+
+    // Add different WHERE/JOIN clauses and ORDER BY based on sort parameter
+    switch (sort) {
+      case "newest": // Sort by most recently created recipes
+        recipesQuery += `ORDER BY Recipes.created_at DESC`;
+        break;
+      case "taste-highest": // Sort by highest taste rating, null values last
+        recipesQuery += `ORDER BY Recipes.average_taste_rating DESC NULLS LAST, Recipes.created_at DESC`;
+        break;
+      case "appearance-highest": // Sort by highest appearance rating, null values last
+        recipesQuery += `ORDER BY Recipes.average_appearance_rating DESC NULLS LAST, Recipes.created_at DESC`;
+        break;
+      case "popular-month": // Sort by most commented recipes in the last month
+        recipesQuery = `
+          SELECT 
+            r.recipe_id, 
+            r.title, 
+            r.description, 
+            r.image_url, 
+            r.average_appearance_rating, 
+            r.average_taste_rating,
+            r.created_at,
+            u.username AS author,
+            COUNT(c.comment_id) AS comment_count
+          FROM Recipes r
+          INNER JOIN Users u ON r.user_id = u.user_id
+          LEFT JOIN Comments c ON r.recipe_id = c.recipe_id AND c.created_at > date('now', '-1 month')
+          GROUP BY r.recipe_id
+          ORDER BY comment_count DESC, r.average_taste_rating DESC, r.created_at DESC
+        `;
+        break;
+      case "popular-week": // Sort by most commented recipes in the last week
+        recipesQuery = `
+          SELECT 
+            r.recipe_id, 
+            r.title, 
+            r.description, 
+            r.image_url, 
+            r.average_appearance_rating, 
+            r.average_taste_rating,
+            r.created_at,
+            u.username AS author,
+            COUNT(c.comment_id) AS comment_count
+          FROM Recipes r
+          INNER JOIN Users u ON r.user_id = u.user_id
+          LEFT JOIN Comments c ON r.recipe_id = c.recipe_id AND c.created_at > date('now', '-7 days')
+          GROUP BY r.recipe_id
+          ORDER BY comment_count DESC, r.average_taste_rating DESC, r.created_at DESC
+        `;
+        break;
+      default: // Default to newest if an invalid sort option is provided
+        recipesQuery += `ORDER BY Recipes.created_at DESC`;
+    }
+
+    // Execute the query
     const recipes = await new Promise((resolve, reject) => {
-      db.all(
-        `SELECT 
-                  Recipes.recipe_id, 
-                  Recipes.title, 
-                  Recipes.description, 
-                  Recipes.image_url, 
-                  Recipes.average_appearance_rating, 
-                  Recipes.average_taste_rating,
-                  Users.username AS author
-              FROM Recipes
-              INNER JOIN Users ON Recipes.user_id = Users.user_id`,
-        [],
-        (err, rows) => {
-          if (err) {
-            console.error("Database error:", err);
-            reject(err);
-          } else {
-            console.log("Number of recipes fetched:", rows.length);
-            console.log("Recipes data:", rows);
-            resolve(rows);
-          }
+      db.all(recipesQuery, [], (err, rows) => {
+        if (err) {
+          console.error("Database error:", err);
+          reject(err);
+        } else {
+          // console.log("Number of recipes fetched:", rows.length);
+          resolve(rows);
         }
-      );
+      });
     });
 
-    res.render("main/recipesMain", { recipes: recipes });
+    // Render the main recipes page and pass the retrieved data
+    res.render("main/recipesMain", {
+      recipes: recipes,
+      sort: sort, // Pass the sorting parameter to the template for UI updates
+    });
   } catch (error) {
+    // Log any errors and return an Internal Server Error response
     console.error("Error fetching recipes:", error);
     res.status(500).send("Internal Server Error");
   }

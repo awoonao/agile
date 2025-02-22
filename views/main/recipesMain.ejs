@@ -16,6 +16,8 @@
   <!-- recipeMain.css -->
   <link rel="stylesheet" type="text/css" href="/css/recipeMain.css" />
 
+  <script src="/js/sorting.js" ></script>
+
   <title>Recipes</title>
 </head>
 
@@ -70,6 +72,43 @@
     </nav>
   </header>
   <main>
+    <div class="container mt-3 mb-4">
+      <div class="row">
+        <div class="col-md-6">
+          <h3>Browse Recipes</h3>
+        </div>
+        <div class="col-md-6 text-right">
+          <form id="filter-form" action="/recipes" method="GET">
+            <input type="hidden" id="sort-input" name="sort" value="<%= sort %>">
+            <div class="form-group">
+              <label for="sort-dropdown">Sort by: </label>
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span id="dropdown-text">
+                    <%= sort === 'newest' ? 'Most Recent' :
+                       sort === 'taste-highest' ? 'Highest Taste Rating' :
+                       sort === 'appearance-highest' ? 'Highest Appearance Rating' :
+                       sort === 'popular-month' ? 'Most Popular This Month' :
+                       sort === 'popular-week' ? 'Most Popular This Week' :
+                       'Select an option' %>
+                  </span>
+                </button>
+                <div class="dropdown-menu">
+                  <button class="dropdown-item" type="button" data-value="newest">Most Recent</button>
+                  <button class="dropdown-item" type="button" data-value="taste-highest">Best Tasting</button>
+                  <button class="dropdown-item" type="button" data-value="appearance-highest">Most Appealing</button>
+                  <button class="dropdown-item" type="button" data-value="popular-month">Most Popular This Month</button>
+                  <button class="dropdown-item" type="button" data-value="popular-week">Most Popular This Week</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+ 
+    
     <div id="recipes-list">
       <% if (typeof recipes !=='undefined' && recipes && recipes.length> 0)
         { %> <% recipes.forEach(recipe=> { %>
