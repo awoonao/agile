@@ -100,7 +100,7 @@ nav img {
 
 .navbar-nav a:hover {
     color: #E6D7D0;
-    font-size: 1.5rem;
+    /* font-size: 1.5rem; */
 }
 .navbar-nav a:active {
     background-color: #E6D7D0;
