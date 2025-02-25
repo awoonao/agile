@@ -71,9 +71,8 @@
   <main>
     <h1>Create Variant for "<%= recipe.title %>"</h1>
 
-    <form class="recipe-container" action="/recipes/<%= recipe.recipe_id %>/create-variant" method="POST">
-      
-         <!-- Recipe Title -->
+      <form class="recipe-container" action="/recipes/<%= recipe.recipe_id %>/create-variant" method="POST" enctype="multipart/form-data">
+        <!-- Recipe Title -->
          <div class="title">
           <label for="title">Title:</label>
          
@@ -87,11 +86,11 @@
         </div>
 
         <div class="image">
-          <label for="image">Photo Here(not working yet):</label><br>
+          <label for="image">Photo Here:</label><br>
           <div class="image-container">
             <!-- Image Preview -->
             <!-- <a href="https://www.flaticon.com/free-icons/image-placeholder" title="image placeholder icons">Image placeholder icons created by Graphic Nehar - Flaticon</a> -->
-            <img id="imagePreview" src="/images/imagePreview.png" alt="Preview" />
+            <img id="imagePreview" src="<%= recipe.image_url %>" alt="Preview" />
             <!-- Recipe Image -->
             <input type="file" name="image" accept="image/*" id="imageUpload" />
 

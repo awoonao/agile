@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
+// Import the upload middleware
+const { upload } = require("../../middleware/middleware");
 
 /**-------------------------------------------------------------------------------------------------------------------------------
  * @desc Recipe Variants - Create and display form for recipe variations with substitutions
  -------------------------------------------------------------------------------------------------------------------------------*/
-router.post("/:id/create-variant", async (req, res) => {
+router.post("/:id/create-variant", upload.single("image"), async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).redirect("/users/login");
   }
@@ -20,17 +22,39 @@ router.post("/:id/create-variant", async (req, res) => {
   } = req.body;
 
   try {
+    // Fetch the original recipe's image URL
+    const originalRecipe = await new Promise((resolve, reject) => {
+      db.get(
+        "SELECT image_url FROM Recipes WHERE recipe_id = ?",
+        [originalRecipeId],
+        (err, row) => {
+          if (err) reject(err);
+          else resolve(row);
+        }
+      );
+    });
+
+    if (!originalRecipe) {
+      return res.status(404).send("Original recipe not found");
+    }
+
+    // Determine image path
+    const imagePath = req.file
+      ? `/images/recipes/${req.file.filename}`
+      : originalRecipe.image_url;
+
     // Fetch the original recipe details
     const newRecipeId = await new Promise((resolve, reject) => {
       db.run(
         `INSERT INTO Recipes (user_id, title, description, image_url, servings, prep_time, cook_time, yield) 
-           SELECT ?, ?, ?, image_url, ?, ?, ?, ? 
+           SELECT ?, ?, ?, ?, ?, ?, ?, ? 
            FROM Recipes 
            WHERE recipe_id = ?`,
         [
           req.session.userId,
           title || `Variant of ${originalRecipeId}`,
           description || "",
+          imagePath,
           servings,
           prep_time,
           cook_time,
