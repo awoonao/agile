@@ -1,24 +1,25 @@
 .about-container {
     display: grid;
     grid-template-areas:
-        "mtt-content mtt-image"
-        "mission-image mission-content"
-        "vision-content vision-image"
+        "mtt-image mtt-content"
+        "mission-content mission-image"
+        "vision-image vision-content"
+        "contact-us contact-us"
     ;
     grid-template-columns: 1fr 1fr;
-    gap:5% 5px;
+    gap: 5% 5px;
     padding: 5px;
-    margin: 5% 15%;
+    margin:5% 15% 15% 15%
 }
 
 .about-container>div {
- 
+
     padding: 10px;
     font-size: 30px;
     text-align: center;
 }
 
-/* Assigning correct grid areas */
+/* Assigning grid areas */
 .about-container .mtt-content {
     grid-area: mtt-content;
     margin: auto;
@@ -47,11 +48,19 @@
 .about-container .vision-image {
     grid-area: vision-image;
 }
+.about-container .contact-us {
+    grid-area: contact-us;
+    text-align: left;
+}
 
-p{
+p ,label{
     font-size: 1rem;
     text-align: justify;
     margin: auto;
+    color: #96290B;
+    font-weight: normal;
+}
+h2{
     color: #96290B;
 }
 
@@ -60,18 +69,94 @@ p{
     /* height: 100%; */
     object-fit: scale-down;
     border-radius: 15px
-
 }
-/* Responsive Design
-@media (max-width: 768px) {
+
+ input, optgroup, select, textarea {
+    margin: 0; 
+    font-family: inherit;
+    font-size: 1rem;
+     line-height: inherit;
+     width: 100%;
+}
+
+.contactus-top{
+    display: grid;
+    grid-template-columns: auto auto ;
+    gap: 5%;
+}
+
+.contactus-container button {
+    font-size: 1rem;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #96290B;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.contactus-container button:hover {
+    background-color: #BB8379;
+}
+
+.contactus-container button[type="button"] {
+    background-color: #BB8379;
+    border: 1px solid #96290B;
+    color: #FFF4EF;
+}
+
+button[type="button"]:hover {
+    background-color: #96290B;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
     .about-container {
         grid-template-areas:
-            "mtt-content"
             "mtt-image"
-            "mission-content"
+            "mtt-content"
             "mission-image"
+            "mission-content"
+            "vision-image"
             "vision-content"
-            "vision-image";
+            "contact-us";
+
         grid-template-columns: 1fr;
+        gap: 0px;
+
+
     }
-} */
+
+    /* Assigning grid areas */
+.about-container .mtt-content {
+    grid-area: mtt-content;
+    margin-bottom: 30px;
+
+}
+
+.about-container .mtt-image {
+    grid-area: mtt-image;
+}
+
+.about-container .mission-content {
+    grid-area: mission-content;
+    margin-bottom: 30px;
+}
+
+.about-container .mission-image {
+    grid-area: mission-image;
+}
+
+.about-container .vision-content {
+    grid-area: vision-content;
+    margin-bottom: 30px;
+
+}
+
+.about-container .vision-image {
+    grid-area: vision-image;
+}
+}
+
