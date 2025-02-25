@@ -53,7 +53,7 @@ global.db = new sqlite3.Database('./database.db', function(err) {
 // Import routes
 const mainRoutes = require('./routes/main');
 const profileRoutes = require('./routes/profile');
-const recipesRoutes = require('./routes/recipes');
+const recipesRoutes = require('./routes/recipes/index');
 const userRoutes = require('./routes/users');
 
 // Use routes
