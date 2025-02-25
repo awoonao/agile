@@ -1,3 +1,4 @@
+// routes/recipes/middleware.js
 const multer = require("multer");
 const path = require("path");
 
@@ -17,7 +18,7 @@ const isAuthenticated = (req, res, next) => {
  ---------------------------------------------------------------------------------------------------------------------------------*/
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../../public/images")); // Updated path to reflect new directory structure
+    cb(null, path.join(__dirname, "../public/images/recipes")); 
   },
   filename: function (req, file, cb) {
     const uniqueName = `${Date.now()}-${file.originalname}`;
