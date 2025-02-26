@@ -12,13 +12,14 @@
 
   <!-- Manages user ratings (appearance & taste), comments, and review persistence -->
   <script src="/js/rating.js" defer></script>
+  <script src="/js/save.js" defer></script>
 
   <!-- Common css -->
   <link rel="stylesheet" type="text/css" href="/css/main.css" />
 
 
-<!-- font style -->
-<link href='https://fonts.googleapis.com/css?family=Young Serif' rel='stylesheet'>
+  <!-- font style -->
+  <link href='https://fonts.googleapis.com/css?family=Young Serif' rel='stylesheet'>
 
 
   <!-- recipe css -->
@@ -122,9 +123,19 @@
         <h1>
           <%= recipe.title %>
         </h1>
-        <p><strong>Author:</strong>
+      </div>
+      <div class="author">
+        <p><strong>Created by:</strong>
           <%= recipe.author %>
         </p>
+      </div>
+
+      <div class="save">
+        <div class="checkbox-wrapper-10">
+          <input class="tgl tgl-flip" id="cb5" type="checkbox"  />
+          <label class="tgl-btn" data-tg-off="Save +" data-tg-on="Saved ✓" for="cb5"></label>
+        </div>
+       
       </div>
       <div class="description">
         <p><strong>Description:</strong>
@@ -133,7 +144,7 @@
       </div>
 
       <div class="ingredient">
-        <h2>Ingredients</h2>
+        <h3>Ingredients</h3>
         <ul>
           <% ingredients.forEach(ingredient=> { %> <% if (ingredient.substitution_name) { %>
               <li>
@@ -153,7 +164,7 @@
       </div>
 
       <div class="instruction">
-        <h2>Instructions</h2>
+        <h3>Instructions</h3>
         <ul>
           <% instructions.forEach(instruction=> { %> <% if (instruction.substitution_name) { %>
               <li>
@@ -198,7 +209,7 @@
         </div>
       </div>
       <div class="review">
-        <h2>Reviews</h2>
+        <h3>Reviews</h3>
       </div>
       <div class="appearance-rating">
         <p>Appearance</p>
@@ -243,7 +254,7 @@
       </div>
 
       <div class="comments">
-        <h2>Comments</h2>
+        <h3>Comments</h3>
         <% comments.forEach(comment=> { %>
           <div class="comment">
             <div class="comment-header">
@@ -258,20 +269,24 @@
                   <% if (comment.appearance_rating) { %>
                     <div class="rating-item">
                       <img src="/images/lookstar.png" alt="appearance rating" class="rating-icon">
-                      <span><%= comment.appearance_rating %></span>
+                      <span>
+                        <%= comment.appearance_rating %>
+                      </span>
                     </div>
-                  <% } %>
-                  
-                  <% if (comment.taste_rating) { %>
-                    <div class="rating-item">
-                      <img src="/images/chefstar.png" alt="taste rating" class="rating-icon">
-                      <span><%= comment.taste_rating %></span>
-                    </div>
-                  <% } %>
+                    <% } %>
+
+                      <% if (comment.taste_rating) { %>
+                        <div class="rating-item">
+                          <img src="/images/chefstar.png" alt="taste rating" class="rating-icon">
+                          <span>
+                            <%= comment.taste_rating %>
+                          </span>
+                        </div>
+                        <% } %>
                 </div>
-              <% } %>
-          </div>
-          
+                <% } %>
+            </div>
+
             <div class="comment-content">
               <p>
                 <%= comment.content %>
