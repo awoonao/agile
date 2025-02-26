@@ -97,6 +97,14 @@ CREATE TABLE Instructions (
     FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id) ON DELETE CASCADE
 );
 
+CREATE TABLE Contact_us (
+    contact_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    contact_name VARCHAR(100) NOT NULL,
+    contact_email VARCHAR(100) NOT NULL,
+    contact_message TEXT NOT NULL
+);
+
+
 -- password : dummyhash
 INSERT INTO Users (
     username,
