@@ -27,6 +27,8 @@ document.addEventListener("DOMContentLoaded", function () {
     function checkSavedStatus() {
       fetch(`/recipes/check-saved/${recipeId}`)
           .then(response => {
+            console.log("Response Status:", response.status);
+            console.log("Response OK:", response.ok);
               if (response.status === 401) {
                   // User is not logged in
                   throw new Error("Login required");
@@ -36,10 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
           .then(data => {
               saveToggle.checked = data.saved;
           })
-          .catch(error => {
-              console.error("Error checking saved status:", error);
-              // Don't redirect on page load, just keep toggle unchecked
-          });
+          
     }
   
     /**
@@ -55,10 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
       })
         .then((response) => {
           if (response.status === 401) {
-            // User is not logged in, redirect to login page
             saveToggle.checked = false;
-            window.location.href = "/users/login";
-            throw new Error("Login required");
           }
           return response.json();
         })
@@ -66,9 +62,10 @@ document.addEventListener("DOMContentLoaded", function () {
           console.log(data.message);
         })
         .catch((error) => {
-        //   console.error("Error saving recipe:", error);
+          console.error("Error saving recipe:", error);
           if (error.message !== "Login required") {
             saveToggle.checked = false;
+            window.location.href = '/users/login?returnTo=' + encodeURIComponent(window.location.pathname);
           }
         });
     }
@@ -88,8 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (response.status === 401) {
             // User is not logged in, redirect to login page
             saveToggle.checked = true;
-            window.location.href = "/users/login";
-            throw new Error("Login required");
+           
           }
           return response.json();
         })
@@ -100,6 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
           console.error("Error unsaving recipe:", error);
           if (error.message !== "Login required") {
             saveToggle.checked = true;
+            window.location.href = '/users/login?returnTo=' + encodeURIComponent(window.location.pathname);
           }
         });
     }
