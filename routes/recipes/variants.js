@@ -84,9 +84,10 @@ router.post("/:id/create-variant", upload.single("image"), async (req, res) => {
     });
 
     for (const ingredient of ingredients) {
-      // Adjust the index to match 1-based ordering
+      // Safely retrieve substitution, if any
       const substitution =
-        substitutions?.ingredients?.[ingredient.ingredient_order - 1];
+        substitutions?.ingredients?.[ingredient.ingredient_order];
+      // Use substitution or original name
       const ingredientName = substitution || ingredient.ingredient_name;
 
       // Insert the ingredient
@@ -109,7 +110,7 @@ router.post("/:id/create-variant", upload.single("image"), async (req, res) => {
             `INSERT INTO Substitutions (
               recipe_id, 
               ingredient_id,
-              ingredient_name, 
+              target_name, 
               substitution, 
               suggested_by,
               type
@@ -147,11 +148,12 @@ router.post("/:id/create-variant", upload.single("image"), async (req, res) => {
     });
 
     for (const instruction of instructions) {
-      // Adjust the index to match 1-based ordering
+      // Safely retrieve substitution, if any
       const substitution =
-        substitutions?.instructions?.[instruction.step_order - 1];
+        substitutions?.instructions?.[instruction.step_order];
+      // Use substitution or original name
       const instructionText = substitution || instruction.instruction_text;
-
+      
       // Insert the instruction
       const newInstructionId = await new Promise((resolve, reject) => {
         db.run(
@@ -172,7 +174,7 @@ router.post("/:id/create-variant", upload.single("image"), async (req, res) => {
             `INSERT INTO Substitutions (
             recipe_id,
             instruction_id,
-            ingredient_name,
+            target_name,
             substitution,
             suggested_by,
             type

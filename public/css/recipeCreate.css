@@ -32,7 +32,7 @@ input, textarea {
     border: 1px solid #96290B;
     border-radius: 5px;
     margin-top: 5px;
-    font-size: 16px;
+    font-size: 0.8rem;
     background-color: white;
     transition: border-color 0.3s ease;
     max-height: 200px;
@@ -41,16 +41,19 @@ input, textarea {
 input:focus, textarea:focus {
     outline: none;
     border-color: #D94E1F;
+    background-color: white;
     box-shadow: 0 0 5px rgba(217, 78, 31, 0.3);
 }
+
 
 
 label {
     font-weight: 600;
     margin-bottom: 8px;
     display: block;
-    font-size: 1.1em;
+    font-size: 1rem;
 }
+
 
 .recipe-container .title {
     grid-area: title;

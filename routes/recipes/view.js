@@ -37,7 +37,7 @@ const router = express.Router();
               i.ingredient_name as original_name,
               i.ingredient_order,
               s.substitution as substitution_name,
-              COALESCE(s.ingredient_name, i.ingredient_name) as original_for_sub
+              COALESCE(s.target_name, i.ingredient_name) as original_for_sub
           FROM Ingredients i
           LEFT JOIN Substitutions s ON s.ingredient_id = i.ingredient_id AND s.type = 'ingredient'
           WHERE i.recipe_id = ?
@@ -58,7 +58,7 @@ const router = express.Router();
               i.instruction_text as original_name,
               i.step_order,
               s.substitution as substitution_name,
-              COALESCE(s.ingredient_name, i.instruction_text) as original_for_sub
+              COALESCE(s.target_name, i.instruction_text) as original_for_sub
           FROM Instructions i
           LEFT JOIN Substitutions s ON s.instruction_id = i.instruction_id AND s.type = 'instruction'
           WHERE i.recipe_id = ?
