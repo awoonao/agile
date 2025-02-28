@@ -48,7 +48,10 @@ function getUserData(userId, callback) {
             }
 
             // Ensure profile picture is correctly referenced
-            row.profile_picture = row.profile_picture ? row.profile_picture : "/images/defaultProfile.png";
+            row.profile_picture = row.profile_picture ? row.profile_picture : "/images/users/defaultProfile.jpg";
+
+            // 🔹 Debugging: Check if the profile picture path is stored correctly
+            console.log("Stored Profile Picture Path in DB:", row.profile_picture);
 
             callback(null, row);
         }
@@ -136,8 +139,8 @@ router.post("/edit-profile/update", ensureAuthenticated, upload.single("profile_
 
     let profile_picture = req.body.existing_profile_picture; // Default to existing picture
     if (req.file) {
-        profile_picture = `images/users/${req.file.filename}`; // Update if new image uploaded
-    }
+        profile_picture = `/images/users/${req.file.filename}`; // ✅ Now correctly referenced for static serving
+    }    
 
     const birthday = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
 

@@ -1,6 +1,6 @@
 <form id="editProfileForm" action="/profile/edit-profile/update" method="POST" enctype="multipart/form-data">
     <div class="profile-image-upload">
-        <img id="imagePreview" src="/<%= user.profile_picture ? user.profile_picture : 'images/defaultProfile.png' %>" alt="Profile Preview" />
+        <img id="profilePicture" src="<%= user.profile_picture ? user.profile_picture : '/images/users/defaultProfile.jpg' %>" alt="Profile Picture" />
         <input type="file" name="profile_picture" accept="image/*" id="imageUpload" style="display: none;" />
     </div>
     <div class="form-group">

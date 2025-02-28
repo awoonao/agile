@@ -42,7 +42,7 @@ router.get('/signup', (req, res) => {
 //Signup (POST)
 router.post('/signup', upload.single('profile_picture'), (req, res) => {
     const { first_name, last_name, username, email, password, confirmPassword, day, month, year } = req.body;
-    const profile_picture = req.file ? "/uploads/" + req.file.filename : "/images/defaultProfile.png"; // Fallback to default image
+    const profile_picture = req.file ? "/images/users/" + req.file.filename : "/images/users/defaultProfile.jpg"; // Fallback to default image
 
     if (!first_name || !last_name || !username || !email || !password || !confirmPassword) {
         return res.render('user/signup', { error: 'All fields are required' });

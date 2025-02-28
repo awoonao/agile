@@ -72,8 +72,7 @@
         <div class="profile-container">
             <!-- Left Sidebar -->
             <div class="profile-sidebar">
-                <img id="profilePicture" src="/<%= user.profile_picture ? user.profile_picture : 'images/defaultProfile.png' %>" alt="Profile Picture" />
-    
+                <img id="profilePicture" src="<%= user.profile_picture ? user.profile_picture : '/images/users/defaultProfile.jpg' %>" alt="Profile Picture" />
                 <h3>Hi, <span id="userName"><%= user.first_name %></span>!</h3>
                 <button class="profile-btn active" data-section="personal-information">Personal Information</button>
                 <button class="profile-btn" data-section="dietary-restrictions">Dietary Restrictions</button>
