@@ -69,16 +69,24 @@
       </header>
 
     <main>
+
+      <% if (message) { %>
+        <div id="profile-message" class="alert alert-<%= message.type === 'success' ? 'success' : 'danger' %>">
+            <%= message.text %>
+        </div>
+      <% } %>
+    
         <div class="profile-container">
             <!-- Left Sidebar -->
             <div class="profile-sidebar">
-                <img id="profilePicture" src="<%= user.profile_picture ? user.profile_picture : '/images/users/defaultProfile.jpg' %>" alt="Profile Picture" />
-                <h3>Hi, <span id="userName"><%= user.first_name %></span>!</h3>
-                <button class="profile-btn active" data-section="personal-information">Personal Information</button>
-                <button class="profile-btn" data-section="dietary-restrictions">Dietary Restrictions</button>
-                <button class="profile-btn" data-section="my-creations">My Creations</button>
-                <button class="profile-btn" data-section="saved-recipes">Saved Recipes</button>
-            </div>
+              <img id="sidebarProfilePicture" src="<%= user.profile_picture ? user.profile_picture : '/images/users/defaultProfile.jpg' %>" alt="Profile Picture" />
+              
+              <h3>Hi, <span id="userName"><%= user.first_name %></span>!</h3>
+              <button class="profile-btn active" data-section="personal-information">Personal Information</button>
+              <button class="profile-btn" data-section="dietary-restrictions">Dietary Restrictions</button>
+              <button class="profile-btn" data-section="my-creations">My Creations</button>
+              <button class="profile-btn" data-section="saved-recipes">Saved Recipes</button>
+          </div>          
     
             <!-- Right Content -->
             <div class="profile-content" id="contentSection">

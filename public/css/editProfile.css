@@ -140,3 +140,68 @@
 .recipe-actions a.delete-btn {
     background: #BB8379;
 }
+
+.saved-recipes-container {
+    margin-top: 20px;
+}
+
+.saved-recipes-list {
+    list-style: none;
+    padding: 0;
+}
+
+.recipe-card {
+    display: flex;
+    align-items: center;
+    background: #FFF9F5;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 2px solid #96290B;
+}
+
+.recipe-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 15px;
+}
+
+.recipe-info {
+    flex-grow: 1;
+}
+
+.recipe-info h4 {
+    margin: 0;
+    font-size: 18px;
+    color: #96290B;
+}
+
+.recipe-info p {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.recipe-info img {
+    width: 16px;
+    height: 16px;
+}
+
+.recipe-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.recipe-actions .unsave-btn {
+    background: #BB8379;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+}
+

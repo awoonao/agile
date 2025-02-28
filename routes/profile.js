@@ -81,6 +81,7 @@ router.get("/edit-profile", ensureAuthenticated, (req, res) => {
     });
 });
 
+
 //Load Personal Information Tab
 router.get("/edit-profile/personal-information", ensureAuthenticated, (req, res) => {
     const userId = req.session.userId;
@@ -127,20 +128,40 @@ router.get("/edit-profile/my-creations", ensureAuthenticated, async (req, res) =
     }
 });
 
-//Load Saved Recipes Tab
+// Load Saved Recipes Tab in Edit Profile
 router.get("/edit-profile/saved-recipes", ensureAuthenticated, (req, res) => {
-    res.render("profile/savedRecipes");
+    const userId = req.session.userId;
+
+    // Query to fetch saved recipes along with title and image
+    const query = `
+        SELECT Recipes.recipe_id, Recipes.title, Recipes.image_url, 
+               COALESCE(Recipes.average_appearance_rating, 0) AS appearance_rating, 
+               COALESCE(Recipes.average_taste_rating, 0) AS taste_rating
+        FROM Saved_Recipes 
+        JOIN Recipes ON Saved_Recipes.recipe_id = Recipes.recipe_id
+        WHERE Saved_Recipes.user_id = ?
+        ORDER BY Saved_Recipes.saved_at DESC
+    `;
+
+    db.all(query, [userId], (err, savedRecipes) => {
+        if (err) {
+            console.error("Error fetching saved recipes:", err);
+            return res.status(500).send("Failed to fetch saved recipes.");
+        }
+
+        res.render("profile/savedRecipes", { savedRecipes });
+    });
 });
 
 // Handle Profile Updates
 router.post("/edit-profile/update", ensureAuthenticated, upload.single("profile_picture"), (req, res) => {
     const userId = req.session.userId;
-    const { first_name, last_name, email, day, month, year } = req.body;
+    const { first_name, last_name, email, day, month, year, existing_profile_picture } = req.body;
 
-    let profile_picture = req.body.existing_profile_picture; // Default to existing picture
+    let profile_picture = existing_profile_picture; // Default to existing picture
     if (req.file) {
-        profile_picture = `/images/users/${req.file.filename}`; // ✅ Now correctly referenced for static serving
-    }    
+        profile_picture = `/images/users/${req.file.filename}`;  // Use new uploaded image if available
+    }
 
     // Ensure all date components are provided
     if (!day || !month || !year) {
@@ -164,5 +185,6 @@ router.post("/edit-profile/update", ensureAuthenticated, upload.single("profile_
         }
     );
 });
+
 
 module.exports = router;

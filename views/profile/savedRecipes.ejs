@@ -1,0 +1,20 @@
+<h3>Saved Recipes:</h3>
+<% if (savedRecipes.length === 0) { %>
+    <p>You have not saved any recipes yet.</p>
+<% } else { %>
+    <% savedRecipes.forEach(recipe => { %>
+        <div class="recipe-card">
+            <img src="<%= recipe.image_url || '/images/defaultRecipe.jpg' %>" alt="<%= recipe.title %>">
+            <div class="recipe-info">
+                <h4><a href="/recipes/<%= recipe.recipe_id %>"><%= recipe.title %></a></h4>
+                <p>
+                    <img src="/images/lookstar.png" alt="Appearance Rating"> <%= recipe.appearance_rating.toFixed(1) %>
+                    <img src="/images/chefstar.png" alt="Taste Rating"> <%= recipe.taste_rating.toFixed(1) %>
+                </p>
+                <div class="recipe-actions">
+                    <button class="unsave-btn" data-recipe-id="<%= recipe.recipe_id %>">Unsave</button>
+                </div>
+            </div>
+        </div>
+    <% }); %>
+<% } %>

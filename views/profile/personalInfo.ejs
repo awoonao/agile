@@ -1,7 +1,10 @@
 <form id="editProfileForm" action="/profile/edit-profile/update" method="POST" enctype="multipart/form-data">
     <div class="profile-image-upload">
-        <img id="profilePicture" src="<%= user.profile_picture ? user.profile_picture : '/images/users/defaultProfile.jpg' %>" alt="Profile Picture" />
+        <label for="imageUpload">
+            <img id="profilePicture" src="<%= user.profile_picture ? user.profile_picture : '/images/users/defaultProfile.jpg' %>" alt="Profile Picture" />
+        </label>
         <input type="file" name="profile_picture" accept="image/*" id="imageUpload" style="display: none;" />
+        <input type="hidden" name="existing_profile_picture" value="<%= user.profile_picture %>" />
     </div>
 
     <div class="form-group">
