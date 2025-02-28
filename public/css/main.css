@@ -27,10 +27,12 @@ main {
     text-align: center;
     width: 100%;
     margin-top: auto;
+
 }
 
 .footer p{
     color: #FFF4EF;
+    font-size: 1rem;
 }
 
 /* Footer links */
@@ -61,7 +63,7 @@ main {
 
 .navbar-nav a {
     color: #FFF4EF;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
 }
 
 nav img {
@@ -103,12 +105,12 @@ nav img {
 
 .navbar-nav a:hover {
     color: #E6D7D0;
-    /* font-size: 1.5rem; */
+   
 }
 .navbar-nav a:active {
     background-color: #E6D7D0;
     color: #96290B;
-    font-size: 1.5rem;
+ 
 }
 
 .dropdown-menu a:hover {
