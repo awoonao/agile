@@ -1,11 +1,12 @@
 // routes/recipes/middleware.js
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
 /**-------------------------------------------------------------------------------------------------------------------------------
  * @desc Middleware to check if user is authenticated. Redirects to login page if not authenticated.
  ---------------------------------------------------------------------------------------------------------------------------------*/
-const isAuthenticated = (req, res, next) => {
+ const isAuthenticated = (req, res, next) => {
   if (req.session && req.session.userId) {
     next();
   } else {
@@ -14,22 +15,30 @@ const isAuthenticated = (req, res, next) => {
 };
 
 /**-------------------------------------------------------------------------------------------------------------------------------
+ * @desc Ensure the directory exists before storing files
+ ---------------------------------------------------------------------------------------------------------------------------------*/
+ const uploadPath = path.join(process.cwd(), "public/images/recipes"); // Dynamically set to project root
+
+ if (!fs.existsSync(uploadPath)) {
+   fs.mkdirSync(uploadPath, { recursive: true }); // Ensure directory exists
+ }
+
+/**-------------------------------------------------------------------------------------------------------------------------------
  * @desc Configuration for file uploads using Multer. Saves images to /public/images with unique filenames.
  ---------------------------------------------------------------------------------------------------------------------------------*/
-const storage = multer.diskStorage({
+ const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../public/images/recipes")); 
+    console.log("Saving file to:", uploadPath); // Debugging log to confirm correct directory
+    cb(null, uploadPath);
   },
   filename: function (req, file, cb) {
-    const uniqueName = `${Date.now()}-${file.originalname}`;
-    cb(null, uniqueName); // Use a timestamp and original file name to avoid conflicts
+    const uniqueName = `${Date.now()}-${file.originalname.replace(/\s+/g, '_')}`;
+    cb(null, uniqueName);
   },
 });
 
-// Initialize multer with the storage configuration
 const upload = multer({
   storage,
-  // limits: { fileSize: 2 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
     if (allowedTypes.includes(file.mimetype)) {

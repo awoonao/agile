@@ -25,7 +25,16 @@ router.post("/create-recipe", upload.single("image"), async (req, res) => {
   } = req.body;
 
   //file path for uploaded images
+  console.log("Received file:", req.file);
+  console.log("Received body:", req.body);
+
+  if (!req.file) {
+      return res.status(400).send("No file uploaded or file upload failed.");
+  }
+
   const imagePath = req.file ? `/images/recipes/${req.file.filename}` : null;
+  console.log("Saved image path:", imagePath);
+
 
   try {
     // Insert new recipe into the Recipes table and get the ID of the inserted recipe
