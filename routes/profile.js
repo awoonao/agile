@@ -25,7 +25,7 @@ const ensureAuthenticated = (req, res, next) => {
     next();
 };
 
-//Fetch User Data
+// Fetch User Data
 function getUserData(userId, callback) {
     db.get(
         `SELECT first_name, last_name, email, birthday, profile_picture FROM Users WHERE user_id = ?`,
@@ -39,19 +39,19 @@ function getUserData(userId, callback) {
 
             // Convert birthday to { day, month, year }
             if (row.birthday) {
-                const dateParts = row.birthday.split("-");
+                const dateParts = row.birthday.split("-"); // Assuming YYYY-MM-DD format
                 row.birthday = {
-                    day: parseInt(dateParts[2], 10),
-                    month: parseInt(dateParts[1], 10),
-                    year: parseInt(dateParts[0], 10)
+                    year: dateParts[0],
+                    month: dateParts[1],
+                    day: dateParts[2]
                 };
             }
 
             // Ensure profile picture is correctly referenced
             row.profile_picture = row.profile_picture ? row.profile_picture : "/images/users/defaultProfile.jpg";
 
-            // 🔹 Debugging: Check if the profile picture path is stored correctly
             console.log("Stored Profile Picture Path in DB:", row.profile_picture);
+            console.log("User Birthday Retrieved:", row.birthday); // Debugging
 
             callback(null, row);
         }
@@ -132,7 +132,7 @@ router.get("/edit-profile/saved-recipes", ensureAuthenticated, (req, res) => {
     res.render("profile/savedRecipes");
 });
 
-//Handle Profile Updates
+// Handle Profile Updates
 router.post("/edit-profile/update", ensureAuthenticated, upload.single("profile_picture"), (req, res) => {
     const userId = req.session.userId;
     const { first_name, last_name, email, day, month, year } = req.body;
@@ -142,7 +142,13 @@ router.post("/edit-profile/update", ensureAuthenticated, upload.single("profile_
         profile_picture = `/images/users/${req.file.filename}`; // ✅ Now correctly referenced for static serving
     }    
 
-    const birthday = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    // Ensure all date components are provided
+    if (!day || !month || !year) {
+        req.session.message = { type: "error", text: "Please select a valid birthday." };
+        return res.redirect("/profile/edit-profile");
+    }
+
+    const birthday = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`; // Format as YYYY-MM-DD
 
     db.run(
         `UPDATE Users SET first_name = ?, last_name = ?, email = ?, birthday = ?, profile_picture = ? WHERE user_id = ?`,
@@ -158,7 +164,5 @@ router.post("/edit-profile/update", ensureAuthenticated, upload.single("profile_
         }
     );
 });
-
-
 
 module.exports = router;

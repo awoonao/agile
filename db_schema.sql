@@ -110,12 +110,14 @@ INSERT INTO Users (
     password_hash,
     first_name,
     last_name,
+    birthday,
     email
 ) VALUES (
     'testuser',
     '$2b$10$fIdByBejJWSt9TthqykSYOrWSJaSB5J/Ki8qBsGd8b2T.Q7M7NYDu', 
     'Test',
     'User',
+    '1999-01-01',
     'test@example.com'
 );
 
