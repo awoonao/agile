@@ -62,14 +62,15 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             console.log(`Loading section: ${section}`);
             const response = await fetch(`/profile/edit-profile/${section}`);
-
+    
             if (!response.ok) {
                 throw new Error(`Failed to load section: ${section}`);
             }
-
+    
             const data = await response.text();
             profileData.innerHTML = data;
-
+    
+            // Attach necessary event listeners after loading content
             if (section === "personal-information") {
                 attachImageUploadHandler();
             }
@@ -79,12 +80,61 @@ document.addEventListener("DOMContentLoaded", function () {
             if (section === "dietary-restrictions") {
                 initializeDietaryRestrictions();
             }
+            if (section === "my-creations") {
+                attachDeleteEventListeners();  //Attach delete event listeners
+            }
         } catch (error) {
             console.error(`Error loading ${section}:`, error);
             profileData.innerHTML = "<p>Error loading section.</p>";
         }
+    }    
+
+    // Attach delete event listeners after "My Creations" section loads
+    function initializeMyCreations() {
+        console.log("Initializing My Creations functionality...");
+
+        document.querySelectorAll(".delete-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                const recipeId = this.getAttribute("data-recipe-id");
+                confirmDelete(recipeId);
+            });
+        });
     }
 
+    function attachDeleteEventListeners() {
+        console.log("Attaching delete event listeners...");
+    
+        document.querySelectorAll(".delete-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                const recipeId = this.getAttribute("data-recipe-id");
+                confirmDelete(recipeId);
+            });
+        });
+    }
+    
+    // Define delete confirmation function
+    function confirmDelete(recipeId) {
+        const confirmation = confirm("Are you sure you want to delete this recipe? This action cannot be undone.");
+        
+        if (confirmation) {
+            fetch(`/profile/edit-profile/my-creations/${recipeId}/delete`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("Error deleting recipe: " + data.error);
+                } else {
+                    alert("Recipe deleted successfully.");
+                    loadProfileSection("my-creations"); 
+                }
+            })
+            .catch(error => console.error("Error deleting recipe:", error));
+        }
+    }
+    
+    
     function initializeDietaryRestrictions() {
         console.log("Initializing dietary restrictions functionality...");
 

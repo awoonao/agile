@@ -251,6 +251,31 @@ router.get("/edit-profile/my-creations", ensureAuthenticated, async (req, res) =
     }
 });
 
+// Route to delete a recipe
+router.delete("/edit-profile/my-creations/:recipeId/delete", ensureAuthenticated, (req, res) => {
+    const userId = req.session.userId;
+    const recipeId = req.params.recipeId;
+
+    if (!recipeId) {
+        return res.status(400).json({ error: "Recipe ID is required" });
+    }
+
+    db.run(
+        "DELETE FROM Recipes WHERE recipe_id = ? AND user_id = ?",
+        [recipeId, userId],
+        function (err) {
+            if (err) {
+                console.error("Database error:", err);
+                return res.status(500).json({ error: "Failed to delete recipe" });
+            }
+            if (this.changes === 0) {
+                return res.status(404).json({ error: "Recipe not found or not authorized to delete" });
+            }
+            res.json({ message: "Recipe deleted successfully" });
+        }
+    );
+});
+
 // Load Saved Recipes Tab
 router.get("/edit-profile/saved-recipes", ensureAuthenticated, (req, res) => {
     const userId = req.session.userId;

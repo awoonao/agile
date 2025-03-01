@@ -13,7 +13,8 @@
                 </p>
                 <div class="recipe-actions">
                     <a href="/recipes/<%= recipe.recipe_id %>/edit" class="edit-btn">Edit</a>
-                    <a href="/recipes/<%= recipe.recipe_id %>/delete" class="delete-btn">Delete</a>
+                    <button class="delete-btn" data-recipe-id="<%= recipe.recipe_id %>">Delete</button>
+
                 </div>
             </div>
         </div>
