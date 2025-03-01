@@ -1,0 +1,95 @@
+/* Login form container */
+.login-container {
+    background-color: #FFF4EF;
+    max-width: 800px;
+    margin: auto;
+    padding: 30px;
+    text-align: center;
+}
+
+/* Login title */
+.login-title {
+    font-family: 'Young Serif', sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+    color: #96290B;
+    margin-bottom: 20px;
+}
+
+/* Form inputs */
+.form-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #BB8379;
+    background-color: #FFFFFF; 
+    font-family: 'IBM Plex Sans', sans-serif; 
+    font-size: 16px;
+    color: #333;
+}
+
+/* Remove focus outline */
+.form-input:focus {
+    outline: none;
+    border-color: #96290B;
+}
+
+/* Login button */
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #96290B;
+    color: #FFF4EF;
+    border: none;
+    font-size: 18px;
+    font-family: 'IBM Plex Sans', sans-serif; 
+    cursor: pointer;
+}
+
+.login-btn:hover {
+    background-color: #BB8379;
+}
+
+/* Social login container */
+.login-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; 
+    margin-top: 10px;
+}
+
+/* Social login buttons */
+.social-login {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    font-size: 16px;
+    text-align: center;
+    font-family: 'IBM Plex Sans', sans-serif; 
+    cursor: pointer;
+}
+
+.facebook { background-color: #3b5998; color: white; }
+.apple { background-color: black; color: white; }
+.google { background-color: #db4437; color: white; }
+
+/* Container for Sign up and Forgot Password links */
+.login-links-container {
+    display: flex;
+    justify-content: space-between; /* Pushes items to far left and far right */
+    align-items: center;
+    margin-bottom: 5px; /* Adds spacing between the links and the input field */
+}
+
+/* Style for Sign up and Forgot Password links */
+.signup-link, .forgot-password-link {
+    font-size: 14px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    text-decoration: none;
+    color: #96290B;
+}
+
+.signup-link:hover, .forgot-password-link:hover {
+    color: #BB8379;
+}
+
