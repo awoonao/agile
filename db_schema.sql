@@ -103,6 +103,20 @@ CREATE TABLE Contact_us (
     contact_message TEXT NOT NULL
 );
 
+CREATE TABLE Dietary_Restrictions (
+    restriction_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    restriction_name VARCHAR(100) UNIQUE NOT NULL,
+    created_by INTEGER NULL, 
+    FOREIGN KEY (created_by) REFERENCES Users(user_id) ON DELETE SET NULL
+);
+
+CREATE TABLE User_Dietary_Restrictions (
+    user_id INTEGER NOT NULL,
+    restriction_id INTEGER NOT NULL,
+    PRIMARY KEY (user_id, restriction_id),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (restriction_id) REFERENCES Dietary_Restrictions(restriction_id) ON DELETE CASCADE
+);
 
 -- password : dummyhash
 INSERT INTO Users (
@@ -125,5 +139,15 @@ INSERT INTO Users (
 INSERT INTO Users (username, password_hash, first_name, last_name, birthday, email, role, is_active)
 VALUES ('test1', '$2b$10$oBgO8MGxHrf7b0nr19xPiewENnHfjewVQZ1S0AJ7.OB8ko640MsUS', 'John', 'Doe', '1990-01-01', 'johndoe@example.com', 'user', TRUE);
 
+-- Restrictions
+INSERT INTO Dietary_Restrictions (restriction_name) VALUES
+('Vegan'),
+('Vegetarian'),
+('Gluten-Free'),
+('Dairy-Free'),
+('Nut-Free'),
+('Keto'),
+('Halal'),
+('Kosher');
 
 COMMIT;

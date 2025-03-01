@@ -205,3 +205,66 @@
     cursor: pointer;
 }
 
+/* Expand input field */
+#dietaryInput {
+    width: 350px; /* Make the input box longer */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Style for suggestions box */
+#suggestions {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    width: 350px; /* Match the input box width */
+    max-height: 250px; /* Increase height for more visible tags */
+    overflow-y: auto;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border-radius: 5px;
+    padding: 5px;
+    display: none; /* Hide by default */
+}
+
+/* Suggestion items */
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+    background-color: white;
+}
+
+/* Last suggestion item (no bottom border) */
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+/* Highlight suggestion on hover */
+.suggestion-item:hover {
+    background: #f0f0f0;
+}
+
+/* Style for adding new tags */
+.suggestion-item.new-entry {
+    font-style: italic;
+    color: #555;
+}
+
+/* Enable/Disable Add Button */
+#addRestrictionBtn {
+    margin-left: 10px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #bbb;
+    color: white;
+}
+
+#addRestrictionBtn:not([disabled]) {
+    background-color: #96290B;
+    cursor: pointer;
+}
