@@ -4,10 +4,8 @@ const router = express.Router();
 /**-------------------------------------------------------------------------------------------------------------------------------
  * @desc Recipe Details - Display individual recipe with ingredients, instructions, comments, and ratings
  -------------------------------------------------------------------------------------------------------------------------------*/ 
- router.get(
-  "/:id",
-  async (req, res) => {
-    const recipeId = req.params.id;
+router.get("/:id", async (req, res) => {
+  const recipeId = req.params.id;
 
     try {
       // Fetch recipe details
@@ -28,6 +26,8 @@ const router = express.Router();
       if (!recipe) {
         return res.status(404).send("Recipe not found");
       }
+
+      if (!recipe) return res.status(404).send("Recipe not found");
 
       // Fetch ingredients
       const ingredients = await new Promise((resolve, reject) => {
@@ -71,6 +71,21 @@ const router = express.Router();
         );
       });
 
+      // Fetch Dietary Restrictions
+      const dietaryRestrictions = await new Promise((resolve, reject) => {
+          db.all(
+              `SELECT dr.restriction_name 
+               FROM Recipe_Dietary_Restrictions rdr
+               JOIN Dietary_Restrictions dr ON rdr.restriction_id = dr.restriction_id
+               WHERE rdr.recipe_id = ?`,
+              [recipeId],
+              (err, rows) => {
+                  if (err) reject(err);
+                  else resolve(rows);
+              }
+          );
+      });
+
       //fetch user feedback if logged in
       let feedback = null;
       if (req.session.userId) {
@@ -91,14 +106,14 @@ const router = express.Router();
       const comments = await new Promise((resolve, reject) => {
         db.all(
           `SELECT c.comment_id, c.content, c.created_at, u.username,
-       MAX(r.appearance_rating) AS appearance_rating, 
-       MAX(r.taste_rating) AS taste_rating
-     FROM Comments c
-     JOIN Users u ON c.user_id = u.user_id
-     LEFT JOIN Ratings r ON r.user_id = c.user_id AND r.recipe_id = c.recipe_id
-     WHERE c.recipe_id = ? 
-     GROUP BY c.comment_id
-     ORDER BY c.created_at DESC`,
+          MAX(r.appearance_rating) AS appearance_rating, 
+          MAX(r.taste_rating) AS taste_rating
+          FROM Comments c
+          JOIN Users u ON c.user_id = u.user_id
+          LEFT JOIN Ratings r ON r.user_id = c.user_id AND r.recipe_id = c.recipe_id
+          WHERE c.recipe_id = ? 
+          GROUP BY c.comment_id
+          ORDER BY c.created_at DESC`,
           [recipeId],
           (err, rows) => {
             if (err) reject(err);
@@ -107,20 +122,20 @@ const router = express.Router();
         );
       });
 
-      // Render the detailed recipe page with all fetched data
       res.render("recipes/recipe", {
         recipe,
         ingredients,
         instructions,
-        feedback,
-        comments,
-      });
-    } catch (error) {
-      console.error("Error fetching recipe details:", error.message);
+        dietaryRestrictions,
+        feedback,  
+        comments   
+    });
+    
+  } catch (error) {
+      console.error("Error fetching recipe details:", error);
       res.status(500).send("Internal Server Error");
-    }
   }
-);
+});
 
 /**-------------------------------------------------------------------------------------------------------------------------------
  * @desc Main Recipes Page - Display all recipes with basic information and ratings
@@ -223,8 +238,8 @@ router.get("/", async (req, res) => {
   }
 });
 /**-------------------------------------------------------------------------------------------------------------------------------
-   * @desc Recipe Template - Fallback route for recipe view template
-   -------------------------------------------------------------------------------------------------------------------------------*/
+* @desc Recipe Template - Fallback route for recipe view template
+-------------------------------------------------------------------------------------------------------------------------------*/
 router.get("/recipe", (req, res) => {
   res.render("recipes/recipe");
 });

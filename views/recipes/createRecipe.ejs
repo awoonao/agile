@@ -145,10 +145,26 @@
         <label for="cook_time">Cook Time:</label>
         <input type="text" id="cook_time" name="cook_time" required />
       </div>
+
+      <div class="dietary-restrictions">
+        <label for="dietaryInput">Dietary Restrictions (Optional):</label>
+        <input type="text" id="dietaryInput" placeholder="Type a dietary restriction..." />
+        <div id="suggestions"></div>
+        <button type="button" id="addRestrictionBtn" disabled>Add</button>
+      
+        <h4>Selected Restrictions:</h4>
+        <ul id="selectedRestrictions"></ul>
+      </div>
+      
+      <!-- Hidden input to send selected restrictions -->
+      <input type="hidden" name="dietary_restrictions" id="hiddenDietaryRestrictions" value="">
+
+      <br>
+
       <button type="submit">Submit Recipe</button>
       <button type="button" onclick="history.back()">Back</button>
     </form>
-    </div>
+  </div>
   </main>
    <!-- FOOTER -->
    <footer class="footer mt-5 py-3">

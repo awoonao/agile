@@ -206,8 +206,22 @@
           <p><strong>Cook Time:</strong>
             <%= recipe.cook_time %>
           </p>
-        </div>
+        </div>      
       </div>
+
+      <div class="dietary-restrictions">
+        <h3>Dietary Restrictions</h3>
+        <% if (dietaryRestrictions.length > 0) { %>
+          <ul>
+            <% dietaryRestrictions.forEach(restriction => { %>
+              <li class="tag"><%= restriction.restriction_name %></li>
+            <% }); %>
+          </ul>
+        <% } else { %>
+          <p>No dietary restrictions.</p>
+        <% } %>
+      </div>
+
       <div class="review">
         <h3>Reviews</h3>
       </div>

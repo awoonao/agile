@@ -169,4 +169,23 @@ button[type="button"]:hover {
     box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
 }
 
+#suggestions {
+    position: absolute;
+    background: white;
+    border: 1px solid #96290B;
+    max-width: 300px;
+    width: 100%;
+    z-index: 1000;
+}
+
+.suggestion-item {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background: #BB8379;
+    color: white;
+}
+
 

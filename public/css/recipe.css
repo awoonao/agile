@@ -12,7 +12,8 @@
         "description description"
         "ingredient ingredient"
         "instruction instruction"
-        "recipe-details recipe-details"
+        "recipe-details recipe-details" 
+        "dietary-restrictions dietary-restrictions" 
         "review review"
         "appearance-rating taste-rating"
         "feedback feedback"
@@ -20,6 +21,8 @@
     grid-template-columns: 1fr 1fr;
     color: #96290B;
 }
+
+
 
 /* Create variant Button */
  .recipe-container .variant {
@@ -302,10 +305,7 @@
 .recipe-container .ingredient img, .instruction img{
     margin: 0px;
      max-width: 40px;
- }
-
-
-
+}
 
 /* Servings/ yield/ prep-time/ cook time */
 
@@ -335,6 +335,30 @@
 
 .recipe-container .cooktime {
     grid-area: cooktime;
+}
+
+/* Dietary Restrictions */
+.recipe-container .dietary-restrictions {
+    grid-area: dietary-restrictions;
+    text-align: left;
+    list-style-type: none;
+    border: 2px solid #96290B;
+    padding: 10px;
+}
+
+.recipe-container .dietary-restrictions ul {
+    margin: 0;
+    padding: 5px;
+}
+
+.recipe-container .dietary-restrictions li {
+    display: inline-block;
+    background-color: #BB8379;
+    color: #FFF4EF;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 5px;
+    font-size: 1em;
 }
 
 /* individual ratings  */

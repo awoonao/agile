@@ -118,6 +118,14 @@ CREATE TABLE User_Dietary_Restrictions (
     FOREIGN KEY (restriction_id) REFERENCES Dietary_Restrictions(restriction_id) ON DELETE CASCADE
 );
 
+CREATE TABLE Recipe_Dietary_Restrictions (
+    recipe_id INTEGER NOT NULL,
+    restriction_id INTEGER NOT NULL,
+    PRIMARY KEY (recipe_id, restriction_id),
+    FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id) ON DELETE CASCADE,
+    FOREIGN KEY (restriction_id) REFERENCES Dietary_Restrictions(restriction_id) ON DELETE CASCADE
+);
+
 -- password : dummyhash
 INSERT INTO Users (
     username,
