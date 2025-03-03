@@ -16,6 +16,8 @@
 
   <!-- Main CSS -->
   <link rel="stylesheet" type="text/css" href="/css/main.css" />
+  <link rel="stylesheet" type="text/css" href="/css/home.css" />
+
   <title>Home</title>
 </head>
 
@@ -72,7 +74,203 @@
   </header>
 
   <main>
-    <!-- Homepage Content Goes Here -->
+
+    <!-- Most Popular This Week Section -->
+    <div class="featured-section">
+      <h2 class="section-title">Most Popular This Week</h2>
+      <% if (topRecipes.popularWeek) { %>
+        <div class="recipe-container">
+          <a href="/recipes/<%= topRecipes.popularWeek.recipe_id %>">
+            <% if (topRecipes.popularWeek.image_url) { %>
+              <img src="<%= topRecipes.popularWeek.image_url %>" alt="<%= topRecipes.popularWeek.title %>"
+                />
+              <% } %>
+                <div class="recipe-content">
+
+                  <h2>
+                    <%= topRecipes.popularWeek.title %>
+                  </h2>
+
+                  <div class="average-rating">
+                    <div class="average-appearance">
+                      <img src="/images/lookstar.png" alt="star rating with chef's hat">
+                      <p>: <%= topRecipes.popularWeek.average_appearance_rating %>
+                      </p>
+                    </div>
+                    <div class="average-taste">
+                      <img src="/images/chefstar.png" alt="star rating">
+                      <p>: <%= topRecipes.popularWeek.average_taste_rating %>
+                      </p>
+                    </div>
+                  </div>
+
+          </a>
+        </div>
+        <% } else { %>
+          <p>No recipes found.</p>
+          <% } %>
+
+    </div>
+    <a href="/recipes?sort=popular-week" class="view-all-link">View More→</a>
+    </div>
+    <hr>
+    <center>
+      <div class="sub-featured-section">
+        <div class="container horizontal-scrollable">
+          <div class="row text-center">
+            <div class="col-xs-4">
+              <!-- Most Recent Section -->
+
+              <h3 class="section-title">Most Recent</h3>
+              <% if (topRecipes.newest) { %>
+                <div class="sub-recipe-container">
+                  <a href="/recipes/<%= topRecipes.newest.recipe_id %>">
+                    <% if (topRecipes.newest.image_url) { %>
+                      <img src="<%= topRecipes.newest.image_url %>" alt="<%= topRecipes.newest.title %>" width="200" />
+                      <% } %>
+                        <div class="recipe-content">
+
+                          <h3>
+                            <%= topRecipes.newest.title %>
+                          </h3>
+
+                          <div class="average-rating">
+                            <div class="average-appearance">
+                              <img src="/images/lookstar.png" alt="star rating with chef's hat">
+                              <p>: <%= topRecipes.newest.average_appearance_rating %>
+                              </p>
+                            </div>
+                            <div class="average-taste">
+                              <img src="/images/chefstar.png" alt="star rating">
+                              <p>: <%= topRecipes.newest.average_taste_rating %>
+                              </p>
+                            </div>
+                          </div>
+
+                        </div>
+                  </a>
+                </div>
+                <% } else { %>
+                  <p>No recipes found.</p>
+                  <% } %>
+                  <a href="/recipes?sort=newest" class="view-all-link">View More →</a>
+            </div>
+            <div class="col-xs-4"> 
+              <!-- Best Tasting Section -->
+
+              <h3 class="section-title">Best Tasting</h3>
+              <% if (topRecipes.bestTasting) { %>
+                <div class="sub-recipe-container">
+                  <a href="/recipes/<%= topRecipes.bestTasting.recipe_id %>">
+                    <% if (topRecipes.bestTasting.image_url) { %>
+                      <img src="<%= topRecipes.bestTasting.image_url %>" alt="<%= topRecipes.bestTasting.title %>"
+                        width="200" />
+                      <% } %>
+                        <div class="recipe-content">
+
+                          <h3>
+                            <%= topRecipes.bestTasting.title %>
+                          </h3>
+
+                          <div class="average-rating">
+                            <div class="average-appearance">
+                              <img src="/images/lookstar.png" alt="star rating with chef's hat">
+                              <p>: <%= topRecipes.bestTasting.average_appearance_rating %>
+                              </p>
+                            </div>
+                            <div class="average-taste">
+                              <img src="/images/chefstar.png" alt="star rating">
+                              <p>: <%= topRecipes.bestTasting.average_taste_rating %>
+                              </p>
+                            </div>
+                          </div>
+
+                        </div>
+                  </a>
+                </div>
+                <% } else { %>
+                  <p>No recipes found.</p>
+                  <% } %>
+                  <a href="/recipes?sort=taste-highest" class="view-all-link">View More →</a>
+            </div>
+            <div class="col-xs-4">
+              <!-- Most Appealing Section -->
+
+              <h3 class="section-title">Most Appealing</h3>
+              <% if (topRecipes.mostAppealing) { %>
+                <div class="sub-recipe-container">
+                  <a href="/recipes/<%= topRecipes.mostAppealing.recipe_id %>">
+                    <% if (topRecipes.mostAppealing.image_url) { %>
+                      <img src="<%= topRecipes.mostAppealing.image_url %>" alt="<%= topRecipes.mostAppealing.title %>"
+                        width="200" />
+                      <% } %>
+                        <div class="recipe-content">
+
+                          <h3>
+                            <%= topRecipes.mostAppealing.title %>
+                          </h3>
+
+                          <div class="average-rating">
+                            <div class="average-appearance">
+                              <img src="/images/lookstar.png" alt="star rating with chef's hat">
+                              <p>: <%= topRecipes.mostAppealing.average_appearance_rating %>
+                              </p>
+                            </div>
+                            <div class="average-taste">
+                              <img src="/images/chefstar.png" alt="star rating">
+                              <p>: <%= topRecipes.mostAppealing.average_taste_rating %>
+                              </p>
+                            </div>
+                          </div>
+
+                        </div>
+                  </a>
+                </div>
+                <% } else { %>
+                  <p>No recipes found.</p>
+                  <% } %>
+                  <a href="/recipes?sort=appearance-highest" class="view-all-link">View More →</a>
+            </div>
+            <div class="col-xs-4"><!-- Most Popular This Month Section -->
+              <h3 class="section-title">Most Popular This Month</h3>
+              <% if (topRecipes.popularMonth) { %>
+                <div class="sub-recipe-container">
+                  <a href="/recipes/<%= topRecipes.popularMonth.recipe_id %>">
+                    <% if (topRecipes.popularMonth.image_url) { %>
+                      <img src="<%= topRecipes.popularMonth.image_url %>" alt="<%= topRecipes.popularMonth.title %>"
+                        width="200" />
+                      <% } %>
+                        <div class="recipe-content">
+                          <h3>
+                            <%= topRecipes.popularMonth.title %>
+                          </h3>
+                          <div class="average-rating">
+                            <div class="average-appearance">
+                              <img src="/images/lookstar.png" alt="star rating with chef's hat">
+                              <p>: <%= topRecipes.popularMonth.average_appearance_rating %>
+                              </p>
+                            </div>
+                            <div class="average-taste">
+                              <img src="/images/chefstar.png" alt="star rating">
+                              <p>: <%= topRecipes.popularMonth.average_taste_rating %>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                  </a>
+                </div>
+                <% } else { %>
+                  <p>No recipes found.</p>
+                  <% } %>
+                  <a href="/recipes?sort=popular-month" class="view-all-link">View More →</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </center>
+
   </main>
 
   <!-- FOOTER -->
