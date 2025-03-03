@@ -31,44 +31,49 @@
   <header>
     <nav class="navbar navbar-expand-xl nav-container">
       <!-- Brand -->
-      <a class="navbar-brand" href="/"><img src="/images/logo.png" alt="logo" /></a>
+      <a class="navbar-brand" href="/">
+        <img src="/images/logo.png" alt="logo" />
+      </a>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-        <!-- <a href="https://www.flaticon.com/free-icons/hamburger" title="hamburger icons">Hamburger icons created by Arief Harvi - Flaticon</a> -->
-        <span class="navbar-toggler-icon"><img src="/images/hamburger-menu.png" alt="hamburger-menu" /></span>
+        <span class="navbar-toggler-icon">
+          <img src="/images/hamburger-menu.png" alt="hamburger-menu" />
+        </span>
       </button>
+
       <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <!-- Links -->
         <ul class="navbar-nav">
-          <!-- Recipe -->
-          <li class="nav-item">
-            <a class="nav-link" href="/recipes">Recipe</a>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="/recipes">Recipes</a></li>
 
-          <!-- Dropdown (account) -->
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-              My Account
-            </a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="/recipes/create-recipe">Create New Recipe</a>
-              <a class="dropdown-item" href="#">My Profile</a>
-              <a class="dropdown-item" href="#">My Recipes</a>
-              <a class="dropdown-item" href="#">Saved Recipes</a>
-              <a class="dropdown-item" href="#">Logout</a>
-            </div>
-          </li>
-          <!-- about us -->
+            <% if (userId) { %>
+              <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                My Account
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/recipes/create-recipe">Create New Recipe</a>
+                <a class="dropdown-item" href="/profile">My Profile</a>
+                <a class="dropdown-item" href="/profile/edit-profile">My Recipes</a>
+                <a class="dropdown-item" href="/profile/edit-profile">My Recipes</a>
+                <form action="/users/logout" method="POST">
+                  <button class="dropdown-item" type="submit">Logout</button>
+                </form>
+              </div>
+              <% } else { %>
           <li class="nav-item">
-            <a class="nav-link" href="/about">About us</a>
+            <a class="nav-link" href="/users/login">Login / Signup</a>
           </li>
-          <li>
-            <form class="form-inline" action="/action_page.php">
-                            <input class="form-control mr-sm-2" type="text" placeholder="Search" name="query" />
+          <% } %>
+            </li>
 
-              <!-- <button class="btn btn-success" type="submit">Search</button> -->
-            </form>
-          </li>
+            <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
+
+            <li>
+              <form class="form-inline" action="/recipes/search" method="GET">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" name="query" />
+
+              </form>
+            </li>
         </ul>
       </div>
     </nav>

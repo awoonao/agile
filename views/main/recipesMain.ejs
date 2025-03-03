@@ -6,10 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Bootstrap -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-  />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -18,16 +15,17 @@
   <link rel="stylesheet" type="text/css" href="/css/main.css" />
 
 
-<!-- font style -->
-<link href='https://fonts.googleapis.com/css?family=Young Serif' rel='stylesheet'>
+  <!-- font style -->
+  <link href='https://fonts.googleapis.com/css?family=Young Serif' rel='stylesheet'>
 
   <!-- recipeMain.css -->
   <link rel="stylesheet" type="text/css" href="/css/recipeMain.css" />
 
-  <script src="/js/sorting.js" ></script>
+  <script src="/js/sorting.js"></script>
 
   <title>Recipes</title>
 </head>
+
 <body>
   <header>
     <nav class="navbar navbar-expand-xl nav-container">
@@ -36,12 +34,7 @@
         <img src="/images/logo.png" alt="logo" />
       </a>
 
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#collapsibleNavbar"
-      >
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon">
           <img src="/images/hamburger-menu.png" alt="hamburger-menu" />
         </span>
@@ -59,27 +52,27 @@
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="/recipes/create-recipe">Create New Recipe</a>
                 <a class="dropdown-item" href="/profile">My Profile</a>
-                <a class="dropdown-item" href="/my-recipes">My Recipes</a>
-                <a class="dropdown-item" href="/saved-recipes">Saved Recipes</a>
+                <a class="dropdown-item" href="/profile/edit-profile">My Recipes</a>
+                <a class="dropdown-item" href="/profile/edit-profile">My Recipes</a>
                 <form action="/users/logout" method="POST">
                   <button class="dropdown-item" type="submit">Logout</button>
                 </form>
               </div>
-            <% } else { %>
-              <li class="nav-item">
-                <a class="nav-link" href="/users/login">Login / Signup</a>
-              </li>
-            <% } %>
+              <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/users/login">Login / Signup</a>
           </li>
+          <% } %>
+            </li>
 
-          <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
 
-          <li>
-            <form class="form-inline" action="/recipes/search" method="GET">
-              <input class="form-control mr-sm-2" type="text" placeholder="Search" name="query" />
+            <li>
+              <form class="form-inline" action="/recipes/search" method="GET">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" name="query" />
 
-            </form>
-          </li>
+              </form>
+            </li>
         </ul>
       </div>
     </nav>
@@ -96,21 +89,21 @@
             <div class="form-group">
               <label for="sort-dropdown">Sort by: </label>
               <div class="btn-group">
-                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
                   <span id="dropdown-text">
-                    <%= sort === 'newest' ? 'Most Recent' :
-                       sort === 'taste-highest' ? 'Highest Taste Rating' :
-                       sort === 'appearance-highest' ? 'Highest Appearance Rating' :
-                       sort === 'popular-month' ? 'Most Popular This Month' :
-                       sort === 'popular-week' ? 'Most Popular This Week' :
-                       'Select an option' %>
+                    <%= sort==='newest' ? 'Most Recent' : sort==='taste-highest' ? 'Highest Taste Rating' :
+                      sort==='appearance-highest' ? 'Highest Appearance Rating' : sort==='popular-month'
+                      ? 'Most Popular This Month' : sort==='popular-week' ? 'Most Popular This Week'
+                      : 'Select an option' %>
                   </span>
                 </button>
                 <div class="dropdown-menu">
                   <button class="dropdown-item" type="button" data-value="newest">Most Recent</button>
                   <button class="dropdown-item" type="button" data-value="taste-highest">Best Tasting</button>
                   <button class="dropdown-item" type="button" data-value="appearance-highest">Most Appealing</button>
-                  <button class="dropdown-item" type="button" data-value="popular-month">Most Popular This Month</button>
+                  <button class="dropdown-item" type="button" data-value="popular-month">Most Popular This
+                    Month</button>
                   <button class="dropdown-item" type="button" data-value="popular-week">Most Popular This Week</button>
                 </div>
               </div>
@@ -119,9 +112,9 @@
         </div>
       </div>
     </div>
-    
- 
-    
+
+
+
     <div id="recipes-list">
       <% if (typeof recipes !=='undefined' && recipes && recipes.length> 0)
         { %> <% recipes.forEach(recipe=> { %>
@@ -137,21 +130,21 @@
                       </h2>
                     </div>
                     <div class="average-rating">
-                    <div class="average-appearance">
-                      <!-- <a href="https://www.flaticon.com/free-icons/star" title="star icons">Star icons created by Pixel perfect - Flaticon</a> -->
-                      <img src="/images/lookstar.png" alt="star rating with chef's hat">
-                      <p>:
-                        <%= recipe.average_appearance_rating %>
-                      </p>
-                    </div>
-                    <div class="average-taste">
-                      <img src="/images/chefstar.png" alt="star rating">
+                      <div class="average-appearance">
+                        <!-- <a href="https://www.flaticon.com/free-icons/star" title="star icons">Star icons created by Pixel perfect - Flaticon</a> -->
+                        <img src="/images/lookstar.png" alt="star rating with chef's hat">
+                        <p>:
+                          <%= recipe.average_appearance_rating %>
+                        </p>
+                      </div>
+                      <div class="average-taste">
+                        <img src="/images/chefstar.png" alt="star rating">
 
-                      <p>:
-                        <%= recipe.average_taste_rating %>
-                      </p>
+                        <p>:
+                          <%= recipe.average_taste_rating %>
+                        </p>
+                      </div>
                     </div>
-                  </div>
                     <div class="description">
                       <p><strong>Description:</strong><br>
                         <%= recipe.description %>
@@ -174,8 +167,8 @@
 
   </main>
 
-   <!-- FOOTER -->
-   <footer class="footer mt-5 py-3">
+  <!-- FOOTER -->
+  <footer class="footer mt-5 py-3">
     <div class="container">
       <div class="row text-center text-md-left">
         <!-- Left Section: Follow Us -->

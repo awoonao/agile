@@ -17,6 +17,7 @@ const ratingRoutes = require("./rating");
 const commentRoutes = require("./comments");
 const variantRoutes = require("./variants");
 const saveRoutes = require("./save");
+const editRoutes = require("./edit")
 
 // Use all the route modules
 router.use("/", searchRoutes);
@@ -26,5 +27,6 @@ router.use("/", ratingRoutes);
 router.use("/", commentRoutes);
 router.use("/", variantRoutes);
 router.use("/", saveRoutes);
+router.use("/", editRoutes);
 
 module.exports = router;

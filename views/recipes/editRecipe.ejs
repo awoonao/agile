@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Recipe: <%= recipe.title %></title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Common css -->
+  <link rel="stylesheet" type="text/css" href="/css/main.css" />
+
+  <!-- font style -->
+  <link href='https://fonts.googleapis.com/css?family=Young Serif' rel='stylesheet'>
+
+  <!-- CreateRecipe.css -->
+  <link rel="stylesheet" type="text/css" href="/css/recipeCreate.css" />
+
+  <!-- Handles adding/removing ingredients & instructions, and image preview -->
+  <script src="/js/createRecipeForm.js"></script>
+
+  <title>Edit Recipe</title>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-xl nav-container">
+          <!-- Brand -->
+          <a class="navbar-brand" href="/">
+            <img src="/images/logo.png" alt="logo" />
+          </a>
+    
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon">
+              <img src="/images/hamburger-menu.png" alt="hamburger-menu" />
+            </span>
+          </button>
+    
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+              <li class="nav-item"><a class="nav-link" href="/recipes">Recipes</a></li>
+    
+              <li class="nav-item dropdown">
+                <% if (userId) { %>
+                  <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                    My Account
+                  </a>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/recipes/create-recipe">Create New Recipe</a>
+                    <a class="dropdown-item" href="/profile">My Profile</a>
+                    <a class="dropdown-item" href="/profile/edit-profile">My Recipes</a>
+                    <a class="dropdown-item" href="/profile/edit-profile">My Recipes</a>
+                    <form action="/users/logout" method="POST">
+                      <button class="dropdown-item" type="submit">Logout</button>
+                    </form>
+                  </div>
+                  <% } else { %>
+              <li class="nav-item">
+                <a class="nav-link" href="/users/login">Login / Signup</a>
+              </li>
+              <% } %>
+                </li>
+    
+                <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
+    
+                <li>
+                  <form class="form-inline" action="/recipes/search" method="GET">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search" name="query" />
+    
+                  </form>
+                </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+  <main>
+    <h1>Edit Recipe: <%= recipe.title %></h1>
+
+    <form class="recipe-container" action="/recipes/<%= recipe.recipe_id %>/edit" method="POST" enctype="multipart/form-data">
+      <!-- Recipe Title -->
+      <div class="title">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" value="<%= recipe.title %>" required />
+      </div>
+
+      <!-- Recipe Description -->
+      <div class="description">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="4" cols="60"><%= recipe.description %></textarea>
+      </div>
+
+      <div class="image">
+        <label for="image">Photo Here:</label><br>
+        <div class="image-container">
+          <!-- Image Preview -->
+          <% if (recipe.image_url) { %>
+            <img id="imagePreview" src="<%= recipe.image_url %>" alt="<%= recipe.title %>" />
+          <% } else { %>
+            <img id="imagePreview" src="/images/imagePreview.png" alt="Preview" />
+          <% } %>
+          <!-- Recipe Image -->
+          <input type="file" name="image" accept="image/*" id="imageUpload" />
+        </div>
+      </div>
+
+      <!-- Ingredients -->
+      <div class="ingredient">
+        <label>Ingredients:</label>
+        <div id="ingredients-container">
+          <% ingredients.forEach((ingredient, index) => { %>
+            <input type="text" name="ingredients[]" value="<%= ingredient.ingredient_name %>" required />
+          <% }); %>
+        </div>
+
+        <button type="button" onclick="addIngredient()">Add Ingredient</button>
+        <button type="button" onclick="removeIngredient()">
+          Remove Ingredient</button>
+      </div>
+
+      <!-- Instructions -->
+      <div class="instruction">
+        <label>Instructions:</label>
+        <div id="instructions-container">
+          <% instructions.forEach((instruction, index) => { %>
+            <input type="text" name="instructions[]" value="<%= instruction.instruction_text %>" required />
+          <% }); %>
+        </div>
+        <button type="button" onclick="addInstruction()">Add Instruction</button>
+        <button type="button" onclick="removeInstruction()">
+          Remove Instruction</button>
+      </div>
+
+      <div class="details">
+        <!-- servings -->
+        <label for="servings">Servings:</label>
+        <input type="text" id="servings" name="servings" value="<%= recipe.servings %>" />
+
+        <!-- prep time -->
+        <label for="prep_time">Prep Time:</label>
+        <input type="text" id="prep_time" name="prep_time" value="<%= recipe.prep_time %>" required />
+        
+        <!-- yield -->
+        <label for="yield">Yield:</label>
+        <input type="text" id="yield" name="yield" value="<%= recipe.yield %>" required />
+        
+        <!-- cook time -->
+        <label for="cook_time">Cook Time:</label>
+        <input type="text" id="cook_time" name="cook_time" value="<%= recipe.cook_time %>" required />
+      </div>
+      
+      <button type="submit">Save Changes</button>
+      <button type="button" onclick="history.back()">Back</button>
+    </form>
+  </main>
+  
+  <!-- FOOTER -->
+  <footer class="footer mt-5 py-3">
+    <div class="container">
+      <div class="row text-center text-md-left">
+        <!-- Left Section: Follow Us -->
+        <div class="col-md-4">
+          <h6><u>Follow Us</u></h6>
+          <a href="https://facebook.com" target="_blank">
+            <img src="/images/facebookicon.png" alt="Facebook" width="24" />
+          </a>
+          <a href="https://instagram.com" target="_blank">
+            <img src="/images/instaicon.png" alt="Instagram" width="24" />
+          </a>
+        </div>
+
+        <!-- Center Section: Copyright -->
+        <div class="col-md-4 text-md-center">
+          <p>© 2024 Swaply. All Rights Reserved.</p>
+        </div>
+
+        <!-- Right Section: Privacy Policy & Terms -->
+        <div class="col-md-4 text-md-right">
+          <a href="/privacy-policy" class="mr-3">Privacy Policy</a>
+          <a href="/terms-and-conditions">Terms and Conditions</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+ 
+</body>
+
+</html>
