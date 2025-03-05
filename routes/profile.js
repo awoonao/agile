@@ -3,17 +3,7 @@ const session = require("express-session");
 const multer = require("multer");
 const bcrypt = require("bcrypt");
 const path = require("path");
-const sqlite3 = require("sqlite3").verbose();
 const router = express.Router();
-
-// Initialize Database Connection
-const db = new sqlite3.Database("./database.db", sqlite3.OPEN_READWRITE, (err) => {
-    if (err) {
-        console.error("Error opening database:", err.message);
-    } else {
-        console.log("Connected to SQLite database.");
-    }
-});
 
 // Configure Multer for Profile Picture Uploads
 const storage = multer.diskStorage({

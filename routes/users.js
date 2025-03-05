@@ -1,12 +1,3 @@
-/**
- * users.js
- * These are example routes for user management
- * This shows how to correctly structure your routes for the project
- * and the suggested pattern for retrieving data by executing queries
- *
- * NB. it's better NOT to use arrow functions for callbacks with the SQLite library
-* 
- */
 const express = require("express");
 const session = require("express-session");
 const bcrypt = require("bcrypt");

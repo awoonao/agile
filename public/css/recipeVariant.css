@@ -12,12 +12,13 @@
 
 * {
   color: #96290B;
-
 }
-h1{
+
+h1 {
   margin-top: 20px;
   text-align: center;
 }
+
 .recipe-container {
   margin: 40px auto;
   display: grid;
@@ -56,7 +57,6 @@ input:focus, textarea:focus {
   box-shadow: 0 0 5px rgba(217, 78, 31, 0.3);
 }
 
-
 label {
   font-weight: 600;
   margin-bottom: 8px;
@@ -67,7 +67,6 @@ label {
 .recipe-container .title {
   grid-area: title;
 }
-
 
 .recipe-container .description {
   grid-area: description;
@@ -81,7 +80,6 @@ label {
 
 .recipe-container .image {
   grid-area: image;
-  /* border: 2px solid #96290B; */
 }
 
 .recipe-container .image-container {
@@ -94,7 +92,6 @@ label {
   align-items: center;
   justify-content: center;
   transition: border-color 0.3s ease;
- 
 }
 
 .recipe-container .image-container:hover {
@@ -112,9 +109,7 @@ label {
 
 .recipe-container .image input {
   display: none;
-
 }
-
 
 .recipe-container .ingredient {
   grid-area: ingredient;
@@ -137,7 +132,6 @@ label {
   gap: 10px;
   margin-bottom: 15px;
 }
-
 
 .recipe-container button {
   padding: 10px 20px;
@@ -176,4 +170,124 @@ button[type="button"]:hover {
   border-radius: 10px;
   border: 1px solid rgba(150, 41, 11, 0.2);
   box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+}
+
+/* Dietary Restrictions  */
+
+.suggestions-box {
+  position: absolute;
+  background: white;
+  border: 1px solid #96290B;
+  max-height: 200px;
+  width: 100%; 
+  overflow-y: auto;
+  z-index: 1000;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  display: none; 
+}
+
+.dietary-container {
+  position: relative; 
+  width: 100%;
+}
+
+
+.suggestion-item {
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.suggestion-item:hover {
+  background: #BB8379;
+  color: white;
+}
+
+#dietaryInput {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.dietary-section {
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(150, 41, 11, 0.2);
+  background-color: #FFF9F5;
+  margin-bottom: 20px;
+}
+
+.dietary-section.full-width {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dietary-container-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px; 
+  width: 100%;
+}
+
+.dietary-section.half-width {
+  width: 100%;
+}
+
+#existingRestrictions, #selectedRestrictions {
+  list-style-type: none;
+  padding: 0;
+}
+
+#existingRestrictions li, #selectedRestrictions li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #96290B;
+}
+
+.remove-existing-restriction, .remove-btn {
+  background: #BB8379;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.remove-existing-restriction:hover, .remove-btn:hover {
+  background: #96290B;
+}
+
+#suggestions {
+  position: absolute;
+  background: white;
+  border: 1px solid #ddd;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+}
+
+.suggestion-item:hover {
+  background: #f0f0f0;
+}
+
+.suggestion-item.new-entry {
+  font-style: italic;
+  color: #888;
 }

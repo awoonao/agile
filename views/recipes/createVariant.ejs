@@ -25,9 +25,18 @@
 
   <!-- Substitution toggle functionality -->
   <script src="/js/substitutionToggle.js"></script>
+
+  <!-- Restrictions -->
+  <script src="/js/variantDietaryRestrictions.js"></script>
+
 </head>
 
 <body>
+
+  <script id="allDietaryRestrictionsData" type="application/json">
+    <%- JSON.stringify(allDietaryRestrictions) %>
+  </script>
+
   <header>
     <nav class="navbar navbar-expand-xl nav-container">
       <!-- Brand -->
@@ -108,54 +117,98 @@
         </div>
 
       
-      <!-- Ingredients and Instructions sections remain the same -->
-      <div class="ingredient">
-      <label>Ingredients</label>
-      <% ingredients.forEach((ingredient, index)=> { %>
-        <div class="substitution-container">
-          <%= ingredient.ingredient_name %>
-            <button type="button" class="toggle-substitution">
-              Add Substitution
-            </button>
-            <input type="text" name="substitutions[ingredients][<%= ingredient.ingredient_order %>]"
-              placeholder="Enter substitution" class="substitution-input hidden" />
+        <!-- Ingredients and Instructions sections remain the same -->
+        <div class="ingredient">
+        <label>Ingredients</label>
+        <% ingredients.forEach((ingredient, index)=> { %>
+          <div class="substitution-container">
+            <%= ingredient.ingredient_name %>
+              <button type="button" class="toggle-substitution">
+                Add Substitution
+              </button>
+              <input type="text" name="substitutions[ingredients][<%= ingredient.ingredient_order %>]"
+                placeholder="Enter substitution" class="substitution-input hidden" />
+          </div>
+          <% }); %>
         </div>
-        <% }); %>
-      </div>
 
-          <!-- Instructions -->
-          <div class="instruction">
-          <label>Instructions</label>
-          <% instructions.forEach((instruction, index)=> { %>
-            <div class="substitution-container">
-              <%= instruction.instruction_text %>
-                <button type="button" class="toggle-substitution">
-                  Add Substitution
-                </button>
-                <input type="text" name="substitutions[instructions][<%= instruction.step_order %>]"
-                  placeholder="Enter substitution" class="substitution-input hidden" />
-            </div>
-            <% }); %>
+        <!-- Instructions -->
+        <div class="instruction">
+        <label>Instructions</label>
+        <% instructions.forEach((instruction, index)=> { %>
+          <div class="substitution-container">
+            <%= instruction.instruction_text %>
+              <button type="button" class="toggle-substitution">
+                Add Substitution
+              </button>
+              <input type="text" name="substitutions[instructions][<%= instruction.step_order %>]"
+                placeholder="Enter substitution" class="substitution-input hidden" />
+          </div>
+          <% }); %>
+        </div>
+
+        <div class="details">
+          <!-- servings -->
+          <label for="servings">Servings:</label>
+          <input type="text" id="servings" name="servings" value="<%= recipe.servings %>" required>
+  
+          <!-- prep time -->
+          <label for="prep_time">Prep Time:</label>
+          <input type="text" id="prep_time" name="prep_time" value="<%= recipe.prep_time %>" required>
+          <!-- yield -->
+          <label for="yield">Yield:</label>
+          <input type="text" id="yield" name="yield" value="<%= recipe.yield %>" required />
+          <!-- cook time -->
+          <label for="cook_time">Cook Time:</label>
+          <input type="text" id="cook_time" name="cook_time" value="<%= recipe.cook_time %>" required />
+        </div>
+
+        <!-- Add Dietary Restrictions -->
+        <div class="dietary-section full-width">
+          <h4>Add Dietary Restrictions:</h4>
+          <div class="dietary-container">
+            <input type="text" id="dietaryInput" placeholder="Type a dietary restriction..." autocomplete="off"/>
+            <div id="suggestions" class="suggestions-box"></div>
+          </div>
+          <button type="button" id="addRestrictionBtn" disabled>Add</button>
+        </div>
+
+        <br>
+
+        <!-- Wrapper -->
+        <div class="dietary-container-group">
+          
+          <!-- Existing Restrictions -->
+          <div class="dietary-section half-width">
+            <h4>Existing Restrictions:</h4>
+            <ul id="existingRestrictions">
+              <% if (existingDietaryRestrictions.length > 0) { %>
+                <% existingDietaryRestrictions.forEach(restriction => { %>
+                  <li>
+                    <span class="restriction-text"><%= restriction %></span>
+                    <button type="button" class="remove-existing-restriction">X</button>
+                  </li>
+                <% }) %>
+              <% } else { %>
+                <p>No dietary restrictions.</p>
+              <% } %>
+            </ul>
           </div>
 
-            <div class="details">
-              <!-- servings -->
-              <label for="servings">Servings:</label>
-              <input type="text" id="servings" name="servings" value="<%= recipe.servings %>" required>
-      
-              <!-- prep time -->
-              <label for="prep_time">Prep Time:</label>
-              <input type="text" id="prep_time" name="prep_time" value="<%= recipe.prep_time %>" required>
-              <!-- yield -->
-              <label for="yield">Yield:</label>
-              <input type="text" id="yield" name="yield" value="<%= recipe.yield %>" required />
-              <!-- cook time -->
-              <label for="cook_time">Cook Time:</label>
-              <input type="text" id="cook_time" name="cook_time" value="<%= recipe.cook_time %>" required />
-            </div>
-            <button type="submit">Save Variant</button>
-            <button type="button" onclick="history.back()">Back</button>
-          </form>
+          <!-- Selected Restrictions -->
+          <div class="dietary-section half-width">
+            <h4>Selected Restrictions:</h4>
+            <ul id="selectedRestrictions"></ul>
+          </div>
+
+        </div>
+
+        <input type="hidden" name="dietary_restrictions" id="hiddenDietaryRestrictions" value="">
+        
+        <br>
+        <button type="submit">Save Variant</button>
+        <button type="button" onclick="history.back()">Back</button>
+      </form>
 
              
     </form>

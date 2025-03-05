@@ -1,18 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const sqlite3 = require("sqlite3").verbose();
 
 // Import the upload middleware
 const { upload } = require("../../middleware/middleware");
-
-// Initialize Database Connection
-const db = new sqlite3.Database("./database.db", sqlite3.OPEN_READWRITE, (err) => {
-    if (err) {
-        console.error("Error opening database:", err.message);
-    } else {
-        console.log("Connected to SQLite database.");
-    }
-});
 
 // Handle POST request to create a new recipe
 router.post("/create-recipe", upload.single("image"), async (req, res) => {
