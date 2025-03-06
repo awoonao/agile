@@ -97,6 +97,14 @@ nav img {
     font-size: 1rem;
 }
 
+.dropdown-item {
+    color: #FFF4EF;
+}
+
+.dropdown-item:hover{
+    color: #96290B;
+}
+
 .form-inline .form-control {
     width: 350px;
     align-items: center;
