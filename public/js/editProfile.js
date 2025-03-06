@@ -3,14 +3,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const profileData = document.getElementById("profileData");
     const messageBox = document.getElementById("profile-message");
 
+    // Automatically hide message box after 4 seconds
     if (messageBox) {
         setTimeout(() => {
             messageBox.style.display = "none";
         }, 4000);
     }
 
+    // Function to handle profile picture uploads and preview changes
     function attachImageUploadHandler() {
-        console.log("Initializing image upload handler...");
         const formProfilePicture = document.getElementById("profilePicture");
         const sidebarProfilePicture = document.getElementById("sidebarProfilePicture");
         const imageUpload = document.getElementById("imageUpload");
@@ -32,13 +33,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     reader.readAsDataURL(this.files[0]);
                 }
             });
-        } else {
-            console.warn("Image upload elements not found.");
         }
     }
 
+    // Function to handle the unsave action for saved recipes
     function attachUnsaveEventListeners() {
-        console.log("Initializing unsave event listeners...");
         document.querySelectorAll(".unsave-btn").forEach(button => {
             button.addEventListener("click", function () {
                 const recipeId = this.dataset.recipeId;
@@ -50,7 +49,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data.message);
                     loadProfileSection("saved-recipes");
                 })
                 .catch(error => console.error("Error unsaving recipe:", error));
@@ -58,9 +56,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Function to dynamically load profile sections when a tab is clicked
     async function loadProfileSection(section) {
         try {
-            console.log(`Loading section: ${section}`);
             const response = await fetch(`/profile/edit-profile/${section}`);
     
             if (!response.ok) {
@@ -70,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const data = await response.text();
             profileData.innerHTML = data;
     
-            // Attach necessary event listeners after loading content
+            // Attach relevant event listeners based on the section being loaded
             if (section === "personal-information") {
                 attachImageUploadHandler();
             }
@@ -81,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 initializeDietaryRestrictions();
             }
             if (section === "my-creations") {
-                attachDeleteEventListeners();  //Attach delete event listeners
+                attachDeleteEventListeners();
             }
         } catch (error) {
             console.error(`Error loading ${section}:`, error);
@@ -89,21 +87,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }    
 
-    // Attach delete event listeners after "My Creations" section loads
-    function initializeMyCreations() {
-        console.log("Initializing My Creations functionality...");
-
-        document.querySelectorAll(".delete-btn").forEach(button => {
-            button.addEventListener("click", function () {
-                const recipeId = this.getAttribute("data-recipe-id");
-                confirmDelete(recipeId);
-            });
-        });
-    }
-
+    // Function to initialize delete event listeners for "My Creations"
     function attachDeleteEventListeners() {
-        console.log("Attaching delete event listeners...");
-    
         document.querySelectorAll(".delete-btn").forEach(button => {
             button.addEventListener("click", function () {
                 const recipeId = this.getAttribute("data-recipe-id");
@@ -112,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
     
-    // Define delete confirmation function
+    // Function to confirm and delete a recipe
     function confirmDelete(recipeId) {
         const confirmation = confirm("Are you sure you want to delete this recipe? This action cannot be undone.");
         
@@ -134,10 +119,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
     
-    
+    // Function to initialize dietary restriction selection
     function initializeDietaryRestrictions() {
-        console.log("Initializing dietary restrictions functionality...");
-
         const dietaryInput = document.getElementById("dietaryInput");
         const suggestionsBox = document.getElementById("suggestions");
         const addRestrictionBtn = document.getElementById("addRestrictionBtn");
@@ -145,28 +128,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let allRestrictions = [];
 
+        // Fetch all dietary restrictions from the server
         async function fetchDietaryRestrictions() {
             try {
-                console.log("Fetching dietary restrictions...");
                 const response = await fetch("/profile/edit-profile/dietary-restrictions/all");
-                console.log("API response status:", response.status);
 
                 if (!response.ok) throw new Error("Failed to fetch dietary restrictions");
 
                 allRestrictions = await response.json();
-                console.log("Fetched restrictions:", allRestrictions);
             } catch (error) {
                 console.error("Error fetching dietary restrictions:", error);
             }
         }
 
+        // Load the current user's dietary restrictions
         async function loadUserRestrictions() {
-            console.log("Fetching user's dietary restrictions...");
             try {
                 const response = await fetch("/profile/edit-profile/dietary-restrictions/user");
                 if (!response.ok) throw new Error("Failed to fetch user dietary restrictions");
                 const data = await response.json();
-                console.log("User's dietary restrictions:", data);
 
                 userRestrictionsList.innerHTML = "";
                 data.forEach(restriction => {
@@ -178,7 +158,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 document.querySelectorAll(".remove-btn").forEach(button => {
                     button.addEventListener("click", function () {
-                        console.log("Removing restriction ID:", this.dataset.id);
                         removeDietaryRestriction(this.dataset.id);
                     });
                 });
@@ -187,9 +166,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
+        // Remove a dietary restriction from the user's profile
         function removeDietaryRestriction(restriction_id) {
-            console.log("Removing dietary restriction with ID:", restriction_id);
-        
             fetch("/profile/edit-profile/dietary-restrictions/remove", {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
@@ -197,37 +175,30 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(response => response.json())
             .then(data => {
-                if (data.error) {
-                    console.error("Error removing restriction:", data.error);
-                } else {
-                    console.log("Restriction removed successfully.");
-                    loadUserRestrictions(); // Refresh list after deletion
+                if (!data.error) {
+                    loadUserRestrictions();
                 }
             })
             .catch(error => console.error("Error removing restriction:", error));
         }
-        
 
+        // Display suggested dietary restrictions as the user types
         dietaryInput.addEventListener("input", function () {
             const search = this.value.trim().toLowerCase();
-            console.log("User input:", search);
             suggestionsBox.innerHTML = "";
             suggestionsBox.style.display = "none";
             addRestrictionBtn.disabled = true;
 
             if (search.length > 0) {
-                console.log("Filtering suggestions...");
                 const filtered = allRestrictions.filter(r =>
                     r.restriction_name.toLowerCase().includes(search)
                 );
 
                 if (filtered.length === 0) {
-                    console.log("No matches found. Allowing new entry.");
                     const noResultDiv = document.createElement("div");
                     noResultDiv.innerText = `Add "${this.value}"`;
                     noResultDiv.classList.add("suggestion-item", "new-entry");
                     noResultDiv.addEventListener("click", function () {
-                        console.log("User wants to add new restriction:", search);
                         dietaryInput.value = search;
                         addRestrictionBtn.disabled = false;
                         suggestionsBox.innerHTML = "";
@@ -236,13 +207,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     suggestionsBox.appendChild(noResultDiv);
                     addRestrictionBtn.disabled = false;
                 } else {
-                    console.log("Matches found:", filtered);
                     filtered.forEach(r => {
                         const div = document.createElement("div");
                         div.innerText = r.restriction_name;
                         div.classList.add("suggestion-item");
                         div.addEventListener("click", function () {
-                            console.log("User selected:", r.restriction_name);
                             dietaryInput.value = r.restriction_name;
                             addRestrictionBtn.disabled = false;
                             suggestionsBox.innerHTML = "";
@@ -256,13 +225,14 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
+        // Hide dietary restriction suggestions when clicking outside
         document.addEventListener("click", function (event) {
             if (!dietaryInput.contains(event.target) && !suggestionsBox.contains(event.target)) {
-                console.log("Clicked outside, hiding suggestions.");
                 suggestionsBox.style.display = "none";
             }
         });
 
+        // Handle adding a new dietary restriction
         addRestrictionBtn.addEventListener("click", function () {
             const restrictionName = dietaryInput.value.trim();
 
@@ -271,7 +241,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            console.log("Adding restriction:", restrictionName);
             fetch("/profile/edit-profile/dietary-restrictions/add", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -279,11 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(response => response.json())
             .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                    console.error("Error adding restriction:", data.error);
-                } else {
-                    console.log("Restriction added successfully:", data);
+                if (!data.error) {
                     dietaryInput.value = "";
                     addRestrictionBtn.disabled = true;
                     loadUserRestrictions();
@@ -296,17 +261,17 @@ document.addEventListener("DOMContentLoaded", function () {
         loadUserRestrictions();
     }
 
+    // Handle navigation between profile sections
     profileButtons.forEach((button) => {
         button.addEventListener("click", function () {
             profileButtons.forEach((btn) => btn.classList.remove("active"));
             this.classList.add("active");
 
             const section = this.dataset.section;
-            console.log(`Navigating to: ${section}`);
-
             loadProfileSection(section);
         });
     });
 
+    // Load the default section when the page loads
     loadProfileSection("personal-information");
 });

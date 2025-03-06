@@ -3,11 +3,11 @@ const session = require("express-session");
 const bcrypt = require("bcrypt");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
-const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require("sqlite3").verbose();
 const multer = require("multer");
 const path = require("path");
 
-// Configure multer storage
+// Configure multer for profile picture storage
 const storage = multer.diskStorage({
     destination: "./public/images/users/",
     filename: (req, file, cb) => {
@@ -17,23 +17,23 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-//Middleware for session handling below
+// Configure session management
 router.use(session({
-    secret: 'your_secret_key', // Change this to a secure random value
+    secret: 'your_secret_key', // Secret key for session encryption
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } // Set to true if using HTTPS
+    cookie: { secure: false } // Use true for HTTPS
 }));
 
-//Signup (GET)
+// Render the signup page
 router.get('/signup', (req, res) => {
-    res.render('user/signup', { error: null }); 
+    res.render('user/signup', { error: null });
 });
 
-//Signup (POST)
+// Handle user signup
 router.post('/signup', upload.single('profile_picture'), (req, res) => {
     const { first_name, last_name, username, email, password, confirmPassword, day, month, year } = req.body;
-    const profile_picture = req.file ? "/images/users/" + req.file.filename : "/images/users/defaultProfile.jpg"; // Fallback to default image
+    const profile_picture = req.file ? "/images/users/" + req.file.filename : "/images/users/defaultProfile.jpg";
 
     if (!first_name || !last_name || !username || !email || !password || !confirmPassword) {
         return res.render('user/signup', { error: 'All fields are required' });
@@ -65,12 +65,12 @@ router.post('/signup', upload.single('profile_picture'), (req, res) => {
     });
 });
 
-// Login (GET)
+// Render the login page
 router.get('/login', (req, res) => {
-    res.render('user/login', { error: null }); // Pass 'error' as null initially
+    res.render('user/login', { error: null });
 });
 
-// Login (POST)
+// Handle user login
 router.post('/login', (req, res) => {
     const { username, password } = req.body;
 
@@ -78,7 +78,6 @@ router.post('/login', (req, res) => {
         return res.render('user/login', { error: 'Username and password are required' });
     }
 
-    // Query the database for the user
     db.get('SELECT user_id, password_hash FROM Users WHERE username = ?', [username], (err, user) => {
         if (err) {
             return res.render('user/login', { error: 'Database error' });
@@ -88,7 +87,6 @@ router.post('/login', (req, res) => {
             return res.render('user/login', { error: 'Invalid username or password' });
         }
 
-        // Compare entered password with hashed password
         bcrypt.compare(password, user.password_hash, (err, match) => {
             if (err) {
                 return res.render('user/login', { error: 'Error verifying password' });
@@ -98,31 +96,28 @@ router.post('/login', (req, res) => {
                 return res.render('user/login', { error: 'Invalid username or password' });
             }
 
-            // Store user session
             req.session.userId = user.user_id;
-
-            // Redirect to the home page after login
             res.redirect('/');
         });
     });
 });
 
-// Logout (POST)
+// Handle user logout
 router.post('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             return res.render('user/login', { error: 'Logout failed' });
         }
-        res.redirect('/'); // Redirect to home page after logout
+        res.redirect('/');
     });
 });
 
-// Forgot Password - Email Page (GET)
+// Render the forgot password request page
 router.get('/forgot-password-email', (req, res) => {
     res.render('user/forgotPasswordEmail', { message: null, error: null });
 });
 
-// Forgot Password - Email Page (POST)
+// Handle forgot password email submission
 router.post('/forgot-password-email', (req, res) => {
     const { email } = req.body;
 
@@ -130,7 +125,6 @@ router.post('/forgot-password-email', (req, res) => {
         return res.render('user/forgotPasswordEmail', { error: 'Please enter your email', message: null });
     }
 
-    // Check if the email exists in the database
     db.get('SELECT * FROM Users WHERE email = ?', [email], (err, user) => {
         if (err) {
             return res.render('user/forgotPasswordEmail', { error: 'Database error', message: null });
@@ -144,13 +138,12 @@ router.post('/forgot-password-email', (req, res) => {
     });
 });
 
-// Forgot Password Reset (GET)
+// Render the forgot password reset page
 router.get('/forgot-password-reset', (req, res) => {
-    res.render('user/forgotPasswordReset', { error: null, message: null }); // Ensure message is passed
+    res.render('user/forgotPasswordReset', { error: null, message: null });
 });
 
-
-// Forgot Password Reset (POST)
+// Handle password reset
 router.post('/forgot-password-reset', (req, res) => {
     const { newPassword, confirmNewPassword } = req.body;
 
@@ -162,13 +155,11 @@ router.post('/forgot-password-reset', (req, res) => {
         return res.render('user/forgotPasswordReset', { error: 'Passwords do not match', message: null });
     }
 
-    // Simulate password reset (Normally, we would verify a reset token and user ID)
     bcrypt.hash(newPassword, 10, (err, hashedPassword) => {
         if (err) {
             return res.render('user/forgotPasswordReset', { error: 'Error resetting password', message: null });
         }
 
-        // Show success message
         return res.render('user/forgotPasswordReset', { error: null, message: 'Password successfully reset!' });
     });
 });
