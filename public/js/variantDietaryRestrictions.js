@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Get references to input fields, buttons, and lists for dietary restrictions
     const dietaryInput = document.getElementById("dietaryInput");
     const suggestionsBox = document.getElementById("suggestions");
     const addRestrictionBtn = document.getElementById("addRestrictionBtn");
@@ -6,10 +7,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const existingRestrictionsList = document.getElementById("existingRestrictions");
     const hiddenDietaryRestrictions = document.getElementById("hiddenDietaryRestrictions");
 
+    // Arrays to store all available dietary restrictions, user-selected ones, and removed ones
     let allRestrictions = [];
     let selectedRestrictions = [];
     let removedRestrictions = [];  
 
+    // Fetches all available dietary restrictions from the server
     async function fetchDietaryRestrictions() {
         try {
             const response = await fetch("/recipes/dietary-restrictions/all");
@@ -21,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Updates the hidden input field with the selected and removed dietary restrictions
     function updateHiddenInput() {
         hiddenDietaryRestrictions.value = JSON.stringify({
             selected: selectedRestrictions,
@@ -28,19 +32,20 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Adds event listeners to remove existing dietary restrictions
     existingRestrictionsList.querySelectorAll(".remove-existing-restriction").forEach(button => {
         button.addEventListener("click", function () {
             const restrictionItem = this.parentElement;
             const restrictionName = restrictionItem.querySelector(".restriction-text").innerText;
 
+            // Removes the restriction from the UI and marks it as removed
             restrictionItem.remove();
             removedRestrictions.push(restrictionName);
-            selectedRestrictions = selectedRestrictions.filter(item => item !== restrictionName);
             updateHiddenInput();
         });
     });
 
-    // Handle input change (show suggestions)
+    // Handles dietary restriction input and displays autocomplete suggestions
     dietaryInput.addEventListener("input", function () {
         const search = this.value.trim().toLowerCase();
         suggestionsBox.innerHTML = "";
@@ -49,12 +54,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (search.length === 0) return;
 
+        // Filter restrictions based on user input
         const filtered = allRestrictions.filter(r =>
             r.restriction_name.toLowerCase().includes(search)
         );
 
+        // If no matching restriction is found, allow the user to add a new one
         if (filtered.length === 0) {
-            // Show "Add (input)" if no match found
             const noResultDiv = document.createElement("div");
             noResultDiv.innerText = `Add "${this.value}"`;
             noResultDiv.classList.add("suggestion-item", "new-entry");
@@ -67,6 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
             suggestionsBox.appendChild(noResultDiv);
             addRestrictionBtn.disabled = false;
         } else {
+            // Show matching dietary restrictions in a dropdown
             filtered.forEach(r => {
                 const div = document.createElement("div");
                 div.innerText = r.restriction_name;
@@ -81,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        // Position dropdown correctly
+        // Position the dropdown correctly
         const parent = dietaryInput.closest(".dietary-container");
         parent.appendChild(suggestionsBox);
         suggestionsBox.style.position = "absolute";
@@ -91,21 +98,23 @@ document.addEventListener("DOMContentLoaded", function () {
         suggestionsBox.style.display = "block";
     });
 
-    // Hide suggestions when clicking outside
+    // Hides the suggestions dropdown when clicking outside
     document.addEventListener("click", function (event) {
         if (!dietaryInput.contains(event.target) && !suggestionsBox.contains(event.target)) {
             suggestionsBox.style.display = "none";
         }
     });
 
-    // Add dietary restriction to variant
+    // Adds a new dietary restriction to the selected list
     addRestrictionBtn.addEventListener("click", function () {
         const restrictionName = dietaryInput.value.trim();
         if (!restrictionName || selectedRestrictions.includes(restrictionName)) return;
 
+        // Adds the restriction to the selected list and updates the hidden input
         selectedRestrictions.push(restrictionName);
         updateHiddenInput();
 
+        // Creates a list item with a remove button
         const li = document.createElement("li");
         li.innerHTML = `${restrictionName} <button class="remove-btn">X</button>`;
         li.querySelector(".remove-btn").addEventListener("click", function () {
@@ -114,10 +123,12 @@ document.addEventListener("DOMContentLoaded", function () {
             li.remove();
         });
 
+        // Appends the new restriction to the list
         selectedRestrictionsList.appendChild(li);
         dietaryInput.value = "";
         addRestrictionBtn.disabled = true;
     });
 
+    // Fetches all dietary restrictions when the page loads
     fetchDietaryRestrictions();
 });

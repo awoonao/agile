@@ -38,7 +38,7 @@ function getUserData(userId, callback) {
 
             // Convert birthday to { day, month, year }
             if (row.birthday) {
-                const dateParts = row.birthday.split("-"); // Assuming YYYY-MM-DD format
+                const dateParts = row.birthday.split("-");
                 row.birthday = {
                     year: dateParts[0],
                     month: dateParts[1],

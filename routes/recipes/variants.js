@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-// Import the upload middleware
+// Import middleware for handling file uploads
 const { upload } = require("../../middleware/middleware");
 
 /**-------------------------------------------------------------------------------------------------------------------------------
@@ -16,7 +16,7 @@ router.post("/:id/create-variant", upload.single("image"), async (req, res) => {
     let { substitutions, title, description, servings, prep_time, cook_time, yield: recipeYield, dietary_restrictions } = req.body;
 
     try {
-        // Fetch original recipe's image
+        // Retrieve the original recipe image
         const originalRecipe = await new Promise((resolve, reject) => {
             db.get(
                 "SELECT image_url FROM Recipes WHERE recipe_id = ?",
@@ -32,10 +32,10 @@ router.post("/:id/create-variant", upload.single("image"), async (req, res) => {
             return res.status(404).send("Original recipe not found");
         }
 
-        // Determine image path (Use new image or inherit from original)
+        // Use the new uploaded image if provided, otherwise retain the original
         const imagePath = req.file ? `/images/recipes/${req.file.filename}` : originalRecipe.image_url;
 
-        // Insert new recipe (variant)
+        // Insert the new recipe variant into the database
         const newRecipeId = await new Promise((resolve, reject) => {
             db.run(
                 `INSERT INTO Recipes (user_id, title, description, image_url, servings, prep_time, cook_time, yield) 
@@ -57,7 +57,7 @@ router.post("/:id/create-variant", upload.single("image"), async (req, res) => {
             );
         });
 
-        // Copy ingredients and process substitutions
+        // Copy ingredients from the original recipe, applying substitutions where provided
         const ingredients = await new Promise((resolve, reject) => {
             db.all(
                 `SELECT ingredient_id, ingredient_name, ingredient_order 
@@ -76,34 +76,20 @@ router.post("/:id/create-variant", upload.single("image"), async (req, res) => {
             const substitution = substitutions?.ingredients?.[ingredient.ingredient_order];
             const ingredientName = substitution || ingredient.ingredient_name;
 
-            const newIngredientId = await new Promise((resolve, reject) => {
+            await new Promise((resolve, reject) => {
                 db.run(
                     `INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order) 
                      VALUES (?, ?, ?)`,
                     [newRecipeId, ingredientName, ingredient.ingredient_order],
                     function (err) {
                         if (err) reject(err);
-                        else resolve(this.lastID);
+                        else resolve();
                     }
                 );
             });
-
-            if (substitution) {
-                await new Promise((resolve, reject) => {
-                    db.run(
-                        `INSERT INTO Substitutions (recipe_id, ingredient_id, target_name, substitution, suggested_by, type) 
-                         VALUES (?, ?, ?, ?, ?, 'ingredient')`,
-                        [newRecipeId, newIngredientId, ingredient.ingredient_name, substitution, req.session.userId],
-                        (err) => {
-                            if (err) reject(err);
-                            else resolve();
-                        }
-                    );
-                });
-            }
         }
 
-        // Copy instructions and process substitutions
+        // Copy instructions from the original recipe, applying substitutions where provided
         const instructions = await new Promise((resolve, reject) => {
             db.all(
                 `SELECT instruction_id, instruction_text, step_order 
@@ -135,32 +121,33 @@ router.post("/:id/create-variant", upload.single("image"), async (req, res) => {
             });
         }
 
-        // Handle Dietary Restrictions (Inherited & User-Selected)
+        // Handle dietary restrictions, ensuring existing ones remain unless explicitly removed
         let dietary_restrictions_data = dietary_restrictions ? JSON.parse(dietary_restrictions) : { selected: [], removed: [] };
         let dietary_restrictions_selected = dietary_restrictions_data.selected;
         let dietary_restrictions_removed = dietary_restrictions_data.removed;
 
-        // Remove restrictions that were deselected in UI
-        for (const restrictionName of dietary_restrictions_removed) {
-            await new Promise((resolve, reject) => {
-                db.run(
-                    `DELETE FROM Recipe_Dietary_Restrictions 
-                     WHERE recipe_id = ? 
-                     AND restriction_id = (SELECT restriction_id FROM Dietary_Restrictions WHERE restriction_name = ?)`,
-                    [newRecipeId, restrictionName],
-                    function (err) {
-                        if (err) reject(err);
-                        else resolve();
-                    }
-                );
-            });
-        }
+        // Retrieve existing dietary restrictions from the original recipe
+        const existingRestrictions = await new Promise((resolve, reject) => {
+            db.all(
+                `SELECT Dietary_Restrictions.restriction_name 
+                 FROM Recipe_Dietary_Restrictions 
+                 JOIN Dietary_Restrictions ON Recipe_Dietary_Restrictions.restriction_id = Dietary_Restrictions.restriction_id 
+                 WHERE Recipe_Dietary_Restrictions.recipe_id = ?`,
+                [originalRecipeId],
+                (err, rows) => {
+                    if (err) reject(err);
+                    else resolve(rows.map(row => row.restriction_name));
+                }
+            );
+        });
 
-        // Insert new selected dietary restrictions
-        for (const restrictionName of dietary_restrictions_selected) {
+        // Keep all original restrictions unless they were explicitly removed
+        const finalRestrictions = [...new Set([...existingRestrictions.filter(r => !dietary_restrictions_removed.includes(r)), ...dietary_restrictions_selected])];
+
+        for (const restrictionName of finalRestrictions) {
             let restrictionId;
 
-            // Check if the restriction exists
+            // Check if the restriction already exists in the database
             const existingRestriction = await new Promise((resolve, reject) => {
                 db.get("SELECT restriction_id FROM Dietary_Restrictions WHERE restriction_name = ?", [restrictionName], (err, row) => {
                     if (err) reject(err);
@@ -171,6 +158,7 @@ router.post("/:id/create-variant", upload.single("image"), async (req, res) => {
             if (existingRestriction) {
                 restrictionId = existingRestriction.restriction_id;
             } else {
+                // Insert the new restriction if it does not exist
                 restrictionId = await new Promise((resolve, reject) => {
                     db.run(
                         "INSERT INTO Dietary_Restrictions (restriction_name) VALUES (?)",
@@ -183,7 +171,7 @@ router.post("/:id/create-variant", upload.single("image"), async (req, res) => {
                 });
             }
 
-            // Link restriction to new recipe variant
+            // Associate the dietary restriction with the new recipe variant
             await new Promise((resolve, reject) => {
                 db.run(
                     "INSERT INTO Recipe_Dietary_Restrictions (recipe_id, restriction_id) VALUES (?, ?)",
@@ -210,7 +198,7 @@ router.get("/:id/create-variant", async (req, res) => {
   const recipeId = req.params.id;
 
   try {
-      // Fetch Recipe & Author
+      // Retrieve the recipe and author details
       const recipe = await new Promise((resolve, reject) => {
           db.get(
               `SELECT Recipes.*, Users.username AS author 
@@ -229,7 +217,7 @@ router.get("/:id/create-variant", async (req, res) => {
           return res.status(404).send("Recipe not found");
       }
 
-      // Fetch Ingredients
+      // Retrieve ingredients for the recipe
       const ingredients = await new Promise((resolve, reject) => {
           db.all(
               `SELECT ingredient_name, ingredient_order 
@@ -244,7 +232,7 @@ router.get("/:id/create-variant", async (req, res) => {
           );
       });
 
-      // Fetch Instructions
+      // Retrieve instructions for the recipe
       const instructions = await new Promise((resolve, reject) => {
           db.all(
               `SELECT instruction_text, step_order 
@@ -259,7 +247,7 @@ router.get("/:id/create-variant", async (req, res) => {
           );
       });
 
-      // Fetch **Existing Dietary Restrictions** for the Recipe
+      // Retrieve existing dietary restrictions for the recipe
       const existingDietaryRestrictions = await new Promise((resolve, reject) => {
           db.all(
               `SELECT Dietary_Restrictions.restriction_name 
@@ -274,7 +262,7 @@ router.get("/:id/create-variant", async (req, res) => {
           );
       });
 
-      // Fetch **All Available Dietary Restrictions** for Suggestions
+      // Retrieve all available dietary restrictions for suggestions
       const allDietaryRestrictions = await new Promise((resolve, reject) => {
           db.all(
               `SELECT restriction_name FROM Dietary_Restrictions`,
@@ -286,38 +274,18 @@ router.get("/:id/create-variant", async (req, res) => {
           );
       });
 
-      // Render the `createVariant` page with all required data
       res.render("recipes/createVariant", { 
         recipe, 
         ingredients, 
         instructions, 
         existingDietaryRestrictions, 
-        allDietaryRestrictions: allDietaryRestrictions 
+        allDietaryRestrictions
       });    
     
   } catch (error) {
       console.error("Error fetching recipe details:", error.message);
       res.status(500).send("Internal Server Error");
   }
-});
-
-/**-------------------------------------------------------------------------------------------------------------------------------
- * @desc Fetch All Dietary Restrictions
- -------------------------------------------------------------------------------------------------------------------------------*/
- router.get("/dietary-restrictions/all", async (req, res) => {
-    try {
-        const dietaryRestrictions = await new Promise((resolve, reject) => {
-            db.all("SELECT restriction_name FROM Dietary_Restrictions", [], (err, rows) => {
-                if (err) reject(err);
-                else resolve(rows);
-            });
-        });
-
-        res.json(dietaryRestrictions);
-    } catch (error) {
-        console.error("Error fetching dietary restrictions:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
 });
 
 module.exports = router;
