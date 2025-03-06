@@ -26,11 +26,16 @@
 }
 .recipe-content{
     display: flex;
+    
     flex-wrap: wrap;
 }
 
 .recipe-content h2,.recipe-content h3{
-    margin: 10px 0px
+    margin: 10px 0px;
+    white-space: nowrap; 
+   
+    overflow: hidden;
+    text-overflow: ellipsis; 
     
 }
      
