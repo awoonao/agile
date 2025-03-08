@@ -127,19 +127,28 @@ CREATE TABLE Recipe_Dietary_Restrictions (
 
 -- password : dummyhash
 INSERT INTO Users (
-    username,
-    password_hash,
-    first_name,
-    last_name,
-    birthday,
-    email
+    username, password_hash, first_name, last_name, birthday, email, profile_picture
 ) VALUES (
-    'testuser',
-    '$2b$10$fIdByBejJWSt9TthqykSYOrWSJaSB5J/Ki8qBsGd8b2T.Q7M7NYDu', 
-    'Test',
-    'User',
-    '1999-01-01',
-    'test@example.com'
+    'john_wick',
+    '$2b$10$fIdByBejJWSt9TthqykSYOrWSJaSB5J/Ki8qBsGd8b2T.Q7M7NYDu',
+    'John',
+    'Wick',
+    '1964-09-12',
+    'john@example.com',
+    '/images/profiles/cat.jpg'
+);
+
+-- password: 1234
+INSERT INTO Users (
+    username, password_hash, first_name, last_name, birthday, email, profile_picture
+) VALUES (
+    'james_bond',
+    '$2b$10$.O4jKvxw6d2RIwA48yIOLOELPZAsO/iYciHfE51I/utLRuUV23bQC',
+    'James',
+    'Bond',
+    '1920-11-20',
+    'james@example.com',
+    '/images/profiles/cat2.jpg'
 );
 
 -- password : password
@@ -156,5 +165,261 @@ INSERT INTO Dietary_Restrictions (restriction_name) VALUES
 ('Keto'),
 ('Halal'),
 ('Kosher');
+
+-- Recipe 1: Chicken Noodle Soup
+INSERT INTO Recipes (user_id, title, description, image_url, servings, prep_time, yield, cook_time)
+VALUES (1, 'Chicken Noodle Soup', 'A comforting and flavorful chicken noodle soup made with tender chicken, vegetables, and egg noodles in a savory broth.', 
+'/images/recipes/Noodle.jpg', '6', '15 minutes', '1.5 cups of soup', '30 minutes');
+
+-- Recipe 2: Ramen
+
+INSERT INTO Recipes (user_id, title, description, image_url, servings, prep_time, yield, cook_time)
+VALUES (2, 'Ramen', 'A comforting and savory bowl of Japanese ramen with a rich broth, tender noodles, and flavorful toppings.', 
+'/images/recipes/Ramen.jpg', '2', '10 minutes', '1 bowl', '15 minutes');
+
+-- Recipe 3: Chinese Fried Noodles
+
+INSERT INTO Recipes (user_id, title, description, image_url, servings, prep_time, yield, cook_time)
+VALUES (1, 'Chinese Fried Noodles', 'Delicious stir-fried Chinese noodles with vegetables and a savory soy-based sauce.', 
+'/images/recipes/FriedNoodles.jpg', '4', '10 minutes', '1 plate', '15 minutes');
+
+--  Recipe 4: Spaghetti Bolognese
+
+INSERT INTO Recipes (user_id, title, description, image_url, servings, prep_time, yield, cook_time)
+VALUES (2, 'Spaghetti Bolognese', 'A classic Italian pasta dish with a rich meat and tomato sauce.', 
+'/images/recipes/Spag.jpg', '4', '15 minutes', '1 plate', '45 minutes');
+
+-- Ingredients for Chicken Noodle Soup
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (1, '2 tablespoons olive oil or butter', 1);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (1, '1 medium onion, diced', 2);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (1, '3 carrots, peeled and sliced', 3);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (1, '2 celery stalks, sliced', 4);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (1, '3 cloves garlic, minced', 5);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (1, '8 cups chicken broth', 6);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (1, '2 bay leaves', 7);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (1, '1 teaspoon dried thyme', 8);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (1, '1 teaspoon dried parsley', 9);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (1, '½ teaspoon black pepper', 10);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (1, '½ teaspoon salt', 11);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (1, '1 teaspoon lemon juice (optional)', 12);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (1, '2 cups cooked and shredded chicken', 13);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (1, '6 ounces egg noodles', 14);
+
+-- Ingredients for Ramen
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (2, '2 cups chicken broth', 1);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (2, '1 pack ramen noodles', 2);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (2, '1 boiled egg, halved', 3);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (2, '2 green onions, sliced', 4);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (2, '1 tablespoon soy sauce', 5);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (2, '1 teaspoon sesame oil', 6);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (2, '1 sheet nori (seaweed)', 7);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (2, '1/2 teaspoon chili paste (optional)', 8);
+
+-- Ingredients for Chinese Fried Noodles
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (3, '8 oz egg noodles', 1);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (3, '1 tablespoon vegetable oil', 2);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (3, '1/2 cup bell peppers, sliced', 3);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (3, '1/2 cup carrots, julienned', 4);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (3, '1/2 cup cabbage, shredded', 5);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (3, '2 tablespoons soy sauce', 6);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (3, '1 teaspoon oyster sauce', 7);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (3, '1/2 teaspoon sesame oil', 8);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (3, '1/2 teaspoon sugar', 9);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (3, 'Green onions for garnish', 10);
+
+-- Ingredients for Spaghetti
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (4, '8 oz spaghetti', 1);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (4, '1 tablespoon olive oil', 2);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (4, '1 medium onion, diced', 3);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (4, '2 cloves garlic, minced', 4);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (4, '1/2 pound ground beef', 5);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (4, '1 can (14 oz) crushed tomatoes', 6);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (4, '1 tablespoon tomato paste', 7);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (4, '1 teaspoon dried basil', 8);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (4, '1 teaspoon dried oregano', 9);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (4, 'Salt and pepper to taste', 10);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (4, 'Grated parmesan cheese (optional)', 11);
+
+-- Steps for Chicken Noodle Soup
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (1, 'Heat olive oil or butter over medium heat. Add onion, carrots, and celery. Sauté for about 5 minutes.', 1);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (1, 'Add minced garlic and cook for 30 seconds until fragrant.', 2);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (1, 'Add chicken broth, bay leaves, thyme, parsley, black pepper, and salt. Bring to a boil.', 3);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (1, 'Reduce heat and simmer for 15–20 minutes until vegetables are tender.', 4);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (1, 'Add shredded chicken and noodles. Cook for another 8–10 minutes until noodles are tender.', 5);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (1, 'Remove bay leaves and add lemon juice (optional).', 6);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (1, 'Serve hot and garnish with fresh parsley.', 7);
+
+-- Instructions for Ramen
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (2, 'Bring chicken broth to a boil in a pot.', 1);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (2, 'Add ramen noodles and cook according to package instructions.', 2);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (2, 'Stir in soy sauce and sesame oil.', 3);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (2, 'Transfer to a bowl and top with boiled egg, green onions, nori, and chili paste.', 4);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (2, 'Serve hot and enjoy.', 5);
+
+-- Instructions for Chinese Fried Noodles
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (3, 'Boil egg noodles according to package instructions and set aside.', 1);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (3, 'Heat vegetable oil in a wok over high heat.', 2);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (3, 'Add bell peppers, carrots, and cabbage. Stir-fry for 2 minutes.', 3);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (3, 'Add the noodles and mix well.', 4);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (3, 'Add soy sauce, oyster sauce, sesame oil, and sugar. Stir until combined.', 5);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (3, 'Garnish with green onions and serve hot.', 6);
+
+-- Instructions for Spaghetti
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (4, 'Boil spaghetti according to package instructions.', 1);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (4, 'Heat olive oil in a large pan over medium heat.', 2);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (4, 'Add onion and garlic. Sauté until soft.', 3);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (4, 'Add ground beef. Cook until browned.', 4);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (4, 'Add crushed tomatoes, tomato paste, basil, oregano, salt, and pepper.', 5);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (4, 'Simmer for 20–25 minutes until sauce thickens.', 6);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (4, 'Serve sauce over spaghetti. Top with parmesan if desired.', 7);
+
+-- Comments
+
+INSERT INTO Comments (recipe_id, user_id, content)
+VALUES (1, 2, 'Delicious and comforting!');
+
+INSERT INTO Comments (recipe_id, user_id, content)
+VALUES (2, 1, 'Loved the broth and noodles!');
+
+INSERT INTO Comments (recipe_id, user_id, content)
+VALUES (3, 2, 'Perfect seasoning and texture.');
+
+INSERT INTO Comments (recipe_id, user_id, content)
+VALUES (4, 1, 'Great balance of sauce and pasta.');
 
 COMMIT;
