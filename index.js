@@ -1,6 +1,6 @@
 /**
 * index.js
-* This is your main app entry point
+
 */
 
 const express = require('express');
@@ -13,10 +13,10 @@ const port = 3000;
 
 // Set up session middleware
 app.use(session({
-    secret: 'your_secret_key', // Change this to a secure random value
+    secret: 'your_secret_key', 
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } // Set to true if using HTTPS
+    cookie: { secure: false }
 }));
 
 // Middleware to make session user ID available in templates
@@ -25,10 +25,8 @@ app.use((req, res, next) => {
     next();
 });
 
-
 // bodyParser middleware
 app.use(bodyParser.json());
-
 
 // Configure body parser
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -16,9 +16,8 @@
   <!-- Common css -->
   <link rel="stylesheet" type="text/css" href="/css/main.css" />
 
-
-<!-- font style -->
-<link href='https://fonts.googleapis.com/css?family=Young Serif' rel='stylesheet'>
+  <!-- font style -->
+  <link href='https://fonts.googleapis.com/css?family=Young Serif' rel='stylesheet'>
 
   <!-- createVariant.css -->
   <link rel="stylesheet" type="text/css" href="/css/recipeVariant.css" />
@@ -90,35 +89,36 @@
   <main>
     <h1>Create Variant for "<%= recipe.title %>"</h1>
 
-      <form class="recipe-container" action="/recipes/<%= recipe.recipe_id %>/create-variant" method="POST" enctype="multipart/form-data">
-        <!-- Recipe Title -->
-         <div class="title">
-          <label for="title">Title:</label>
-         
-         <input type="text" id="title" name="title" value="Variant of <%= recipe.title %>" required />
-        </div>
-  
-        <!-- Recipe Description -->
-        <div class="description">
-          <label for="description">Description:</label>
-          <textarea id="description" name="description"><%= recipe.description %></textarea>
-        </div>
+    <form class="recipe-container" action="/recipes/<%= recipe.recipe_id %>/create-variant" method="POST"
+      enctype="multipart/form-data">
+      <!-- Recipe Title -->
+      <div class="title">
+        <label for="title">Title:</label>
 
-        <div class="image">
-          <label for="image">Photo Here:</label><br>
-          <div class="image-container">
-            <!-- Image Preview -->
-            <!-- <a href="https://www.flaticon.com/free-icons/image-placeholder" title="image placeholder icons">Image placeholder icons created by Graphic Nehar - Flaticon</a> -->
-            <img id="imagePreview" src="<%= recipe.image_url %>" alt="Preview" />
-            <!-- Recipe Image -->
-            <input type="file" name="image" accept="image/*" id="imageUpload" />
+        <input type="text" id="title" name="title" value="Variant of <%= recipe.title %>" required />
+      </div>
 
-          </div>
+      <!-- Recipe Description -->
+      <div class="description">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"><%= recipe.description %></textarea>
+      </div>
+
+      <div class="image">
+        <label for="image">Photo Here:</label><br>
+        <div class="image-container">
+          <!-- Image Preview -->
+          <!-- <a href="https://www.flaticon.com/free-icons/image-placeholder" title="image placeholder icons">Image placeholder icons created by Graphic Nehar - Flaticon</a> -->
+          <img id="imagePreview" src="<%= recipe.image_url %>" alt="Preview" />
+          <!-- Recipe Image -->
+          <input type="file" name="image" accept="image/*" id="imageUpload" />
+
         </div>
+      </div>
 
-      
-        <!-- Ingredients and Instructions sections remain the same -->
-        <div class="ingredient">
+
+      <!-- Ingredients and Instructions sections remain the same -->
+      <div class="ingredient">
         <label>Ingredients</label>
         <% ingredients.forEach((ingredient, index)=> { %>
           <div class="substitution-container">
@@ -130,10 +130,10 @@
                 placeholder="Enter substitution" class="substitution-input hidden" />
           </div>
           <% }); %>
-        </div>
+      </div>
 
-        <!-- Instructions -->
-        <div class="instruction">
+      <!-- Instructions -->
+      <div class="instruction">
         <label>Instructions</label>
         <% instructions.forEach((instruction, index)=> { %>
           <div class="substitution-container">
@@ -145,102 +145,104 @@
                 placeholder="Enter substitution" class="substitution-input hidden" />
           </div>
           <% }); %>
+      </div>
+
+      <div class="details">
+        <!-- servings -->
+        <label for="servings">Servings:</label>
+        <input type="text" id="servings" name="servings" value="<%= recipe.servings %>" required>
+
+        <!-- prep time -->
+        <label for="prep_time">Prep Time:</label>
+        <input type="text" id="prep_time" name="prep_time" value="<%= recipe.prep_time %>" required>
+        <!-- yield -->
+        <label for="yield">Yield:</label>
+        <input type="text" id="yield" name="yield" value="<%= recipe.yield %>" required />
+        <!-- cook time -->
+        <label for="cook_time">Cook Time:</label>
+        <input type="text" id="cook_time" name="cook_time" value="<%= recipe.cook_time %>" required />
+      </div>
+
+      <!-- Add Dietary Restrictions -->
+      <div class="dietary-section full-width">
+        <h4>Add Dietary Restrictions:</h4>
+        <div class="dietary-container">
+          <input type="text" id="dietaryInput" placeholder="Type a dietary restriction..." autocomplete="off" />
+          <div id="suggestions" class="suggestions-box"></div>
         </div>
+        <button type="button" id="addRestrictionBtn" disabled>Add</button>
+      </div>
 
-        <div class="details">
-          <!-- servings -->
-          <label for="servings">Servings:</label>
-          <input type="text" id="servings" name="servings" value="<%= recipe.servings %>" required>
-  
-          <!-- prep time -->
-          <label for="prep_time">Prep Time:</label>
-          <input type="text" id="prep_time" name="prep_time" value="<%= recipe.prep_time %>" required>
-          <!-- yield -->
-          <label for="yield">Yield:</label>
-          <input type="text" id="yield" name="yield" value="<%= recipe.yield %>" required />
-          <!-- cook time -->
-          <label for="cook_time">Cook Time:</label>
-          <input type="text" id="cook_time" name="cook_time" value="<%= recipe.cook_time %>" required />
-        </div>
+      <br>
 
-        <!-- Add Dietary Restrictions -->
-        <div class="dietary-section full-width">
-          <h4>Add Dietary Restrictions:</h4>
-          <div class="dietary-container">
-            <input type="text" id="dietaryInput" placeholder="Type a dietary restriction..." autocomplete="off"/>
-            <div id="suggestions" class="suggestions-box"></div>
-          </div>
-          <button type="button" id="addRestrictionBtn" disabled>Add</button>
-        </div>
+      <!-- Wrapper -->
+      <div class="dietary-container-group">
 
-        <br>
-
-        <!-- Wrapper -->
-        <div class="dietary-container-group">
-          
-          <!-- Existing Restrictions -->
-          <div class="dietary-section half-width">
-            <h4>Existing Restrictions:</h4>
-            <ul id="existingRestrictions">
-              <% if (existingDietaryRestrictions.length > 0) { %>
-                <% existingDietaryRestrictions.forEach(restriction => { %>
-                  <li>
-                    <span class="restriction-text"><%= restriction %></span>
-                    <button type="button" class="remove-existing-restriction">X</button>
-                  </li>
+        <!-- Existing Restrictions -->
+        <div class="dietary-section half-width">
+          <h4>Existing Restrictions:</h4>
+          <ul id="existingRestrictions">
+            <% if (existingDietaryRestrictions.length> 0) { %>
+              <% existingDietaryRestrictions.forEach(restriction=> { %>
+                <li>
+                  <span class="restriction-text">
+                    <%= restriction %>
+                  </span>
+                  <button type="button" class="remove-existing-restriction">X</button>
+                </li>
                 <% }) %>
-              <% } else { %>
-                <p>No dietary restrictions.</p>
-              <% } %>
-            </ul>
-          </div>
-
-          <!-- Selected Restrictions -->
-          <div class="dietary-section half-width">
-            <h4>Selected Restrictions:</h4>
-            <ul id="selectedRestrictions"></ul>
-          </div>
-
+                  <% } else { %>
+                    <p>No dietary restrictions.</p>
+                    <% } %>
+          </ul>
         </div>
 
-        <input type="hidden" name="dietary_restrictions" id="hiddenDietaryRestrictions" value="">
-        
-        <br>
-        <button type="submit">Save Variant</button>
-        <button type="button" onclick="history.back()">Back</button>
-      </form>
+        <!-- Selected Restrictions -->
+        <div class="dietary-section half-width">
+          <h4>Selected Restrictions:</h4>
+          <ul id="selectedRestrictions"></ul>
+        </div>
 
-             
+      </div>
+
+      <input type="hidden" name="dietary_restrictions" id="hiddenDietaryRestrictions" value="">
+
+      <br>
+      <button type="submit">Save Variant</button>
+      <button type="button" onclick="history.back()">Back</button>
+    </form>
+
+
     </form>
   </main>
- <!-- FOOTER -->
- <footer class="footer mt-5 py-3">
-  <div class="container">
-    <div class="row text-center text-md-left">
-      <!-- Left Section: Follow Us -->
-      <div class="col-md-4">
-        <h6><u>Follow Us</u></h6>
-        <a href="https://facebook.com" target="_blank">
-          <img src="/images/facebookicon.png" alt="Facebook" width="24" />
-        </a>
-        <a href="https://instagram.com" target="_blank">
-          <img src="/images/instaicon.png" alt="Instagram" width="24" />
-        </a>
-      </div>
+  <!-- FOOTER -->
+  <footer class="footer mt-5 py-3">
+    <div class="container">
+      <div class="row text-center text-md-left">
+        <!-- Left Section: Follow Us -->
+        <div class="col-md-4">
+          <h6><u>Follow Us</u></h6>
+          <a href="https://facebook.com" target="_blank">
+            <img src="/images/facebookicon.png" alt="Facebook" width="24" />
+          </a>
+          <a href="https://instagram.com" target="_blank">
+            <img src="/images/instaicon.png" alt="Instagram" width="24" />
+          </a>
+        </div>
 
-      <!-- Center Section: Copyright -->
-      <div class="col-md-4 text-md-center">
-        <p>© 2024 Swaply. All Rights Reserved.</p>
-      </div>
+        <!-- Center Section: Copyright -->
+        <div class="col-md-4 text-md-center">
+          <p>© 2024 Swaply. All Rights Reserved.</p>
+        </div>
 
-      <!-- Right Section: Privacy Policy & Terms -->
-      <div class="col-md-4 text-md-right">
-        <a href="/privacy-policy" class="mr-3">Privacy Policy</a>
-        <a href="/terms-and-conditions">Terms and Conditions</a>
+        <!-- Right Section: Privacy Policy & Terms -->
+        <div class="col-md-4 text-md-right">
+          <a href="/privacy-policy" class="mr-3">Privacy Policy</a>
+          <a href="/terms-and-conditions">Terms and Conditions</a>
+        </div>
       </div>
     </div>
-  </div>
-</footer>
+  </footer>
 </body>
 
 </html>

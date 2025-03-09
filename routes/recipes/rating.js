@@ -3,7 +3,8 @@ const router = express.Router();
 
 /**-------------------------------------------------------------------------------------------------------------------------------
  * @desc Rating System - Handle taste and appearance ratings with average calculation
- -------------------------------------------------------------------------------------------------------------------------------*/ // Route to handle taste rating submissions
+ -------------------------------------------------------------------------------------------------------------------------------*/ 
+ // Route to handle taste rating submissions
 router.post("/:id/rate/taste", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).json({ error: "Must be logged in to rate recipes" });

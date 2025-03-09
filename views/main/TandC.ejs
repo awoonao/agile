@@ -1,63 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Bootstrap -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="/css/main.css" />
-    <title>Terms and Conditions</title>
-  </head>
-  <body>
-    <header>
-      <nav class="navbar navbar-expand-xl nav-container">
-        <!-- Brand -->
-        <a class="navbar-brand" href="/">
-          <img src="/images/logo.png" alt="logo" />
-        </a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#collapsibleNavbar"
-        >
-          <span class="navbar-toggler-icon">
-            <img src="/images/hamburger-menu.png" alt="hamburger-menu" />
-          </span>
-        </button>
+  <!-- Common CSS -->
+  <link rel="stylesheet" type="text/css" href="/css/main.css" />
+  <title>Terms and Conditions</title>
+</head>
 
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-          <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="/recipes">Recipes</a></li>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-xl nav-container">
+      <!-- Brand -->
+      <a class="navbar-brand" href="/">
+        <img src="/images/logo.png" alt="logo" />
+      </a>
 
-            <li class="nav-item dropdown">
-              <% if (userId) { %>
-                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-                  My Account
-                </a>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="/recipes/create-recipe">Create New Recipe</a>
-                  <a class="dropdown-item" href="/profile">My Profile</a>
-                  <a class="dropdown-item" href="/profile/edit-profile">My Recipes</a>
-                  <a class="dropdown-item" href="/profile/edit-profile">Saved Recipes</a>
-                  <form action="/users/logout" method="POST">
-                    <button class="dropdown-item" type="submit">Logout</button>
-                  </form>
-                </div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon">
+          <img src="/images/hamburger-menu.png" alt="hamburger-menu" />
+        </span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="/recipes">Recipes</a></li>
+
+          <li class="nav-item dropdown">
+            <% if (userId) { %>
+              <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                My Account
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/recipes/create-recipe">Create New Recipe</a>
+                <a class="dropdown-item" href="/profile">My Profile</a>
+                <a class="dropdown-item" href="/profile/edit-profile">My Recipes</a>
+                <a class="dropdown-item" href="/profile/edit-profile">Saved Recipes</a>
+                <form action="/users/logout" method="POST">
+                  <button class="dropdown-item" type="submit">Logout</button>
+                </form>
+              </div>
               <% } else { %>
-                <li class="nav-item">
-                  <a class="nav-link" href="/users/login">Login / Signup</a>
-                </li>
-              <% } %>
+          <li class="nav-item">
+            <a class="nav-link" href="/users/login">Login / Signup</a>
+          </li>
+          <% } %>
             </li>
 
             <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
@@ -67,95 +61,101 @@
                 <input class="form-control mr-sm-2" type="text" placeholder="Search" name="query" />
               </form>
             </li>
-          </ul>
-        </div>
-      </nav>
-    </header>
-
-    <main class="container mt-5">
-      <h2 class="text-center">Terms and Conditions</h2>
-      <hr />
-
-      <section>
-        <h4>1. Introduction</h4>
-        <p>
-          Welcome to Swaply. By accessing and using our website, you agree to comply with and be bound by these Terms and Conditions.
-        </p>
-      </section>
-
-      <section>
-        <h4>2. User Responsibilities</h4>
-        <p>When using Swaply, you agree to:</p>
-        <ul>
-          <li>Provide accurate information when creating an account.</li>
-          <li>Not use the website for any unlawful activities.</li>
-          <li>Respect other users and avoid inappropriate content.</li>
         </ul>
-      </section>
+      </div>
+    </nav>
+  </header>
 
-      <section>
-        <h4>3. Content Ownership</h4>
-        <p>
-          Any content you submit (recipes, comments, etc.) remains your intellectual property. However, by submitting content, you grant Swaply a license to display and share it on our platform.
-        </p>
-      </section>
+  <main class="container mt-5">
+    <h2 class="text-center">Terms and Conditions</h2>
+    <hr />
 
-      <section>
-        <h4>4. Account Termination</h4>
-        <p>
-          We reserve the right to suspend or delete accounts that violate our policies, including but not limited to hate speech, harassment, or fraudulent activity.
-        </p>
-      </section>
+    <section>
+      <h4>1. Introduction</h4>
+      <p>
+        Welcome to Swaply. By accessing and using our website, you agree to comply with and be bound by these Terms and
+        Conditions.
+      </p>
+    </section>
 
-      <section>
-        <h4>5. Limitation of Liability</h4>
-        <p>
-          Swaply is not responsible for any damages or losses resulting from your use of our website, including but not limited to errors, omissions, or security breaches.
-        </p>
-      </section>
+    <section>
+      <h4>2. User Responsibilities</h4>
+      <p>When using Swaply, you agree to:</p>
+      <ul>
+        <li>Provide accurate information when creating an account.</li>
+        <li>Not use the website for any unlawful activities.</li>
+        <li>Respect other users and avoid inappropriate content.</li>
+      </ul>
+    </section>
 
-      <section>
-        <h4>6. Changes to Terms</h4>
-        <p>
-          We may update these Terms and Conditions periodically. It is your responsibility to review them regularly.
-        </p>
-      </section>
+    <section>
+      <h4>3. Content Ownership</h4>
+      <p>
+        Any content you submit (recipes, comments, etc.) remains your intellectual property. However, by submitting
+        content, you grant Swaply a license to display and share it on our platform.
+      </p>
+    </section>
 
-      <section>
-        <h4>7. Contact Us</h4>
-        <p>
-          If you have any questions about these Terms and Conditions, please contact us at <a href="mailto:support@swaply.com">support@swaply.com</a>.
-        </p>
-      </section>
-    </main>
+    <section>
+      <h4>4. Account Termination</h4>
+      <p>
+        We reserve the right to suspend or delete accounts that violate our policies, including but not limited to hate
+        speech, harassment, or fraudulent activity.
+      </p>
+    </section>
 
-    <!-- FOOTER -->
-    <footer class="footer mt-5 py-3">
-      <div class="container">
-        <div class="row text-center text-md-left">
-          <!-- Left Section: Follow Us -->
-          <div class="col-md-4">
-            <h6><u>Follow Us</u></h6>
-            <a href="https://facebook.com" target="_blank">
-              <img src="/images/facebookicon.png" alt="Facebook" width="24" />
-            </a>
-            <a href="https://instagram.com" target="_blank">
-              <img src="/images/instaicon.png" alt="Instagram" width="24" />
-            </a>
-          </div>
+    <section>
+      <h4>5. Limitation of Liability</h4>
+      <p>
+        Swaply is not responsible for any damages or losses resulting from your use of our website, including but not
+        limited to errors, omissions, or security breaches.
+      </p>
+    </section>
 
-          <!-- Center Section: Copyright -->
-          <div class="col-md-4 text-md-center">
-            <p>© 2024 Swaply. All Rights Reserved.</p>
-          </div>
+    <section>
+      <h4>6. Changes to Terms</h4>
+      <p>
+        We may update these Terms and Conditions periodically. It is your responsibility to review them regularly.
+      </p>
+    </section>
 
-          <!-- Right Section: Privacy Policy & Terms -->
-          <div class="col-md-4 text-md-right">
-            <a href="/privacy-policy" class="mr-3">Privacy Policy</a>
-            <a href="/terms-and-conditions">Terms and Conditions</a>
-          </div>
+    <section>
+      <h4>7. Contact Us</h4>
+      <p>
+        If you have any questions about these Terms and Conditions, please contact us at <a
+          href="mailto:support@swaply.com">support@swaply.com</a>.
+      </p>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer mt-5 py-3">
+    <div class="container">
+      <div class="row text-center text-md-left">
+        <!-- Left Section: Follow Us -->
+        <div class="col-md-4">
+          <h6><u>Follow Us</u></h6>
+          <a href="https://facebook.com" target="_blank">
+            <img src="/images/facebookicon.png" alt="Facebook" width="24" />
+          </a>
+          <a href="https://instagram.com" target="_blank">
+            <img src="/images/instaicon.png" alt="Instagram" width="24" />
+          </a>
+        </div>
+
+        <!-- Center Section: Copyright -->
+        <div class="col-md-4 text-md-center">
+          <p>© 2024 Swaply. All Rights Reserved.</p>
+        </div>
+
+        <!-- Right Section: Privacy Policy & Terms -->
+        <div class="col-md-4 text-md-right">
+          <a href="/privacy-policy" class="mr-3">Privacy Policy</a>
+          <a href="/terms-and-conditions">Terms and Conditions</a>
         </div>
       </div>
-    </footer>
-  </body>
+    </div>
+  </footer>
+</body>
+
 </html>
