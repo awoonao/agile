@@ -28,6 +28,7 @@ Swaply is a recipe-sharing platform designed to help users discover, create, and
  #### Optional
  
 ```npm run clean-db``` to delete the database on Mac or Linux before rebuilding it for a fresh start
+
 ```npm run clean-db-win``` to delete the database on Windows before rebuilding it for a fresh start
 
 ## Key Routes
