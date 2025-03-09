@@ -28,10 +28,19 @@ Swaply is a recipe-sharing platform designed to help users discover, create, and
  #### Optional
  
 ```npm run clean-db``` to delete the database on Mac or Linux before rebuilding it for a fresh start
+
 ```npm run clean-db-win``` to delete the database on Windows before rebuilding it for a fresh start
 
 ## Key Routes
+Here are some important routes in the application:
 
+- Homepage: http://localhost:3000/
+- Main Recipe: http://localhost:3000/recipes
+- Login: http://localhost:3000/users/login
+- Sign Up: http://localhost:3000/users/signup
+- Forgot Password: http://localhost:3000/users/forgot-password-email
+- reate Recipe: http://localhost:3000/recipes/create-recipe
+- About Us: http://localhost:3000/about
 
 
 ## Folder Structure 
