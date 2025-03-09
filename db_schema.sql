@@ -499,38 +499,22 @@ VALUES (5, 2, 'Creamy and full of flavor! The mushrooms were cooked perfectly.')
 -- Ratings for Recipe 1: Chicken Noodle Soup
 -- User 2 (James Bond) rates Recipe 1
 INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at)
-VALUES (2, 1, 4, 5, CURRENT_TIMESTAMP);
-
--- User 3 (John Doe) rates Recipe 1
-INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at)
-VALUES (3, 1, 5, 4, CURRENT_TIMESTAMP);
+VALUES (2, 1, 3, 4, CURRENT_TIMESTAMP);
 
 -- Ratings for Recipe 2: Ramen
 -- User 1 (John Wick) rates Recipe 2
 INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at)
-VALUES (1, 2, 5, 5, CURRENT_TIMESTAMP);
-
--- User 3 (John Doe) rates Recipe 2
-INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at)
-VALUES (3, 2, 4, 5, CURRENT_TIMESTAMP);
+VALUES (1, 2, 5, 4, CURRENT_TIMESTAMP);
 
 -- Ratings for Recipe 3: Chinese Fried Noodles
 -- User 2 (James Bond) rates Recipe 3
 INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at)
-VALUES (2, 3, 3, 4, CURRENT_TIMESTAMP);
-
--- User 3 (John Doe) rates Recipe 3
-INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at) 
-VALUES (3, 3, 4, 3, CURRENT_TIMESTAMP);
+VALUES (2, 3, 4, 3, CURRENT_TIMESTAMP);
 
 -- Ratings for Recipe 4: Spaghetti Bolognese
 -- User 1 (John Wick) rates Recipe 4
 INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at)
-VALUES (1, 4, 4, 4, CURRENT_TIMESTAMP);
-
--- User 3 (John Doe) rates Recipe 4
-INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at)
-VALUES (3, 4, 5, 3, CURRENT_TIMESTAMP);
+VALUES (1, 4, 3, 5, CURRENT_TIMESTAMP);
 
 -- Update average ratings for all recipes
 -- Recipe 1: Chicken Noodle Soup
