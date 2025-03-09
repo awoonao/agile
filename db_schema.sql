@@ -136,7 +136,7 @@ INSERT INTO Users (
     'Wick',
     '1964-09-12',
     'john@example.com',
-    '/images/profiles/cat.jpg'
+    '/images/users/cat.jpg'
 );
 
 -- username: james_bond
@@ -150,7 +150,7 @@ INSERT INTO Users (
     'Bond',
     '1920-11-20',
     'james@example.com',
-    '/images/profiles/cat2.jpg'
+    '/images/users/cat2.jpg'
 );
 
 -- username: johndoe
