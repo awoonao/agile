@@ -189,6 +189,11 @@ INSERT INTO Recipes (user_id, title, description, image_url, servings, prep_time
 VALUES (2, 'Spaghetti Bolognese', 'A classic Italian pasta dish with a rich meat and tomato sauce.', 
 '/images/recipes/Spag.jpg', '4', '15 minutes', '1 plate', '45 minutes');
 
+-- Recipe 5: Mushroom Risotto
+INSERT INTO Recipes (user_id, title, description, image_url, servings, prep_time, yield, cook_time)
+VALUES (1, 'Mushroom Risotto', 'A creamy and delicious mushroom risotto with Arborio rice, white wine, and parmesan cheese.', 
+'/images/recipes/mushroom.jpg', '4', '10 minutes', '1 plate', '30 minutes');
+
 -- Ingredients for Chicken Noodle Soup
 INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
 VALUES (1, '2 tablespoons olive oil or butter', 1);
@@ -325,7 +330,41 @@ VALUES (4, 'Salt and pepper to taste', 10);
 INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
 VALUES (4, 'Grated parmesan cheese (optional)', 11);
 
--- Steps for Chicken Noodle Soup
+-- Ingredients for Mushroom Risotto
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (5, '2 tablespoons olive oil', 1);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (5, '1 small onion, finely chopped', 2);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (5, '2 cloves garlic, minced', 3);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (5, '1 cup Arborio rice', 4);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (5, '1/2 cup dry white wine', 5);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (5, '4 cups chicken or vegetable broth, warmed', 6);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (5, '1 cup mushrooms, sliced', 7);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (5, '1/2 cup grated Parmesan cheese', 8);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (5, '2 tablespoons butter', 9);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (5, 'Salt and pepper to taste', 10);
+
+INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order)
+VALUES (5, 'Fresh parsley, chopped (for garnish)', 11);
+
+-- Instructions for Chicken Noodle Soup
 
 INSERT INTO Instructions (recipe_id, instruction_text, step_order)
 VALUES (1, 'Heat olive oil or butter over medium heat. Add onion, carrots, and celery. Sauté for about 5 minutes.', 1);
@@ -408,6 +447,34 @@ VALUES (4, 'Simmer for 20–25 minutes until sauce thickens.', 6);
 INSERT INTO Instructions (recipe_id, instruction_text, step_order)
 VALUES (4, 'Serve sauce over spaghetti. Top with parmesan if desired.', 7);
 
+-- Instructions for Mushroom Risotto
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (5, 'Heat olive oil in a large pan over medium heat.', 1);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (5, 'Add the chopped onion and garlic, sauté until softened.', 2);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (5, 'Add the Arborio rice and cook for 2 minutes, stirring frequently.', 3);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (5, 'Pour in the white wine and cook until it has evaporated.', 4);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (5, 'Add the warm broth, one ladle at a time, stirring continuously until absorbed.', 5);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (5, 'Repeat until the rice is tender and creamy (about 20 minutes).', 6);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (5, 'Stir in the mushrooms and cook for another 5 minutes.', 7);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (5, 'Add Parmesan cheese, butter, salt, and pepper to taste.', 8);
+
+INSERT INTO Instructions (recipe_id, instruction_text, step_order)
+VALUES (5, 'Garnish with fresh parsley and serve hot.', 9);
+
 -- Comments
 
 INSERT INTO Comments (recipe_id, user_id, content)
@@ -421,5 +488,8 @@ VALUES (3, 2, 'Perfect seasoning and texture.');
 
 INSERT INTO Comments (recipe_id, user_id, content)
 VALUES (4, 1, 'Great balance of sauce and pasta.');
+
+INSERT INTO Comments (recipe_id, user_id, content)
+VALUES (5, 2, 'Creamy and full of flavor! The mushrooms were cooked perfectly.');
 
 COMMIT;
