@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,13 +13,13 @@
   <!-- Common css -->
   <link rel="stylesheet" type="text/css" href="/css/main.css" />
 
-
-<!-- font style -->
-<link href='https://fonts.googleapis.com/css?family=Young Serif' rel='stylesheet'>
+  <!-- font style -->
+  <link href='https://fonts.googleapis.com/css?family=Young Serif' rel='stylesheet'>
 
   <link rel="stylesheet" type="text/css" href="/css/signup.css" />
   <title>Sign Up</title>
 </head>
+
 <body>
   <header>
     <nav class="navbar navbar-expand-xl nav-container">
@@ -52,19 +53,19 @@
                   <button class="dropdown-item" type="submit">Logout</button>
                 </form>
               </div>
-            <% } else { %>
-              <li class="nav-item">
-                <a class="nav-link" href="/users/login">Login / Signup</a>
-              </li>
-            <% } %>
+              <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/users/login">Login / Signup</a>
           </li>
+          <% } %>
+            </li>
 
-          <li class="nav-item"><a class="nav-link" href="/about">About us</a></li>
-          <li>
-            <form class="form-inline" action="/action_page.php">
-              <input class="form-control mr-sm-2" type="text" placeholder="Search" />
-            </form>
-          </li>
+            <li class="nav-item"><a class="nav-link" href="/about">About us</a></li>
+            <li>
+              <form class="form-inline" action="/action_page.php">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" />
+              </form>
+            </li>
         </ul>
       </div>
     </nav>
@@ -80,84 +81,95 @@
             </div>
             <div class="card-body">
               <% if (error) { %>
-                <div class="alert alert-danger"><%= error %></div>
-              <% } %>
-
-              <form action="/users/signup" method="POST" enctype="multipart/form-data">
-                <div class="form-row">
-                  <div class="form-group col-md-6">
-                    <input type="text" class="form-control" name="first_name" placeholder="First Name" required />
-                  </div>
-                  <div class="form-group col-md-6">
-                    <input type="text" class="form-control" name="last_name" placeholder="Last Name" required />
-                  </div>
+                <div class="alert alert-danger">
+                  <%= error %>
                 </div>
+                <% } %>
 
-                <div class="form-group">
-                  <input type="text" class="form-control" name="username" placeholder="Username" required />
-                </div>
+                  <form action="/users/signup" method="POST" enctype="multipart/form-data">
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <input type="text" class="form-control" name="first_name" placeholder="First Name" required />
+                      </div>
+                      <div class="form-group col-md-6">
+                        <input type="text" class="form-control" name="last_name" placeholder="Last Name" required />
+                      </div>
+                    </div>
 
-                <label>Your Birthday:</label>
-                <div class="form-row">
-                  <div class="form-group col-md-4">
-                    <select class="form-control" name="day" required>
-                      <option value="">Day</option>
-                      <% for(let i=1; i<=31; i++) { %>
-                        <option value="<%= i %>"><%= i %></option>
-                      <% } %>
-                    </select>
-                  </div>
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="username" placeholder="Username" required />
+                    </div>
 
-                  <div class="form-group col-md-4">
-                    <select class="form-control" name="month" required>
-                      <option value="">Month</option>
-                      <% ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].forEach((month, index) => { %>
-                        <option value="<%= index + 1 %>"><%= month %></option>
-                      <% }); %>
-                    </select>
-                  </div>
+                    <label>Your Birthday:</label>
+                    <div class="form-row">
+                      <div class="form-group col-md-4">
+                        <select class="form-control" name="day" required>
+                          <option value="">Day</option>
+                          <% for(let i=1; i<=31; i++) { %>
+                            <option value="<%= i %>">
+                              <%= i %>
+                            </option>
+                            <% } %>
+                        </select>
+                      </div>
 
-                  <div class="form-group col-md-4">
-                    <select class="form-control" name="year" required>
-                      <option value="">Year</option>
-                      <% for(let i = new Date().getFullYear(); i >= 1900; i--) { %>
-                        <option value="<%= i %>"><%= i %></option>
-                      <% } %>
-                    </select>
-                  </div>
-                </div>
+                      <div class="form-group col-md-4">
+                        <select class="form-control" name="month" required>
+                          <option value="">Month</option>
+                          <% ['January', 'February' , 'March' , 'April' , 'May' , 'June' , 'July' , 'August'
+                            , 'September' , 'October' , 'November' , 'December' ].forEach((month, index)=> { %>
+                            <option value="<%= index + 1 %>">
+                              <%= month %>
+                            </option>
+                            <% }); %>
+                        </select>
+                      </div>
 
-                <div class="form-group">
-                  <input type="email" class="form-control" name="email" placeholder="Email" required />
-                </div>
+                      <div class="form-group col-md-4">
+                        <select class="form-control" name="year" required>
+                          <option value="">Year</option>
+                          <% for(let i=new Date().getFullYear(); i>= 1900; i--) { %>
+                            <option value="<%= i %>">
+                              <%= i %>
+                            </option>
+                            <% } %>
+                        </select>
+                      </div>
+                    </div>
 
-                <div class="form-group">
-                  <input type="password" class="form-control" name="password" placeholder="Password" required />
-                </div>
+                    <div class="form-group">
+                      <input type="email" class="form-control" name="email" placeholder="Email" required />
+                    </div>
 
-                <div class="form-group">
-                  <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm Password" required />
-                </div>
+                    <div class="form-group">
+                      <input type="password" class="form-control" name="password" placeholder="Password" required />
+                    </div>
 
-                <!-- Profile Picture Upload -->
-                <div class="image signup-container">
-                  <label for="profile_picture">Profile Picture:</label><br>
-                  <div class="image-container">
-                    <img id="imagePreview" src="/images/imagePreview.png" alt="Preview" />
-                    <input type="file" name="profile_picture" accept="image/*" id="imageUpload" required style="display: none;" />
-                  </div>
-                </div>
+                    <div class="form-group">
+                      <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm Password"
+                        required />
+                    </div>
 
-                <!-- Ensure Correct JavaScript Path -->
-                <script src="/js/signup.js"></script>
+                    <!-- Profile Picture Upload -->
+                    <div class="image signup-container">
+                      <label for="profile_picture">Profile Picture:</label><br>
+                      <div class="image-container">
+                        <img id="imagePreview" src="/images/imagePreview.png" alt="Preview" />
+                        <input type="file" name="profile_picture" accept="image/*" id="imageUpload" required
+                          style="display: none;" />
+                      </div>
+                    </div>
 
-                <br>
+                    <!-- Ensure Correct JavaScript Path -->
+                    <script src="/js/signup.js"></script>
 
-                <div class="form-group text-center">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                  <a href="/users/login" class="btn btn-secondary">Cancel</a>
-                </div>
-              </form>
+                    <br>
+
+                    <div class="form-group text-center">
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                      <a href="/users/login" class="btn btn-secondary">Cancel</a>
+                    </div>
+                  </form>
             </div>
           </div>
         </div>
@@ -194,4 +206,5 @@
     </div>
   </footer>
 </body>
+
 </html>

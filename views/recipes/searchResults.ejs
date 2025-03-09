@@ -14,9 +14,8 @@
   <!-- Common css -->
   <link rel="stylesheet" type="text/css" href="/css/main.css" />
 
-
-<!-- font style -->
-<link href='https://fonts.googleapis.com/css?family=Young Serif' rel='stylesheet'>
+  <!-- font style -->
+  <link href='https://fonts.googleapis.com/css?family=Young Serif' rel='stylesheet'>
 
   <!-- search.css -->
   <link rel="stylesheet" type="text/css" href="/css/search.css" />
@@ -85,7 +84,7 @@
                 alt="<%= recipe.title %>">
               <div class="card-body">
                 <h5 class="card-title">
-                  <%= recipe.title %>   
+                  <%= recipe.title %>
                 </h5>
                 <p class="card-text">
                   <%= recipe.description.slice(0, 100) %>...
@@ -116,36 +115,36 @@
       </div>
       <% } else { %>
         <p class="mt-4">No recipes found matching your search.</p>
-        <% } %>         
+        <% } %>
   </main>
- <!-- FOOTER -->
- <footer class="footer mt-5 py-3">
-  <div class="container">
-    <div class="row text-center text-md-left">
-      <!-- Left Section: Follow Us -->
-      <div class="col-md-4">
-        <h6><u>Follow Us</u></h6>
-        <a href="https://facebook.com" target="_blank">
-          <img src="/images/facebookicon.png" alt="Facebook" width="24" />
-        </a>
-        <a href="https://instagram.com" target="_blank">
-          <img src="/images/instaicon.png" alt="Instagram" width="24" />
-        </a>
-      </div>
+  <!-- FOOTER -->
+  <footer class="footer mt-5 py-3">
+    <div class="container">
+      <div class="row text-center text-md-left">
+        <!-- Left Section: Follow Us -->
+        <div class="col-md-4">
+          <h6><u>Follow Us</u></h6>
+          <a href="https://facebook.com" target="_blank">
+            <img src="/images/facebookicon.png" alt="Facebook" width="24" />
+          </a>
+          <a href="https://instagram.com" target="_blank">
+            <img src="/images/instaicon.png" alt="Instagram" width="24" />
+          </a>
+        </div>
 
-      <!-- Center Section: Copyright -->
-      <div class="col-md-4 text-md-center">
-        <p>© 2024 Swaply. All Rights Reserved.</p>
-      </div>
+        <!-- Center Section: Copyright -->
+        <div class="col-md-4 text-md-center">
+          <p>© 2024 Swaply. All Rights Reserved.</p>
+        </div>
 
-      <!-- Right Section: Privacy Policy & Terms -->
-      <div class="col-md-4 text-md-right">
-        <a href="/privacy-policy" class="mr-3">Privacy Policy</a>
-        <a href="/terms-and-conditions">Terms and Conditions</a>
+        <!-- Right Section: Privacy Policy & Terms -->
+        <div class="col-md-4 text-md-right">
+          <a href="/privacy-policy" class="mr-3">Privacy Policy</a>
+          <a href="/terms-and-conditions">Terms and Conditions</a>
+        </div>
       </div>
     </div>
-  </div>
-</footer>
+  </footer>
 </body>
 
 </html>

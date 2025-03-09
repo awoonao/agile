@@ -220,7 +220,6 @@ router.get("/", async (req, res) => {
           console.error("Database error:", err);
           reject(err);
         } else {
-          // console.log("Number of recipes fetched:", rows.length);
           resolve(rows);
         }
       });

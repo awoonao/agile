@@ -125,16 +125,6 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get('/about', (req, res) => {
-    res.render('main/aboutUs');
-});
-
-
-
-
-
-
-
 // Handle form submission to contact_us table
 router.post('/contact', (req, res) => {
     const { contact_name, contact_email, contact_message } = req.body;
@@ -161,6 +151,10 @@ router.get('/privacy-policy', (req, res) => {
 
 router.get('/terms-and-conditions', (req, res) => {
     res.render('main/TandC');
+});
+
+router.get('/about', (req, res) => {
+    res.render('main/aboutUs');
 });
 
   
