@@ -125,6 +125,7 @@ CREATE TABLE Recipe_Dietary_Restrictions (
     FOREIGN KEY (restriction_id) REFERENCES Dietary_Restrictions(restriction_id) ON DELETE CASCADE
 );
 
+-- username: john_wick
 -- password : dummyhash
 INSERT INTO Users (
     username, password_hash, first_name, last_name, birthday, email, profile_picture
@@ -138,6 +139,7 @@ INSERT INTO Users (
     '/images/profiles/cat.jpg'
 );
 
+-- username: james_bond
 -- password: 1234
 INSERT INTO Users (
     username, password_hash, first_name, last_name, birthday, email, profile_picture
@@ -151,9 +153,10 @@ INSERT INTO Users (
     '/images/profiles/cat2.jpg'
 );
 
+-- username: johndoe
 -- password : password
 INSERT INTO Users (username, password_hash, first_name, last_name, birthday, email, role, is_active)
-VALUES ('test1', '$2b$10$oBgO8MGxHrf7b0nr19xPiewENnHfjewVQZ1S0AJ7.OB8ko640MsUS', 'John', 'Doe', '1990-01-01', 'johndoe@example.com', 'user', TRUE);
+VALUES ('johndoe', '$2b$10$oBgO8MGxHrf7b0nr19xPiewENnHfjewVQZ1S0AJ7.OB8ko640MsUS', 'John', 'Doe', '1990-01-01', 'johndoe@example.com', 'user', TRUE);
 
 -- Restrictions
 INSERT INTO Dietary_Restrictions (restriction_name) VALUES
@@ -491,5 +494,107 @@ VALUES (4, 1, 'Great balance of sauce and pasta.');
 
 INSERT INTO Comments (recipe_id, user_id, content)
 VALUES (5, 2, 'Creamy and full of flavor! The mushrooms were cooked perfectly.');
+
+
+-- Ratings for Recipe 1: Chicken Noodle Soup
+-- User 2 (James Bond) rates Recipe 1
+INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at)
+VALUES (2, 1, 4, 5, CURRENT_TIMESTAMP);
+
+-- User 3 (John Doe) rates Recipe 1
+INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at)
+VALUES (3, 1, 5, 4, CURRENT_TIMESTAMP);
+
+-- Ratings for Recipe 2: Ramen
+-- User 1 (John Wick) rates Recipe 2
+INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at)
+VALUES (1, 2, 5, 5, CURRENT_TIMESTAMP);
+
+-- User 3 (John Doe) rates Recipe 2
+INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at)
+VALUES (3, 2, 4, 5, CURRENT_TIMESTAMP);
+
+-- Ratings for Recipe 3: Chinese Fried Noodles
+-- User 2 (James Bond) rates Recipe 3
+INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at)
+VALUES (2, 3, 3, 4, CURRENT_TIMESTAMP);
+
+-- User 3 (John Doe) rates Recipe 3
+INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at) 
+VALUES (3, 3, 4, 3, CURRENT_TIMESTAMP);
+
+-- Ratings for Recipe 4: Spaghetti Bolognese
+-- User 1 (John Wick) rates Recipe 4
+INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at)
+VALUES (1, 4, 4, 4, CURRENT_TIMESTAMP);
+
+-- User 3 (John Doe) rates Recipe 4
+INSERT INTO Ratings (user_id, recipe_id, appearance_rating, taste_rating, created_at)
+VALUES (3, 4, 5, 3, CURRENT_TIMESTAMP);
+
+-- Update average ratings for all recipes
+-- Recipe 1: Chicken Noodle Soup
+UPDATE Recipes 
+SET average_appearance_rating = (
+    SELECT AVG(appearance_rating) 
+    FROM Ratings 
+    WHERE recipe_id = 1 
+    AND appearance_rating IS NOT NULL
+),
+average_taste_rating = (
+    SELECT AVG(taste_rating) 
+    FROM Ratings 
+    WHERE recipe_id = 1 
+    AND taste_rating IS NOT NULL
+)
+WHERE recipe_id = 1;
+
+-- Recipe 2: Ramen
+UPDATE Recipes 
+SET average_appearance_rating = (
+    SELECT AVG(appearance_rating) 
+    FROM Ratings 
+    WHERE recipe_id = 2 
+    AND appearance_rating IS NOT NULL
+),
+average_taste_rating = (
+    SELECT AVG(taste_rating) 
+    FROM Ratings 
+    WHERE recipe_id = 2 
+    AND taste_rating IS NOT NULL
+)
+WHERE recipe_id = 2;
+
+-- Recipe 3: Chinese Fried Noodles
+UPDATE Recipes 
+SET average_appearance_rating = (
+    SELECT AVG(appearance_rating) 
+    FROM Ratings 
+    WHERE recipe_id = 3 
+    AND appearance_rating IS NOT NULL
+),
+average_taste_rating = (
+    SELECT AVG(taste_rating) 
+    FROM Ratings 
+    WHERE recipe_id = 3 
+    AND taste_rating IS NOT NULL
+)
+WHERE recipe_id = 3;
+
+-- Recipe 4: Spaghetti Bolognese
+UPDATE Recipes 
+SET average_appearance_rating = (
+    SELECT AVG(appearance_rating) 
+    FROM Ratings 
+    WHERE recipe_id = 4 
+    AND appearance_rating IS NOT NULL
+),
+average_taste_rating = (
+    SELECT AVG(taste_rating) 
+    FROM Ratings 
+    WHERE recipe_id = 4 
+    AND taste_rating IS NOT NULL
+)
+WHERE recipe_id = 4;
 
 COMMIT;
