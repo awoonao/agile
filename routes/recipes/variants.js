@@ -74,22 +74,35 @@ router.post("/:id/create-variant", upload.single("image"), async (req, res) => {
 
         for (const ingredient of ingredients) {
             const substitution = substitutions?.ingredients?.[ingredient.ingredient_order];
-            const ingredientName = substitution || ingredient.ingredient_name;
-
-            await new Promise((resolve, reject) => {
+            const newIngredientId = await new Promise((resolve, reject) => {
                 db.run(
                     `INSERT INTO Ingredients (recipe_id, ingredient_name, ingredient_order) 
                      VALUES (?, ?, ?)`,
-                    [newRecipeId, ingredientName, ingredient.ingredient_order],
+                    [newRecipeId, ingredient.ingredient_name, ingredient.ingredient_order],
                     function (err) {
                         if (err) reject(err);
-                        else resolve();
+                        else resolve(this.lastID);
                     }
                 );
             });
+            
+            // If there's a substitution, record it in the Substitutions table
+            if (substitution) {
+                await new Promise((resolve, reject) => {
+                    db.run(
+                        `INSERT INTO Substitutions (recipe_id, ingredient_id, target_name, substitution, suggested_by, type) 
+                         VALUES (?, ?, ?, ?, ?, 'ingredient')`,
+                        [newRecipeId, newIngredientId, ingredient.ingredient_name, substitution, req.session.userId],
+                        function (err) {
+                            if (err) reject(err);
+                            else resolve();
+                        }
+                    );
+                });
+            }
         }
 
-        // Copy instructions from the original recipe, applying substitutions where provided
+        // Copy instructions from the original recipe
         const instructions = await new Promise((resolve, reject) => {
             db.all(
                 `SELECT instruction_id, instruction_text, step_order 
@@ -106,19 +119,34 @@ router.post("/:id/create-variant", upload.single("image"), async (req, res) => {
 
         for (const instruction of instructions) {
             const substitution = substitutions?.instructions?.[instruction.step_order];
-            const instructionText = substitution || instruction.instruction_text;
-
-            await new Promise((resolve, reject) => {
+            
+            // Always insert the original instruction text into the Instructions table
+            const newInstructionId = await new Promise((resolve, reject) => {
                 db.run(
                     `INSERT INTO Instructions (recipe_id, instruction_text, step_order) 
                      VALUES (?, ?, ?)`,
-                    [newRecipeId, instructionText, instruction.step_order],
+                    [newRecipeId, instruction.instruction_text, instruction.step_order],
                     function (err) {
                         if (err) reject(err);
-                        else resolve();
+                        else resolve(this.lastID);
                     }
                 );
             });
+            
+            // If there's a substitution, record it in the Substitutions table
+            if (substitution) {
+                await new Promise((resolve, reject) => {
+                    db.run(
+                        `INSERT INTO Substitutions (recipe_id, instruction_id, target_name, substitution, suggested_by, type) 
+                         VALUES (?, ?, ?, ?, ?, 'instruction')`,
+                        [newRecipeId, newInstructionId, instruction.instruction_text, substitution, req.session.userId],
+                        function (err) {
+                            if (err) reject(err);
+                            else resolve();
+                        }
+                    );
+                });
+            }
         }
 
         // Handle dietary restrictions, ensuring existing ones remain unless explicitly removed
